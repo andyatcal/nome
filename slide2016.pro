@@ -19,8 +19,8 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-linux-g++{
-    LIBS += -lglut -lGLU -lGL
+linux{
+    LIBS += -lglut -lGLU
 }
 
 mac{
