@@ -27,3 +27,7 @@ mac{
     INCLUDEPATH = /usr/local/include
     LIBS += -framework GLUT -framework OpenGL
 }
+
+win32{
+    LIBS +=
+}
