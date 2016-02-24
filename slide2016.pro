@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,3 +18,16 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+linux-g++{
+    LIBS += -lglut -lGLU -lGL
+}
+
+mac{
+    INCLUDEPATH = /usr/local/include
+    LIBS += -framework GLUT -framework OpenGL
+}
+
+win32{
+    LIBS +=
+}
