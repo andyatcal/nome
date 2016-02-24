@@ -29,5 +29,5 @@ mac{
 }
 
 win32{
-    LIBS +=
+    LIBS += -lopengl32 -lglu32 -lglut32
 }
