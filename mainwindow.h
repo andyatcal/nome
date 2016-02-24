@@ -3,7 +3,12 @@
 
 #include <QMainWindow>
 #include <QtOpenGL>
-#include <GL/glu.h>
+#if __linux__
+ #include <GL/glut.h>
+ #include <GL/gl.h>
+#elif __APPLE__
+ #include <GLUT/GLUT.h>
+#endif
 
 class MainWindow : public QGLWidget
 {

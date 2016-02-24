@@ -19,4 +19,11 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-LIBS += -lglut -lGLU
+linux-g++{
+    LIBS += -lglut -lGLU -lGL
+}
+
+mac{
+    INCLUDEPATH = /usr/local/include
+    LIBS += -framework GLUT -framework OpenGL
+}
