@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     vertex.cpp \
     face.cpp \
     mesh.cpp \
-    marge.cpp
+    marge.cpp \
+    makeMesh.cpp
 
 HEADERS  += mainwindow.h \
     edge.h \
     vertex.h \
     face.h \
     mesh.h \
-    merge.h
+    merge.h \
+    makeMesh.h
 
 FORMS    += mainwindow.ui
 
