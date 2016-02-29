@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = slide2016
 TEMPLATE = app
 QMAKE_CXXFLAGS = -std=c++11 -w
-
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
 SOURCES += main.cpp\
         mainwindow.cpp \
     edge.cpp \
