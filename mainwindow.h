@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "mesh.h"
 #include <QMainWindow>
 #include <QtOpenGL>
 #if __linux__

@@ -10,18 +10,22 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = slide2016
 TEMPLATE = app
-
+QMAKE_CXXFLAGS = -std=c++11 -w
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     edge.cpp \
     vertex.cpp \
-    face.cpp
+    face.cpp \
+    mesh.cpp \
+    marge.cpp
 
 HEADERS  += mainwindow.h \
     edge.h \
     vertex.h \
-    face.h
+    face.h \
+    mesh.h \
+    merge.h
 
 FORMS    += mainwindow.ui
 
