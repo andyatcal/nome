@@ -13,9 +13,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    edge.cpp \
+    vertex.cpp \
+    face.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    edge.h \
+    vertex.h \
+    face.h
 
 FORMS    += mainwindow.ui
 
