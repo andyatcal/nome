@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <unordered_map>
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 #include <QMainWindow>
 #include <QtOpenGL>
