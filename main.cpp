@@ -1,10 +1,10 @@
-#include "mainwindow.h"
+#include "slideglwidget.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    SlideGLWidget s;
+    s.show();
     return a.exec();
 }

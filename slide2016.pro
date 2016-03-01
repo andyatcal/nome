@@ -13,7 +13,6 @@ TEMPLATE = app
 CONFIG += c++11 -w
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     edge.cpp \
     vertex.cpp \
     face.cpp \
@@ -27,9 +26,10 @@ SOURCES += main.cpp\
     stl.cpp \
     zipper.cpp \
     makePolyline.cpp \
-    myselection.cpp
+    myselection.cpp \
+    slideglwidget.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     edge.h \
     vertex.h \
     face.h \
@@ -43,9 +43,8 @@ HEADERS  += mainwindow.h \
     stl.h \
     zipper.h \
     makePolyline.h \
-    myselection.h
-
-FORMS    += mainwindow.ui
+    myselection.h \
+    slideglwidget.h
 
 linux{
     LIBS += -lglut -lGLU
