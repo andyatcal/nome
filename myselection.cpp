@@ -56,47 +56,56 @@ void MySelection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
                   GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
-        int minimumDepth = INT_MAX;
-        int minimumDepthIndex = INT_MAX;
-        for (int i = 0; i < hits; i++) {
-            int currentDepth = (GLubyte)names[i * 4 + 1];
-            if(currentDepth < minimumDepth) {
-                minimumDepth = currentDepth;
-                minimumDepthIndex = i;
-            }
-        }
-        int selectedID = names[minimumDepthIndex * 4 + 3];
-        Face * workFace = mesh.faceList[selectedID];
-        Edge * firstEdge = workFace -> oneEdge;
-        Edge * currEdge = firstEdge;
-        Edge * nextEdge;
-        Vertex * tempv;
+        vec3 hit_position = vec3(posX, posY, posZ);
+        float min_distance = 500000.0;
         Vertex * selectedVertex;
-        float minDistance = 50000.0; // A very large value ...
-        do {
-            if(workFace == currEdge -> fa) {
-                tempv = currEdge -> vb;
-                nextEdge = currEdge -> nextVbFa;
-            } else {
-                if(currEdge -> mobius) {
+        for (int i = 0; i < hits; i++) {
+            int currentID = names[i * 4 + 3];
+            Face * workFace = mesh.faceList[currentID];
+            Edge * firstEdge = workFace -> oneEdge;
+            Edge * currEdge = firstEdge;
+            Edge * nextEdge;
+            Vertex * tempv;
+            do {
+                if(workFace == currEdge -> fa) {
                     tempv = currEdge -> vb;
-                    nextEdge = currEdge -> nextVbFb;
+                    nextEdge = currEdge -> nextVbFa;
                 } else {
-                    tempv = currEdge -> va;
-                    nextEdge = currEdge -> nextVaFb;
+                    if(currEdge -> mobius) {
+                        tempv = currEdge -> vb;
+                        nextEdge = currEdge -> nextVbFb;
+                    } else {
+                        tempv = currEdge -> va;
+                        nextEdge = currEdge -> nextVaFb;
+                    }
                 }
-            }
-            float newDistance = distance(tempv -> position, vec3(posX, posY, posZ));
-            if(newDistance < minDistance) {
-                minDistance = newDistance;
-                selectedVertex = tempv;
-            }
-            currEdge = nextEdge;
-        } while (currEdge != firstEdge);
+                float new_distance = distance(tempv -> position, hit_position);
+                if(new_distance < min_distance) {
+                    min_distance = new_distance;
+                    selectedVertex = tempv;
+                }
+                currEdge = nextEdge;
+            } while (currEdge != firstEdge);
+        }
         if(selectedVertex -> selected) {
             selectedVertex -> selected = false;
+            vector<Vertex*>::iterator vIt;
+            for(vIt = selectedVertices.begin();
+             vIt < selectedVertices.end(); vIt ++) {
+                if((*vIt) == selectedVertex) {
+                    break;
+                }
+            }
+            selectedVertices.erase(vIt);
+            cout<<"Unselected Vertex: v"<<selectedVertex -> ID<<endl;
+            cout<<"You have "<<selectedVertices.size()
+            <<" vertices selected."<<endl;
         } else {
             selectedVertex -> selected = true;
+            selectedVertices.push_back(selectedVertex);
+            cout<<"Selected Vertex: v"<<selectedVertex -> ID<<endl;
+            cout<<"You have "<<selectedVertices.size()
+            <<" vertices selected."<<endl;
         }
     }
 }
