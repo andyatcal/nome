@@ -55,6 +55,7 @@ void SlideGLWidget::mouse_select(int x, int y) {
     glRenderMode(GL_SELECT);
     //glClearColor(0, 0, 0, 1);
     glInitNames();
+    glPushName(0);
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
