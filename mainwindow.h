@@ -2,12 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#define ROTATION_SPEED
 #include <QtOpenGL>
 #if __linux__
  #include <GL/glut.h>
  #include <GL/gl.h>
+ #define ROTATION_SPEED (50.0)
 #elif __APPLE__
  #include <GLUT/GLUT.h>
+ #define ROTATION_SPEED (1.0)
 #endif
 #ifdef _WIN32
 #ifndef NOMINMAX
