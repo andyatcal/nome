@@ -43,7 +43,8 @@ HEADERS  += mainwindow.h \
     polyline.h \
     zipper.h \
     makePolyline.h \
-    selection.h
+    selection.h \
+    parameters.h
 
 FORMS    += mainwindow.ui
 
