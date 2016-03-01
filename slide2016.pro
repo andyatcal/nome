@@ -19,15 +19,23 @@ SOURCES += main.cpp\
     face.cpp \
     mesh.cpp \
     marge.cpp \
-    makeMesh.cpp
+    transformation.cpp \
+    makeMesh.cpp \
+    subdivision.cpp \
+    offset.cpp \
+    stl.cpp \
 
 HEADERS  += mainwindow.h \
     edge.h \
     vertex.h \
     face.h \
     mesh.h \
+    transformation.h \
     merge.h \
-    makeMesh.h
+    makeMesh.h \
+    subdivison.h \
+    offset.h \
+    stl.h
 
 FORMS    += mainwindow.ui
 

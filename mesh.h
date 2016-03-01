@@ -11,6 +11,7 @@
 #include <vector>
 #include <unordered_map>
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include <QMainWindow>
 #include <QtOpenGL>
@@ -80,6 +81,9 @@ public:
     vector<Edge*> boundaryEdgeList();
 };
 
+// @param p1, p2, p3 are positions of three vertices,
+// with edge p1 -> p2 and edge p2 -> p3.
+vec3 getNormal3Vertex(vec3 p1, vec3 p2, vec3 p3);
 
 static GLfloat WHITE[] = {0.8f, 0.8f, 0.8f, 1.0f};
 static GLfloat RED[] = {0.8f, 0.0f, 0.0f, 1.0f};
@@ -88,5 +92,8 @@ static GLfloat BLUE[] = {0.0f, 0.0f, 0.8f, 1.0f};
 static GLfloat YELLOW[] = {.8f, .8f, 0.f, 1.f};
 static GLfloat PURPLE[] = {.8f, 0.f, .8f, 1.f};
 static GLfloat CYAN[] = {.0f, .8f, 0.8f, 1.f};
+
+#define PI (glm::pi<float>())
+#define VERYSMALLVALUE 0.001
 
 #endif // __MESH_H__

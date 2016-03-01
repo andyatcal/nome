@@ -402,18 +402,6 @@ void Mesh::computeNormals(){
 
 }
 
-// Get a triangular surface normal.
-// @param v1 v2 v3: three vertices of the triangle.
-vec3 getTriFaceNormal(Vertex * va, Vertex * vb, Vertex * vc){
-    vec3 pa = va -> position;
-    vec3 pb = vb -> position;
-    vec3 pc = vc -> position;
-    vec3 vNormalb = getNormal3Vertex(pa, pb, pc);
-    vec3 vNormalc = getNormal3Vertex(pb, pc, pa);
-    vec3 vNormala = getNormal3Vertex(pc, pa, pb);
-    return normalize(vNormala + vNormalb + vNormalc);
-}
-
 void Mesh::drawMesh() {
     Face * tempFace;
     vector<Face*>::iterator fIt;

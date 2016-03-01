@@ -9,10 +9,13 @@
 #ifndef __MAKEMESH_H__
 #define __MAKEMESH_H__
 
-#include "glm/glm.hpp"
-#include "glm/gtx/rotate_vector.hpp"
+#include <regex>
+#include <fstream>
+#include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include "mesh.h"
 #include "merge.h"
+#include "transformation.h"
 
 using namespace glm;
 using namespace std;
