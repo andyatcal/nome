@@ -1,7 +1,7 @@
 #include "slideglwidget.h"
 
 SlideGLWidget::SlideGLWidget(QWidget *parent) :
-    QGLWidget(parent)
+    QOpenGLWidget(parent)
 {
     startTimer(0);
     makeDefaultMesh();
