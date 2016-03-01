@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#define ROTATION_SPEED
 #include <QtOpenGL>
 #if __linux__
  #include <GL/glut.h>
@@ -15,7 +14,6 @@
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
-#define ROTATION_SPEED (1.0)
 #endif
 #include <windows.h>
 #include <gl\gl.h>
@@ -23,7 +21,7 @@
 #endif
 #include "mesh.h"
 #include "makeMesh.h"
-
+#include "polyline.h"
 class MainWindow : public QGLWidget
 {
     Q_OBJECT
