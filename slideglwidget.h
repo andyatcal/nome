@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SLIDEGLWIDGET_H
+#define SLIDEGLWIDGET_H
 
 #include <QMainWindow>
 #include <QtOpenGL>
@@ -24,13 +24,13 @@
 #include "makeMesh.h"
 #include "polyline.h"
 #include "myselection.h"
-class MainWindow : public QGLWidget
+class SlideGLWidget: public QOpenGLWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit SlideGLWidget(QWidget *parent = 0);
+    ~SlideGLWidget();
 
 private:
     // Viewer variables.
@@ -74,4 +74,4 @@ protected:
     void keyPressEvent(QKeyEvent*);
 };
 
-#endif // MAINWINDOW_H
+#endif // SLIDEGLWIDGET_H

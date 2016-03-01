@@ -1,7 +1,7 @@
-#include "mainwindow.h"
+#include "slideglwidget.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QGLWidget(parent)
+SlideGLWidget::SlideGLWidget(QWidget *parent) :
+    QOpenGLWidget(parent)
 {
     startTimer(0);
     makeDefaultMesh();
@@ -10,15 +10,16 @@ MainWindow::MainWindow(QWidget *parent) :
     arcball_on = false;
     wireframe = false;
     smoothshading = true;
+    selection_mode = 0;
 }
 
-void MainWindow::makeDefaultMesh()
+void SlideGLWidget::makeDefaultMesh()
 {
     makeCube(master_mesh,0.5,0.5,0.5);
     master_mesh.computeNormals();
 }
 
-vec3 MainWindow::get_arcball_vector(int x, int y) {
+vec3 SlideGLWidget::get_arcball_vector(int x, int y) {
     vec3 p = vec3(1.0 * x / this->width() * 2 - 1.0,
       1.0 * y / this->height() * 2 - 1.0, 0);
     p.y = - p.y;
@@ -31,8 +32,7 @@ vec3 MainWindow::get_arcball_vector(int x, int y) {
     return p;
 }
 
-void MainWindow::mouse_select(int x, int y) {
-    makeCurrent();
+void SlideGLWidget::mouse_select(int x, int y) {
     GLuint buff[64] = {0};
     GLint hits, view[4];
     GLdouble modelview[16];
@@ -59,6 +59,7 @@ void MainWindow::mouse_select(int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
+    //commit
     gluPickMatrix(x, view[3] - y, 1.0, 1.0, view);
     gluPerspective(45, (float) this -> width() / this -> height(), 0.1, 100);
     glMatrixMode(GL_MODELVIEW);
@@ -67,15 +68,23 @@ void MainWindow::mouse_select(int x, int y) {
     glPopMatrix();
     hits = glRenderMode(GL_RENDER);
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
-    mySelect.list_hits(hits, buff);
+    //mySelect.list_hits(hits, buff);
+    if(selection_mode == 0){
+        mySelect.selectVertex(master_mesh, hits,buff,posX, posY, posZ);
+        (hits, buff, posX, posY, posZ);
+    } else if(selection_mode == 1) {
+        mySelect.selectWholeBorder(master_mesh, hits,buff,posX, posY, posZ);
+    } else {
+        mySelect.selectPartialBorder(master_mesh, hits,buff,posX, posY, posZ);
+    }
     glMatrixMode(GL_MODELVIEW);
 }
-MainWindow::~MainWindow()
+SlideGLWidget::~SlideGLWidget()
 {
 
 }
 
-void MainWindow::initializeGL()
+void SlideGLWidget::initializeGL()
 {
     //Smooth Shading
     glShadeModel(GL_SMOOTH);
@@ -99,7 +108,7 @@ void MainWindow::initializeGL()
     transforms[MODE_CAMERA] = lookAt(vec3(0.0,  0.0, 10.0), vec3(0.0,  0.0, 0.0), vec3(0.0,  1.0, 0.0));  // up
 }
 
-void MainWindow::resizeGL(int w, int h)
+void SlideGLWidget::resizeGL(int w, int h)
 {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
@@ -109,7 +118,7 @@ void MainWindow::resizeGL(int w, int h)
     glLoadIdentity();
 }
 
-void MainWindow::paintGL()
+void SlideGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -117,9 +126,10 @@ void MainWindow::paintGL()
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
+    master_mesh.drawVertices();
 }
 
-void MainWindow::mousePressEvent(QMouseEvent* event)
+void SlideGLWidget::mousePressEvent(QMouseEvent* event)
 {
     if (event->buttons() & Qt::LeftButton)
     {
@@ -137,7 +147,7 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent* event)
+void SlideGLWidget::mouseMoveEvent(QMouseEvent* event)
 {
     if(arcball_on)
     {
@@ -146,7 +156,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void MainWindow::timerEvent(QTimerEvent *event) {
+void SlideGLWidget::timerEvent(QTimerEvent *event) {
     if(last_mx != cur_mx || last_my != cur_my) {
         vec3 va = get_arcball_vector(last_mx, last_my);
         vec3 vb = get_arcball_vector( cur_mx,  cur_my);
@@ -160,7 +170,7 @@ void MainWindow::timerEvent(QTimerEvent *event) {
     }
     repaint();
 }
-void MainWindow::keyPressEvent(QKeyEvent* event)
+void SlideGLWidget::keyPressEvent(QKeyEvent* event)
 {
     switch(event->key()) {
     case Qt::Key_Escape:
@@ -198,3 +208,4 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
     }
     repaint();
 }
+
