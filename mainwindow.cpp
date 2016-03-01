@@ -141,13 +141,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         }
         break;
     case Qt::Key_S:
-        if (smoothShading) {
-            glShadeModel(GL_FLAT);
-            smoothShading = false;
-        } else {
-            glShadeModel(GL_SMOOTH);
-            smoothShading = true;
-        }
+
         break;
     default:
         event->ignore();
