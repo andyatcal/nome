@@ -5,8 +5,8 @@
 //
 //
 
-#ifndef __SELECTION_H__
-#define __SELECTION_H__
+#ifndef __MYSELECTION_H__
+#define __MYSELECTION_H__
 
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -20,7 +20,7 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////
 // Selection Class -- Handles Mouse Selection.
 
-class Selection {
+class MySelection {
     // Vertices selected. Can be used to create Face or Polyline.
     vector<Vertex*> selectedVertices;
     // For partial border selection
@@ -29,9 +29,9 @@ class Selection {
     vector<Vertex*> allBorderPoints;
     vector<Vertex*> firstHalfBorder;
     vector<Vertex*> vertToSelect;
+public:
     // Debug function
     void list_hits(GLint hits, GLuint *names);
-
     // Select the hitted face from mesh.
     // @param mesh, the mesh that contains this face.
     void selectFace(Mesh & mesh, GLint hits, GLuint *names);

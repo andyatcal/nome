@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     last_mx = last_my = cur_mx = cur_my = 0;
     arcball_on = false;
     wireframe = false;
-    smoothshading = false;
+    smoothshading = true;
 }
 
 void MainWindow::makeDefaultMesh()
@@ -31,6 +31,45 @@ vec3 MainWindow::get_arcball_vector(int x, int y) {
     return p;
 }
 
+void MainWindow::mouse_select(int x, int y) {
+    makeCurrent();
+    GLuint buff[64] = {0};
+    GLint hits, view[4];
+    GLdouble modelview[16];
+    GLdouble projection[16];
+    GLfloat winX, winY, winZ;
+    GLdouble posX, posY, posZ;
+    glSelectBuffer(64, buff);
+    glGetIntegerv(GL_VIEWPORT, view);
+    // Find the 3D points of the current clicked point
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview );
+    glGetDoublev(GL_PROJECTION_MATRIX, projection );
+    winX = (float) x;
+    winY = (float) view[3] - (float)y;
+    //cout<<"winX"<<winX<<" "<<"winY"<<winY<<" "<<endl;
+    glReadPixels( x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+    gluUnProject( winX, winY, winZ, modelview, projection,
+     view, &posX, &posY, &posZ);
+    //cout<<"X: "<<posX<<" Y: "<<posY<<" Z: "<<posZ<<endl;
+    // Find the face selected.
+    glRenderMode(GL_SELECT);
+    //glClearColor(0, 0, 0, 1);
+    glInitNames();
+    glPushName(0);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluPickMatrix(x, view[3] - y, 1.0, 1.0, view);
+    gluPerspective(45, (float) this -> width() / this -> height(), 0.1, 100);
+    glMatrixMode(GL_MODELVIEW);
+    repaint();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    hits = glRenderMode(GL_RENDER);
+    cout<<posX<<" "<<posY<<" "<<posZ<<endl;
+    //mySelect.list_hits(hits, buff);
+    glMatrixMode(GL_MODELVIEW);
+}
 MainWindow::~MainWindow()
 {
 
@@ -38,6 +77,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeGL()
 {
+    //Smooth Shading
+    glShadeModel(GL_SMOOTH);
     // Two sided pr ones side;
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     //glEnable(GL_CULL_FACE);
@@ -90,6 +131,10 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
     {
         arcball_on = false;
     }
+    if (event->buttons() & Qt::RightButton)
+    {
+        mouse_select(event -> x(), event -> y());
+    }
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
@@ -140,7 +185,12 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         }
         break;
     case Qt::Key_S:
-
+        if (smoothshading) {
+            glShadeModel(GL_FLAT);
+        } else {
+            glShadeModel(GL_SMOOTH);
+        }
+        smoothshading = !smoothshading;
         break;
     default:
         event->ignore();

@@ -1,6 +1,6 @@
-#include "selection.h"
+#include "myselection.h"
 
-void Selection::list_hits(GLint hits, GLuint *names)
+void MySelection::list_hits(GLint hits, GLuint *names)
 {
     int i;
 
@@ -30,7 +30,7 @@ void Selection::list_hits(GLint hits, GLuint *names)
         printf("\n");
 }
 
-void Selection::selectFace(Mesh &mesh, GLint hits, GLuint *names)
+void MySelection::selectFace(Mesh &mesh, GLint hits, GLuint *names)
 {
     if(hits > 0) {
         int minimumDepth = INT_MAX;
@@ -52,7 +52,7 @@ void Selection::selectFace(Mesh &mesh, GLint hits, GLuint *names)
     }
 }
 
-void Selection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
+void MySelection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
                   GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
@@ -101,7 +101,7 @@ void Selection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
     }
 }
 
-void Selection::selectWholeBorder(Mesh & mesh, GLint hits, GLuint *names,
+void MySelection::selectWholeBorder(Mesh & mesh, GLint hits, GLuint *names,
                        GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
@@ -192,7 +192,7 @@ void Selection::selectWholeBorder(Mesh & mesh, GLint hits, GLuint *names,
     }
 }
 
-void Selection::selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
+void MySelection::selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
                          GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {

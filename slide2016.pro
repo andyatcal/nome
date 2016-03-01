@@ -25,9 +25,9 @@ SOURCES += main.cpp\
     subdivision.cpp \
     offset.cpp \
     stl.cpp \
-    selection.cpp \
     zipper.cpp \
-    makePolyline.cpp
+    makePolyline.cpp \
+    myselection.cpp
 
 HEADERS  += mainwindow.h \
     edge.h \
@@ -41,9 +41,9 @@ HEADERS  += mainwindow.h \
     subdivison.h \
     offset.h \
     stl.h \
-    selection.h \
     zipper.h \
-    makePolyline.h
+    makePolyline.h \
+    myselection.h
 
 FORMS    += mainwindow.ui
 
