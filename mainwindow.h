@@ -7,7 +7,7 @@
 #if __linux__
  #include <GL/glut.h>
  #include <GL/gl.h>
- #define ROTATION_SPEED (50.0)
+ #define ROTATION_SPEED (150.0)
 #elif __APPLE__
  #include <GLUT/GLUT.h>
  #define ROTATION_SPEED (1.0)
