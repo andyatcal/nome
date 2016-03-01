@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
     cameraDistance = 4;
     last_mx = last_my = cur_mx = cur_my = 0;
     arcball_on = false;
+    wireframe = false;
+    smoothshading = false;
 }
 
 void MainWindow::makeDefaultMesh()
@@ -74,7 +76,13 @@ void MainWindow::paintGL()
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
+#ifdef __APPLE__
+    glutSwapBuffers();
+#elif __linux__
     swapBuffers();
+#elif __WIN32
+    glutSwapBuffers();
+#endif
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)

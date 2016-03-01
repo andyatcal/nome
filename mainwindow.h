@@ -15,6 +15,7 @@
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
+#define ROTATION_SPEED (1.0)
 #endif
 #include <windows.h>
 #include <gl\gl.h>
@@ -39,6 +40,7 @@ private:
     int last_mx, last_my, cur_mx, cur_my;
     int arcball_on;
     bool wireframe;
+    bool smoothshading;
     void makeDefaultMesh();
     Mesh master_mesh;
     Mesh temp_mesh;
