@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtOpenGL>
+#define ROTATION_SPEED (1.0)
 #if __linux__
  #include <GL/glut.h>
  #include <GL/gl.h>

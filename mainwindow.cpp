@@ -70,14 +70,12 @@ void MainWindow::resizeGL(int w, int h)
 
 void MainWindow::paintGL()
 {
-    makeCurrent();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
-    swapBuffers();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
