@@ -34,7 +34,6 @@ private:
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
     mat4 transforms[MODE_LAST];
     float cameraDistance;
-
     void makeDefaultMesh();
 
 protected:

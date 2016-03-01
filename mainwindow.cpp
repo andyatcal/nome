@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QGLWidget(parent)
@@ -47,7 +46,7 @@ void MainWindow::resizeGL(int w, int h)
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, w, 0, h); // set origin to bottom left corner
+    gluPerspective(45, (float) w / h, 0.1, 100);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -60,6 +59,7 @@ void MainWindow::paintGL()
     glMultMatrixf(&mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     mesh.drawMesh();
+    glutSwapBuffers();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
