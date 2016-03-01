@@ -44,10 +44,10 @@ void MainWindow::mouse_select(int x, int y) {
     // Find the 3D points of the current clicked point
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview );
     glGetDoublev(GL_PROJECTION_MATRIX, projection );
-    winX = (float) x;
-    winY = (float) view[3] - (float)y;
-    //cout<<"winX"<<winX<<" "<<"winY"<<winY<<" "<<endl;
+    winX = (double) x;
+    winY = (double) view[3] - (double)y;
     glReadPixels( x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+    cout<<"winX "<<winX<<" "<<"winY "<<winY<<" "<<"winZ "<<winZ<<endl;
     gluUnProject( winX, winY, winZ, modelview, projection,
      view, &posX, &posY, &posZ);
     //cout<<"X: "<<posX<<" Y: "<<posY<<" Z: "<<posZ<<endl;
@@ -67,7 +67,7 @@ void MainWindow::mouse_select(int x, int y) {
     glPopMatrix();
     hits = glRenderMode(GL_RENDER);
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
-    //mySelect.list_hits(hits, buff);
+    mySelect.list_hits(hits, buff);
     glMatrixMode(GL_MODELVIEW);
 }
 MainWindow::~MainWindow()
