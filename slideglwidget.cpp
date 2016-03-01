@@ -1,7 +1,7 @@
 #include "slideglwidget.h"
 
 SlideGLWidget::SlideGLWidget(QWidget *parent) :
-    QOpenGLWidget(parent)
+    QGLWidget(parent)
 {
     startTimer(0);
     makeDefaultMesh();
@@ -33,6 +33,7 @@ vec3 SlideGLWidget::get_arcball_vector(int x, int y) {
 }
 
 void SlideGLWidget::mouse_select(int x, int y) {
+    makeCurrent();
     GLuint buff[64] = {0};
     GLint hits, view[4];
     GLdouble modelview[16];
@@ -44,8 +45,8 @@ void SlideGLWidget::mouse_select(int x, int y) {
     // Find the 3D points of the current clicked point
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview );
     glGetDoublev(GL_PROJECTION_MATRIX, projection );
-    winX = (float) x;
-    winY = (float) view[3] - (double)y;
+    winX = (double) x;
+    winY = (double) view[3] - (double)y;
     glReadPixels( x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
     cout<<"winX "<<winX<<" "<<"winY "<<winY<<" "<<"winZ "<<winZ<<endl;
     gluUnProject( winX, winY, winZ, modelview, projection,
@@ -68,7 +69,7 @@ void SlideGLWidget::mouse_select(int x, int y) {
     glPopMatrix();
     hits = glRenderMode(GL_RENDER);
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
-    mySelect.list_hits(hits, buff);
+    //mySelect.list_hits(hits, buff);
     if(selection_mode == 0){
         mySelect.selectVertex(master_mesh, hits,buff,posX, posY, posZ);
         (hits, buff, posX, posY, posZ);
@@ -126,7 +127,6 @@ void SlideGLWidget::paintGL()
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
-    master_mesh.drawVertices();
 }
 
 void SlideGLWidget::mousePressEvent(QMouseEvent* event)
@@ -143,7 +143,6 @@ void SlideGLWidget::mousePressEvent(QMouseEvent* event)
     }
     if (event->buttons() & Qt::RightButton)
     {
-        //cout<<"Current context"<<context()<<endl;
         mouse_select(event -> x(), event -> y());
     }
 }
