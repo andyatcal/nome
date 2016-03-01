@@ -96,7 +96,7 @@ void MySelection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
                     break;
                 }
             }
-            selectedVertices.erase(vIt);
+            selectedertices.erase(vIt);
             cout<<"Unselected Vertex: v"<<selectedVertex -> ID<<endl;
             cout<<"You have "<<selectedVertices.size()
             <<" vertices selected."<<endl;
