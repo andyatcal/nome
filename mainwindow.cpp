@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cameraDistance = 4;
     last_mx = last_my = cur_mx = cur_my = 0;
     arcball_on = false;
+    wireframe = false;
 }
 
 void MainWindow::makeDefaultMesh()
@@ -74,7 +75,7 @@ void MainWindow::paintGL()
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
-    glutSwapBuffers();
+    //swapBuffers();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
@@ -108,7 +109,7 @@ void MainWindow::timerEvent(QTimerEvent *event) {
         vec3 axis_in_camera_coord = cross(va, vb);
         mat3 camera2object = inverse(mat3(transforms[MODE_CAMERA]) * mat3(master_mesh.object2world));
         vec3 axis_in_object_coord = camera2object * axis_in_camera_coord;
-        master_mesh.object2world = rotate(master_mesh.object2world, angle, axis_in_object_coord);
+        master_mesh.object2world = rotate(master_mesh.object2world, 150*angle, axis_in_object_coord);
         last_mx = cur_mx;
         last_my = cur_my;
     }
@@ -128,7 +129,6 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
             glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         }
         wireframe = !wireframe;
-        cout<<"Hey!"<<endl;
         break;
     case Qt::Key_I:
         if(cameraDistance > 0.1) {
@@ -140,18 +140,9 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
             cameraDistance *= 1.1;
         }
         break;
-    case Qt::Key_S:
-        if (smoothShading) {
-            glShadeModel(GL_FLAT);
-            smoothShading = false;
-        } else {
-            glShadeModel(GL_SMOOTH);
-            smoothShading = true;
-        }
-        break;
     default:
         event->ignore();
         break;
     }
-    glutPostRedisplay();
+    repaint();
 }
