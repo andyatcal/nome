@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "mesh.h"
 #include <QMainWindow>
 #include <QtOpenGL>
 #if __linux__
@@ -18,6 +17,8 @@
 #include <gl\gl.h>
 #include <gl\glu.h>
 #endif
+#include "mesh.h"
+#include "makeMesh.h"
 
 class MainWindow : public QGLWidget
 {
@@ -26,6 +27,15 @@ class MainWindow : public QGLWidget
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+private:
+    // Viewer variables.
+    Mesh mesh;
+    enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
+    mat4 transforms[MODE_LAST];
+    float cameraDistance;
+
+    void makeDefaultMesh();
 
 protected:
     void initializeGL();

@@ -5,6 +5,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QGLWidget(parent)
 {
     setMouseTracking(true);
+    makeDefaultMesh();
+    cameraDistance = 4;
+}
+
+void MainWindow::makeDefaultMesh()
+{
+    makeCube(mesh,0.5,0.5,0.5);
+    mesh.computeNormals();
 }
 
 MainWindow::~MainWindow()
@@ -14,13 +22,24 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeGL()
 {
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_BLEND);
-    glEnable(GL_POLYGON_SMOOTH);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glClearColor(0, 0, 0, 0);
+    // Two sided pr ones side;
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    //glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    GLfloat light_ambient0[] = { 0.8, 0.8, 0.8, 10.0 };
+    GLfloat light_diffuse0[] = { 1.0, 1.0, 1.0, 10.0 };
+    GLfloat light_specular0[] = { 1.0, 1.0, 1.0, 10.0 };
+    GLfloat light_position0[] = { 1, 1, 1, 0.0 };
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient0);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse0);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular0);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position0);
+
+    transforms[MODE_CAMERA] = lookAt(vec3(0.0,  0.0, 10.0), vec3(0.0,  0.0, 0.0), vec3(0.0,  1.0, 0.0));  // up
 }
 
 void MainWindow::resizeGL(int w, int h)
@@ -35,13 +54,12 @@ void MainWindow::resizeGL(int w, int h)
 
 void MainWindow::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1,0,0);
-    glBegin(GL_POLYGON);
-    glVertex2f(0,0);
-    glVertex2f(100,500);
-    glVertex2f(500,100);
-    glEnd();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
+    glMultMatrixf(&mesh.object2world[0][0]);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
+    mesh.drawMesh();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
