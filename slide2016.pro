@@ -24,6 +24,9 @@ SOURCES += main.cpp\
     subdivision.cpp \
     offset.cpp \
     stl.cpp \
+    polyline.cpp \
+    makePolyline.cpp \
+    zipper.cpp
 
 HEADERS  += mainwindow.h \
     edge.h \
@@ -35,7 +38,10 @@ HEADERS  += mainwindow.h \
     makeMesh.h \
     subdivison.h \
     offset.h \
-    stl.h
+    stl.h \
+    polyline.h \
+    makePolyline.h \
+    zipper.h
 
 FORMS    += mainwindow.ui
 
