@@ -25,8 +25,8 @@ SOURCES += main.cpp\
     offset.cpp \
     stl.cpp \
     polyline.cpp \
-    makePolyline.cpp \
     zipper.cpp \
+    makePolyline.cpp \
     selection.cpp
 
 HEADERS  += mainwindow.h \
@@ -41,8 +41,8 @@ HEADERS  += mainwindow.h \
     offset.h \
     stl.h \
     polyline.h \
-    makePolyline.h \
     zipper.h \
+    makePolyline.h \
     selection.h
 
 FORMS    += mainwindow.ui
@@ -58,4 +58,5 @@ mac{
 
 win32{
     LIBS += -lopengl32 -lglu32 -lglut32
+    INCLUDEPATH = $$PWD/../include
 }

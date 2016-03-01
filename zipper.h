@@ -17,12 +17,6 @@
 using namespace std;
 using namespace glm;
 
-// Forward declarations
-class Vertex;
-class Edge;
-class Face;
-class Polyline;
-
 //////////////////////////////////////////////////////////////////////
 // Polyline Class -- A Polyline is a list of vertices
 class Zipper

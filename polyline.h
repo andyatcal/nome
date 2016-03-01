@@ -15,11 +15,6 @@
 using namespace std;
 using namespace glm;
 
-// Forward declarations
-class Vertex;
-class Edge;
-
-
 //////////////////////////////////////////////////////////////////////
 // Polyline Class -- A Polyline is a list of vertices
 class Polyline {
