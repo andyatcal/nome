@@ -73,6 +73,8 @@ public:
     void addPolygonFace(vector<Vertex*> vertices, bool reverseOrder = false);
     // Draw mesh in OpenGL
     void drawMesh();
+    // Draw the selected vertices in OpenGL
+    void drawVertices();
     // Build Boundary Pointers for Mesh.
     void buildBoundary();
     // Compute the vertex normals for every face and vertex of the mesh.

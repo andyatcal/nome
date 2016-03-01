@@ -1,24 +1,36 @@
-#ifndef PARAMETERS_H
-#define PARAMETERS_H
+#ifndef SLIDEGLWIDGET_H
+#define SLIDEGLWIDGET_H
 
 #include <QMainWindow>
 #include <QtOpenGL>
+#define ROTATION_SPEED (1.0)
+#if __linux__
+ #include <GL/glut.h>
+ #include <GL/gl.h>
+ #define ROTATION_SPEED (50.0)
+#elif __APPLE__
+ #include <GLUT/GLUT.h>
+ #define ROTATION_SPEED (1.0)
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#include <gl\gl.h>
+#include <gl\glu.h>
+#endif
 #include "mesh.h"
 #include "makeMesh.h"
 #include "polyline.h"
-<<<<<<< HEAD:slideglwidget.h
 #include "myselection.h"
-class SlideGLWidget: public QGLWidget
-=======
-
-class MainWindow : public QGLWidget
->>>>>>> origin/master:parameters.h
+class SlideGLWidget: public QOpenGLWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit SlideGLWidget(QWidget *parent = 0);
+    ~SlideGLWidget();
 
 private:
     // Viewer variables.
@@ -32,6 +44,7 @@ private:
     void makeDefaultMesh();
     Mesh master_mesh;
     Mesh temp_mesh;
+    MySelection mySelect;
     /**
      * Get a normalized vector from the center of the virtual ball O to a
      * point P on the virtual ball surface, such that P is aligned on
@@ -43,6 +56,15 @@ private:
      * Timer Event for this MainWindow. Similar to OnIdleFunc of GLUT.
      */
     void timerEvent(QTimerEvent *event);
+    // A wrapper function for selection with mouse
+    // @param x, the x coordinate of the mouse clicked
+    // @param y, the y coordinate of the mouse clicked
+    // @param mode, the mode of selection.
+    void mouse_select(int x, int y);
+    // selection_mode = 1: vertex selection
+    // selection_mode = 2: whole border selection (line loop)
+    // selection_mode = 3: partial border selection (line strip)
+    int selection_mode;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -52,4 +74,4 @@ protected:
     void keyPressEvent(QKeyEvent*);
 };
 
-#endif // PARAMETERS_H
+#endif // SLIDEGLWIDGET_H
