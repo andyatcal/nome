@@ -61,6 +61,7 @@ void SlideGLWidget::mouse_select(int x, int y) {
     gluPickMatrix(x, view[3] - y, 1.0, 1.0, view);
     gluPerspective(45, (float) this -> width() / this -> height(), 0.1, 100);
     glMatrixMode(GL_MODELVIEW);
+    glutSwapBuffers();
     repaint();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
