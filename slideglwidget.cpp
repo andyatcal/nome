@@ -33,7 +33,6 @@ vec3 SlideGLWidget::get_arcball_vector(int x, int y) {
 }
 
 void SlideGLWidget::mouse_select(int x, int y) {
-    makeCurrent();
     GLuint buff[64] = {0};
     GLint hits, view[4];
     GLdouble modelview[16];
@@ -64,7 +63,6 @@ void SlideGLWidget::mouse_select(int x, int y) {
     gluPickMatrix(x, view[3] - y, 1.0, 1.0, view);
     gluPerspective(45, (float) this -> width() / this -> height(), 0.1, 100);
     glMatrixMode(GL_MODELVIEW);
-    glutSwapBuffers();
     repaint();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
