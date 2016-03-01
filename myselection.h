@@ -47,6 +47,8 @@ public:
     // @param mesh, the mesh that contains this border
     void selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
                              GLdouble posX, GLdouble posY, GLdouble posZ);
+    // Clear the current selection
+    void clearSelection();
 };
 
 #endif // SELECTION_H

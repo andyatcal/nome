@@ -358,3 +358,15 @@ void MySelection::selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
         }
     }
 }
+
+void MySelection::clearSelection() {
+    vector<Vertex*>::iterator vIt;
+    for(vIt = selectedVertices.begin(); vIt < selectedVertices.end(); vIt++) {
+        (*vIt) -> selected = false;
+    }
+    selectedVertices.clear();
+    firstBorderSelectionPoint = NULL;
+    secondBorderSelectionPoint = NULL;
+    allBorderPoints.clear();
+    vertToSelect.clear();
+}

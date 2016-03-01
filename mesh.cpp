@@ -486,3 +486,20 @@ vector<Edge*> Mesh::boundaryEdgeList() {
     //cout<<"size: " << boundaryEdgeList.size()<<endl;
     return boundaryEdgeList;
 }
+
+void Mesh::drawVertices() {
+    vector<Vertex*>::iterator vIt;
+    glPointSize(10);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
+    int counter = 0;
+    for(vIt = vertList.begin(); vIt < vertList.end(); vIt++) {
+        if((*vIt) -> selected) {
+            glBegin(GL_POINTS);
+            vec3 position = (*vIt) -> position;
+            glNormal3f(position[0] * 100, position[1] * 100, position[2] * 100);
+            glVertex3f(position[0], position[1], position[2]);
+            glEnd();
+        }
+    }
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, YELLOW);
+}

@@ -10,6 +10,7 @@ SlideGLWidget::SlideGLWidget(QWidget *parent) :
     arcball_on = false;
     wireframe = false;
     smoothshading = true;
+    selection_mode = 0;
 }
 
 void SlideGLWidget::makeDefaultMesh()
@@ -67,7 +68,15 @@ void SlideGLWidget::mouse_select(int x, int y) {
     glPopMatrix();
     hits = glRenderMode(GL_RENDER);
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
-    mySelect.list_hits(hits, buff);
+    //mySelect.list_hits(hits, buff);
+    if(selection_mode == 0){
+        mySelect.selectVertex(master_mesh, hits,buff,posX, posY, posZ);
+        (hits, buff, posX, posY, posZ);
+    } else if(selection_mode == 1) {
+        mySelect.selectWholeBorder(master_mesh, hits,buff,posX, posY, posZ);
+    } else {
+        mySelect.selectPartialBorder(master_mesh, hits,buff,posX, posY, posZ);
+    }
     glMatrixMode(GL_MODELVIEW);
 }
 SlideGLWidget::~SlideGLWidget()
@@ -117,6 +126,7 @@ void SlideGLWidget::paintGL()
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
+    master_mesh.drawVertices();
 }
 
 void SlideGLWidget::mousePressEvent(QMouseEvent* event)
