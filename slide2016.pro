@@ -10,9 +10,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = slide2016
 TEMPLATE = app
-CONFIG += c++11 -w
-
+QMAKE_CXXFLAGS = -std=c++11 -w
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
 SOURCES += main.cpp\
+        mainwindow.cpp \
     edge.cpp \
     vertex.cpp \
     face.cpp \
@@ -24,12 +25,11 @@ SOURCES += main.cpp\
     subdivision.cpp \
     offset.cpp \
     stl.cpp \
+    selection.cpp \
     zipper.cpp \
-    makePolyline.cpp \
-    myselection.cpp \
-    slideglwidget.cpp
+    makePolyline.cpp
 
-HEADERS  += \
+HEADERS  += mainwindow.h \
     edge.h \
     vertex.h \
     face.h \
@@ -41,10 +41,17 @@ HEADERS  += \
     subdivison.h \
     offset.h \
     stl.h \
+    selection.h \
     zipper.h \
+<<<<<<< HEAD
     makePolyline.h \
-    myselection.h \
-    slideglwidget.h
+    selection.h \
+    parameters.h
+=======
+    makePolyline.h
+>>>>>>> 4c5a6c51c96f268ee1f538a22fc156aae196637a
+
+FORMS    += mainwindow.ui
 
 linux{
     LIBS += -lglut -lGLU

@@ -1,8 +1,9 @@
 #include "slideglwidget.h"
 
 SlideGLWidget::SlideGLWidget(QWidget *parent) :
-    QOpenGLWidget(parent)
+    QGLWidget(parent)
 {
+    move(50, 50);
     startTimer(0);
     makeDefaultMesh();
     cameraDistance = 4;
@@ -46,6 +47,7 @@ void SlideGLWidget::mouse_select(int x, int y) {
     glGetDoublev(GL_PROJECTION_MATRIX, projection );
     winX = (double) x;
     winY = (double) view[3] - (double)y;
+    makeCurrent();
     glReadPixels( x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
     cout<<"winX "<<winX<<" "<<"winY "<<winY<<" "<<"winZ "<<winZ<<endl;
     gluUnProject( winX, winY, winZ, modelview, projection,
@@ -59,7 +61,6 @@ void SlideGLWidget::mouse_select(int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    //commit
     gluPickMatrix(x, view[3] - y, 1.0, 1.0, view);
     gluPerspective(45, (float) this -> width() / this -> height(), 0.1, 100);
     glMatrixMode(GL_MODELVIEW);
@@ -120,6 +121,7 @@ void SlideGLWidget::resizeGL(int w, int h)
 
 void SlideGLWidget::paintGL()
 {
+    makeCurrent();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);

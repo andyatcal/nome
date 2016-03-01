@@ -23,7 +23,6 @@
 #include "mesh.h"
 #include "makeMesh.h"
 #include "polyline.h"
-#include "myselection.h"
 class MainWindow : public QGLWidget
 {
     Q_OBJECT
@@ -44,7 +43,6 @@ private:
     void makeDefaultMesh();
     Mesh master_mesh;
     Mesh temp_mesh;
-    MySelection mySelect;
     /**
      * Get a normalized vector from the center of the virtual ball O to a
      * point P on the virtual ball surface, such that P is aligned on
@@ -56,15 +54,6 @@ private:
      * Timer Event for this MainWindow. Similar to OnIdleFunc of GLUT.
      */
     void timerEvent(QTimerEvent *event);
-    // A wrapper function for selection with mouse
-    // @param x, the x coordinate of the mouse clicked
-    // @param y, the y coordinate of the mouse clicked
-    // @param mode, the mode of selection.
-    void mouse_select(int x, int y);
-    // selection_mode = 1: vertex selection
-    // selection_mode = 2: whole border selection (line loop)
-    // selection_mode = 3: partial border selection (line strip)
-    int selection_mode;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
