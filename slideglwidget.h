@@ -1,6 +1,7 @@
 #ifndef SLIDEGLWIDGET_H
 #define SLIDEGLWIDGET_H
 
+#include <QMainWindow>
 #include <QtOpenGL>
 #define ROTATION_SPEED (1.0)
 #if __linux__
@@ -8,6 +9,7 @@
  #include <GL/gl.h>
  #define ROTATION_SPEED (50.0)
 #elif __APPLE__
+ #include <GLUT/GLUT.h>
  #define ROTATION_SPEED (1.0)
 #endif
 #ifdef _WIN32
@@ -22,12 +24,12 @@
 #include "makeMesh.h"
 #include "polyline.h"
 #include "myselection.h"
-class SlideGLWidget: public QOpenGLWidget
+class SlideGLWidget: public QGLWidget
 {
     Q_OBJECT
 
 public:
-    SlideGLWidget(QWidget *parent = 0);
+    explicit SlideGLWidget(QWidget *parent = 0);
     ~SlideGLWidget();
 
 private:
