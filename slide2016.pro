@@ -19,7 +19,11 @@ SOURCES += main.cpp\
     face.cpp \
     mesh.cpp \
     marge.cpp \
+<<<<<<< HEAD
     transformation.cpp
+=======
+    makeMesh.cpp
+>>>>>>> origin/master
 
 HEADERS  += mainwindow.h \
     edge.h \
@@ -27,7 +31,11 @@ HEADERS  += mainwindow.h \
     face.h \
     mesh.h \
     merge.h \
+<<<<<<< HEAD
     transformation.h
+=======
+    makeMesh.h
+>>>>>>> origin/master
 
 FORMS    += mainwindow.ui
 
