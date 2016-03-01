@@ -43,7 +43,8 @@ HEADERS  += mainwindow.h \
     stl.h \
     selection.h \
     zipper.h \
-<<<<<<< HEAD
+<<<<<<< HEAD \
+    parameters.h
     makePolyline.h \
     selection.h \
     parameters.h
