@@ -116,7 +116,7 @@ void MainWindow::timerEvent(QTimerEvent *event) {
         vec3 axis_in_camera_coord = cross(va, vb);
         mat3 camera2object = inverse(mat3(transforms[MODE_CAMERA]) * mat3(master_mesh.object2world));
         vec3 axis_in_object_coord = camera2object * axis_in_camera_coord;
-        master_mesh.object2world = rotate(master_mesh.object2world, (float) angle, axis_in_object_coord);
+        master_mesh.object2world = rotate(master_mesh.object2world, (float) ROTATION_SPEED * angle, axis_in_object_coord);
         last_mx = cur_mx;
         last_my = cur_my;
     }
@@ -135,7 +135,6 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
             glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         }
         wireframe = !wireframe;
-        cout<<"Hey!"<<endl;
         break;
     case Qt::Key_I:
         if(cameraDistance > 0.1) {
