@@ -25,8 +25,8 @@ public:
     // Constructor
     Zipper();
     // Function zipper, zippering two polylines.
-    Mesh zip(Polyline * b1, Polyline * b2, float trianglePenalty = 1.3);
-    Mesh zip_skewness(Polyline * b1, Polyline * b2, float penalty = 1.3);
+    Mesh zip(PolyLine * b1, PolyLine * b2, float trianglePenalty = 1.3);
+    Mesh zip_skewness(PolyLine * b1, PolyLine * b2, float penalty = 1.3);
 };
 
 #endif //__ZIPPER_H__

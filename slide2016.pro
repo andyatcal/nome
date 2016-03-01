@@ -18,32 +18,32 @@ SOURCES += main.cpp\
     vertex.cpp \
     face.cpp \
     mesh.cpp \
+    polyline.cpp \
     marge.cpp \
     transformation.cpp \
     makeMesh.cpp \
     subdivision.cpp \
     offset.cpp \
     stl.cpp \
-    polyline.cpp \
+    selection.cpp \
     zipper.cpp \
-    makePolyline.cpp \
-    selection.cpp
+    makePolyline.cpp
 
 HEADERS  += mainwindow.h \
     edge.h \
     vertex.h \
     face.h \
     mesh.h \
+    polyline.h \
     transformation.h \
     merge.h \
     makeMesh.h \
     subdivison.h \
     offset.h \
     stl.h \
-    polyline.h \
+    selection.h \
     zipper.h \
-    makePolyline.h \
-    selection.h
+    makePolyline.h
 
 FORMS    += mainwindow.ui
 

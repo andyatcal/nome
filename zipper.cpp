@@ -12,7 +12,7 @@ Zipper::Zipper()
 
 }
 
-Mesh Zipper::zip(Polyline * b1, Polyline * b2, float trianglePenalty)
+Mesh Zipper::zip(PolyLine * b1, PolyLine * b2, float trianglePenalty)
 {
     Mesh result;
     if(!(b1 -> isLoop) && !(b2 -> isLoop))
@@ -637,7 +637,7 @@ Mesh Zipper::zip(Polyline * b1, Polyline * b2, float trianglePenalty)
     return result;
 }
 
-Mesh Zipper::zip_skewness(Polyline * b1, Polyline * b2, float penalty)
+Mesh Zipper::zip_skewness(PolyLine * b1, PolyLine * b2, float penalty)
 {
     Mesh result;
     if(!(b1 -> isLoop) && !(b2 -> isLoop))
