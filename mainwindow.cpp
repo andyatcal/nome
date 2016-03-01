@@ -76,13 +76,6 @@ void MainWindow::paintGL()
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
-#ifdef __APPLE__
-    glutSwapBuffers();
-#elif __linux__
-    swapBuffers();
-#elif __WIN32
-    swapBuffers();
-#endif
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)

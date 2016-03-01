@@ -17,12 +17,12 @@ using namespace glm;
 
 //////////////////////////////////////////////////////////////////////
 // Polyline Class -- A Polyline is a list of vertices
-class Polyline {
+class PolyLine {
 public:
     vector<Vertex*> vertices;
     bool isLoop;
     // Constructor
-    Polyline();
+    PolyLine();
     // Draw this polyline in OpenGL;
     void drawLine();
     // Return the skewness of points in this polyline.

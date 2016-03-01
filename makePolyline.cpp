@@ -8,12 +8,12 @@
 #include "makePolyline.h"
 
 //////////////////////////////////////////////////////////////////////
-// MakePolyline Class -- Create Initial Meshes.
+// MakePolyLine Class -- Create Initial Meshes.
 Mesh initPolyline()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v11 = new Vertex;
     Vertex * v12 = new Vertex;
@@ -72,8 +72,8 @@ Mesh initPolyline()
 Mesh initPolyline1()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v11 = new Vertex;
     Vertex * v12 = new Vertex;
@@ -128,8 +128,8 @@ Mesh initPolyline1()
 Mesh initPolyline2()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v15 = new Vertex;
     v10 -> ID = 10;
@@ -173,8 +173,8 @@ Mesh initPolyline2()
 Mesh initPolyline4()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v15 = new Vertex;
     v10 -> ID = 10;
@@ -201,8 +201,8 @@ Mesh initPolyline4()
 Mesh initPolyline8()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v11 = new Vertex;
     Vertex * v12 = new Vertex;
@@ -263,8 +263,8 @@ Mesh initPolyline8()
 Mesh initPolyline9()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v11 = new Vertex;
     Vertex * v12 = new Vertex;
@@ -325,8 +325,8 @@ Mesh initPolyline9()
 Mesh initPolyline3()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v11 = new Vertex;
     Vertex * v12 = new Vertex;
@@ -385,8 +385,8 @@ Mesh initPolyline3()
 Mesh initPolyline5()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v11 = new Vertex;
     Vertex * v12 = new Vertex;
@@ -446,8 +446,8 @@ Mesh initPolyline5()
 Mesh initPolyline6()
 {
     Mesh glMesh;
-    Polyline * boarder1 = new Polyline;
-    Polyline * boarder2 = new Polyline;
+    PolyLine * boarder1 = new PolyLine;
+    PolyLine * boarder2 = new PolyLine;
     Vertex * v10 = new Vertex;
     Vertex * v11 = new Vertex;
     Vertex * v12 = new Vertex;

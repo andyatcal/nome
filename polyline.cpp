@@ -7,13 +7,13 @@
 
 #include "polyline.h"
 
-Polyline::Polyline()
+PolyLine::PolyLine()
 {
     isLoop = false;
     vertices.clear();
 }
 
-void Polyline::drawLine()
+void PolyLine::drawLine()
 {
     if(!isLoop)
     {
@@ -32,7 +32,7 @@ void Polyline::drawLine()
     glEnd();
 }
 
-vector<float> Polyline::skewness()
+vector<float> PolyLine::skewness()
 {
     if(vertices.size() < 2) {
         cout<<"ERROR: Can not find the skewness of a polyline with one vertex."<<endl;
