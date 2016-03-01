@@ -24,7 +24,7 @@
 #include "makeMesh.h"
 #include "polyline.h"
 #include "myselection.h"
-class SlideGLWidget: public QOpenGLWidget
+class SlideGLWidget: public QGLWidget
 {
     Q_OBJECT
 
