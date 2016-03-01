@@ -74,7 +74,7 @@ void MainWindow::paintGL()
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     master_mesh.drawMesh();
-    glutSwapBuffers();
+    swapBuffers();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
@@ -108,11 +108,10 @@ void MainWindow::timerEvent(QTimerEvent *event) {
         vec3 axis_in_camera_coord = cross(va, vb);
         mat3 camera2object = inverse(mat3(transforms[MODE_CAMERA]) * mat3(master_mesh.object2world));
         vec3 axis_in_object_coord = camera2object * axis_in_camera_coord;
-        master_mesh.object2world = rotate(master_mesh.object2world, angle, axis_in_object_coord);
+        master_mesh.object2world = rotate(master_mesh.object2world, (float) ROTATION_SPEED * angle, axis_in_object_coord);
         last_mx = cur_mx;
         last_my = cur_my;
     }
-    //fix_subdivision_matrices();
     repaint();
 }
 void MainWindow::keyPressEvent(QKeyEvent* event)
@@ -147,5 +146,5 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         event->ignore();
         break;
     }
-    glutPostRedisplay();
+    repaint();
 }
