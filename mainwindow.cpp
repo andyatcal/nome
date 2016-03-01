@@ -140,6 +140,15 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
             cameraDistance *= 1.1;
         }
         break;
+    case Qt::Key_S:
+        if (smoothShading) {
+            glShadeModel(GL_FLAT);
+            smoothShading = false;
+        } else {
+            glShadeModel(GL_SMOOTH);
+            smoothShading = true;
+        }
+        break;
     default:
         event->ignore();
         break;
