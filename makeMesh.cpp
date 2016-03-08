@@ -1283,6 +1283,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     while(getline(file, nextLine)){
         nextLine.pop_back();
         if(regex_match(nextLine, vRegex)){
+            cout<<"Vert!"<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
             temp = temp.substr(temp.find(" ") + 1);
@@ -1305,10 +1306,8 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
                     break;
                 }
             }
-            //cout<<newVert -> ID<<"Vertex added"<<endl;
-            //cout<<"I am mapping "<<vBeforeMergeCounter<<" to "<<vAfterMergeCounter<<endl;
-            //mapBeforeMergeToAfter[vBeforeMergeCounter] = vAfterMergeCounter;
-
+            cout<<newVert -> ID<<" Vertex added"<<endl;
+            cout<<"I am mapping "<<vBeforeMergeCounter<<" to "<<vAfterMergeCounter<<endl;
             if(!alreadyAdded) {
                 newVert -> ID = vAfterMergeCounter;
                 mesh.addVertex(newVert);
@@ -1317,6 +1316,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             }
             vBeforeMergeCounter += 1;
         } else if(regex_match(nextLine, tRegex)) {
+            cout<<"Polygon!"<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
             //cout<<temp<<endl;
@@ -1344,33 +1344,8 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             Vertex * va = mesh.vertList[a];
             Vertex * vb = mesh.vertList[b];
             Vertex * vc = mesh.vertList[c];
-            //cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
+            cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
             mesh.addTriFace(va, vb, vc);
-        } else if(regex_match(nextLine, lRegex)){
-            vector<int> oneBoundary;
-            string temp;
-            int nextVert;
-            if(shellNum > 1) {
-                vector<int>::iterator vertNumIt;
-                IDplusBecauseOfShells = 0;
-                for(vertNumIt = numberOfVerticesInShells.begin();
-                 vertNumIt < numberOfVerticesInShells.end(); vertNumIt ++) {
-                    IDplusBecauseOfShells += *vertNumIt;
-                }
-            }
-            temp = nextLine.substr(nextLine.find("\("),
-             nextLine.find("\)") - nextLine.find("\("));
-            //cout<<temp<<endl;
-            temp = temp.substr(temp.find(" ") + 1);
-            while(temp.find(" ") != string::npos){
-                nextVert = stoi(temp.substr(0, temp.find(" ")));
-                oneBoundary.push_back(nextVert + IDplusBecauseOfShells);
-                temp = temp.substr(temp.find(" ") + 1);
-            }
-            nextVert = stoi(temp);
-            oneBoundary.push_back(nextVert + IDplusBecauseOfShells);
-            boundaries.push_back(oneBoundary);
-            //cout<<oneBoundary.size()<<endl;
         } else if(regex_match(nextLine, shRegex)) {
             shellNum += 1;
         } else if(regex_match(nextLine, verticesRegex)){
