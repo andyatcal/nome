@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     zipper.cpp \
     makePolyline.cpp \
     myselection.cpp \
-    slideglwidget.cpp
+    slideglwidget.cpp \
+    controlpanel.cpp \
+    mainwindow.cpp
 
 HEADERS  += \
     edge.h \
@@ -44,7 +46,9 @@ HEADERS  += \
     zipper.h \
     makePolyline.h \
     myselection.h \
-    slideglwidget.h
+    slideglwidget.h \
+    controlpanel.h \
+    mainwindow.h
 
 linux{
     LIBS += -lglut -lGLU

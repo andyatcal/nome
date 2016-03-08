@@ -81,6 +81,8 @@ public:
     void computeNormals();
     // Return the list of edges on the boarders
     vector<Edge*> boundaryEdgeList();
+    // The color of this mesh
+    vec3 color;
 };
 
 // @param p1, p2, p3 are positions of three vertices,
