@@ -1263,8 +1263,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
         exit(1); // exit if file not found
     }
     string nextLine;
-    regex anyR(".*(.*).*");
-    regex vRegex(".*\(v .*$\).*");
+    regex vRegex(".*\(v .*\).*");
 
     regex tRegex(".*\(t .*\).*");
 
@@ -1276,14 +1275,13 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     int vBeforeMergeCounter = 0;
     int vAfterMergeCounter = 0;
     int IDplusBecauseOfShells = 0;
-    vector<vector<int> > boundaries;
     unordered_map<int, int> mapBeforeMergeToAfter;
     int shellNum = 0;
     vector<int> numberOfVerticesInShells;
     while(getline(file, nextLine)){
         nextLine.pop_back();
         if(regex_match(nextLine, vRegex)){
-            cout<<"Vert!"<<endl;
+            //cout<<"Vert!"<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
             temp = temp.substr(temp.find(" ") + 1);
@@ -1306,8 +1304,8 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
                     break;
                 }
             }
-            cout<<newVert -> ID<<" Vertex added"<<endl;
-            cout<<"I am mapping "<<vBeforeMergeCounter<<" to "<<vAfterMergeCounter<<endl;
+            //cout<<newVert -> ID<<" Vertex added"<<endl;
+            //cout<<"I am mapping "<<vBeforeMergeCounter<<" to "<<vAfterMergeCounter<<endl;
             if(!alreadyAdded) {
                 newVert -> ID = vAfterMergeCounter;
                 mesh.addVertex(newVert);
@@ -1316,7 +1314,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             }
             vBeforeMergeCounter += 1;
         } else if(regex_match(nextLine, tRegex)) {
-            cout<<"Polygon!"<<endl;
+            //cout<<"Polygon!"<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
             //cout<<temp<<endl;
@@ -1344,11 +1342,14 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             Vertex * va = mesh.vertList[a];
             Vertex * vb = mesh.vertList[b];
             Vertex * vc = mesh.vertList[c];
-            cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
+            //cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
             mesh.addTriFace(va, vb, vc);
         } else if(regex_match(nextLine, shRegex)) {
+            cout<<nextLine<<endl;
+            cout<<"match shell."<<endl;
             shellNum += 1;
         } else if(regex_match(nextLine, verticesRegex)){
+            cout<<"match vertices."<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("),
              nextLine.find("\)") - nextLine.find("\("));
@@ -1370,7 +1371,6 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
         exit(1); // exit if file not found
     }
     string nextLine;
-    regex anyR(".*(.*).*");
     regex vRegex(".*\(v .*$\).*");
     regex tRegex(".*\(t .*\).*");
     regex lRegex(".*\(loop .*\).*");
