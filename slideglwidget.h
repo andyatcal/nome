@@ -24,26 +24,40 @@
 #include "makeMesh.h"
 #include "polyline.h"
 #include "myselection.h"
+#include "stl.h"
+
 class SlideGLWidget: public QGLWidget
 {
     Q_OBJECT
 
 public:
     explicit SlideGLWidget(QWidget *parent = 0);
+    SlideGLWidget(string name, QWidget *parent = 0);
     ~SlideGLWidget();
-
+    // Save the current master_mesh in a STL file
+    void saveMesh(string name);
 private:
     // Viewer variables.
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
     mat4 transforms[MODE_LAST];
     float cameraDistance;
+    // Support arcball feature.
     int last_mx, last_my, cur_mx, cur_my;
+    // Support arcball feature.
     int arcball_on;
+    // control of the wireframe mode.
     bool wireframe;
+    // control of the shading mode.
     bool smoothshading;
+    // Make a default mesh of a cube
     void makeDefaultMesh();
+    // Make a mesh by reading in a SIF or SLF file
+    void makeMesh(string name);
+    // The master_mesh that we work on.
     Mesh master_mesh;
+    // The temp_mesh modified by the user.
     Mesh temp_mesh;
+    // Selection object to handle mouse selection.
     MySelection mySelect;
     /**
      * Get a normalized vector from the center of the virtual ball O to a
@@ -65,6 +79,8 @@ private:
     // selection_mode = 2: whole border selection (line loop)
     // selection_mode = 3: partial border selection (line strip)
     int selection_mode;
+    // Called by constructor to setup general background parameters.
+    void generalSetup();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

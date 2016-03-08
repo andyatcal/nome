@@ -3,8 +3,20 @@
 SlideGLWidget::SlideGLWidget(QWidget *parent) :
     QGLWidget(parent)
 {
-    startTimer(0);
+    generalSetup();
     makeDefaultMesh();
+}
+
+SlideGLWidget::SlideGLWidget(string name, QWidget *parent) :
+    QGLWidget(parent)
+{
+    generalSetup();
+    makeMesh(name);
+}
+
+void SlideGLWidget::generalSetup()
+{
+    startTimer(0);
     cameraDistance = 4;
     last_mx = last_my = cur_mx = cur_my = 0;
     arcball_on = false;
@@ -16,6 +28,21 @@ SlideGLWidget::SlideGLWidget(QWidget *parent) :
 void SlideGLWidget::makeDefaultMesh()
 {
     makeCube(master_mesh,0.5,0.5,0.5);
+    master_mesh.computeNormals();
+}
+
+void SlideGLWidget::makeMesh(string name)
+{
+    // Figure out the QuadSIF or SIF later/
+    makeWithSIF(master_mesh,name);
+    master_mesh.computeNormals();
+}
+
+void SlideGLWidget::saveMesh(string name)
+{
+    // Figure out the QuadSIF or SIF later/
+    STL *stl = new STL;
+    stl -> STLOutput(master_mesh, name);
     master_mesh.computeNormals();
 }
 

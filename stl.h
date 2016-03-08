@@ -27,6 +27,7 @@ class STL{
 public:
     STL(){};
     void STLOutput(vector<Mesh> &meshes, string outputSTL);
+    void STLOutput(Mesh &mesh, string outputSTL);
 };
 
 // Get a triangular surface normal.
