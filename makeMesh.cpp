@@ -1269,7 +1269,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
 
     regex lRegex(".*\(loop .*\).*");
 
-    regex shRegex(".*\(shell.*\).*");
+    regex shRegex(".*shell");
     regex verticesRegex(".*\(vertices .*\).*");
 
     int vBeforeMergeCounter = 0;
