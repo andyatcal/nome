@@ -2,6 +2,5 @@
 
 ControlPanel::ControlPanel()
 {
-    cout<<"Calling me."<<endl;
+    //cout<<"Calling me."<<endl;
 }
-
