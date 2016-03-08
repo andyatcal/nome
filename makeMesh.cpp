@@ -1511,8 +1511,8 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
     regex vRegex(".*\(v .*$\).*");
     regex tRegex(".*\(t .*\).*");
     regex lRegex(".*\(loop .*\).*");
-    regex shRegex(".*\\(shell.*\).*");
-    regex verticesRegex(".*\\(vertices .*\).*");
+    regex shRegex(".*\(shell.*\).*");
+    regex verticesRegex(".*\(vertices .*\).*");
     int vBeforeMergeCounter = 0;
     int vAfterMergeCounter = 0;
     int IDplusBecauseOfShells = 0;
