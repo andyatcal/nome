@@ -1265,10 +1265,15 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     string nextLine;
     regex anyR(".*(.*).*");
     regex vRegex(".*\(v .*$\).*");
+
     regex tRegex(".*\(t .*\).*");
+
     regex lRegex(".*\(loop .*\).*");
-    regex shRegex(".*\\(shell.*\).*");
-    regex verticesRegex(".*\\(vertices .*\).*");
+
+    regex shRegex(".*\(shell.*\).*");
+    cout<<"hey!"<<endl;
+    regex verticesRegex(".*\(vertices .*\).*");
+
     int vBeforeMergeCounter = 0;
     int vAfterMergeCounter = 0;
     int IDplusBecauseOfShells = 0;
@@ -1404,6 +1409,7 @@ void makeWithSIFWithMerge(Mesh &mesh, string inputSIF){
     unordered_map<int, int> mapBeforeMergeToAfter;
     int shellNum = 0;
     vector<int> numberOfVerticesInShells;
+
     while(getline(file, nextLine)){
         nextLine.pop_back();
         if(regex_match(nextLine, vRegex)){
