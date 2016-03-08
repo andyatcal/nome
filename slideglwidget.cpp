@@ -202,7 +202,7 @@ void SlideGLWidget::keyPressEvent(QKeyEvent* event)
 {
     switch(event->key()) {
     case Qt::Key_Escape:
-        close();
+        mySelect.clearSelection();
         break;
     case Qt::Key_W:
         if (wireframe) {

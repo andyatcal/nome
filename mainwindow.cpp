@@ -14,6 +14,7 @@ void MainWindow::open()
         return;
     }
     createCanvas(fileName);
+    createControlPanel();
 }
 
 void MainWindow::save()
@@ -31,12 +32,17 @@ void MainWindow::save()
 
 void MainWindow::close()
 {
-
+    if(canvas != NULL) {
+        canvas -> close();
+        canvas = NULL;
+        controls -> close();
+        controls = NULL;
+    }
 }
 
 void MainWindow::quit()
 {
-
+    exit(1);
 }
 
 void MainWindow::createActions()
@@ -73,9 +79,16 @@ void MainWindow::createMenus()
 void MainWindow::createCanvas(QString name)
 {
     canvas = new SlideGLWidget(name.toStdString());
+    canvas -> move(0, 50);
     canvas -> show();
 }
 
+void MainWindow::createControlPanel()
+{
+    controls = new ControlPanel();
+    controls -> move(900, 50);
+    controls -> show();
+}
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
