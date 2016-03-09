@@ -1278,7 +1278,10 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     int shellNum = 0;
     vector<int> numberOfVerticesInShells;
     while(getline(file, nextLine)){
-        if(regex_match(nextLine, vRegex)){
+#if __APPLE__
+        nextLine.pop_back();
+#endif
+        if(regex_match(nextLine, vRegex)) {
             //cout<<"Vert!"<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
