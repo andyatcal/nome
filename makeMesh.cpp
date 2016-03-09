@@ -1268,8 +1268,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     regex tRegex(".*\(t .*\).*");
 
     regex lRegex(".*\(loop .*\).*");
-
-    regex shRegex(".*shell");
+    regex shRegex(".*shell.*");
     regex verticesRegex(".*\(vertices .*\).*");
 
     int vBeforeMergeCounter = 0;
@@ -1279,7 +1278,6 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     int shellNum = 0;
     vector<int> numberOfVerticesInShells;
     while(getline(file, nextLine)){
-        nextLine.pop_back();
         if(regex_match(nextLine, vRegex)){
             //cout<<"Vert!"<<endl;
             string temp;
@@ -1349,12 +1347,14 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             cout<<"match shell."<<endl;
             shellNum += 1;
         } else if(regex_match(nextLine, verticesRegex)){
+            cout<<nextLine<<endl;
             cout<<"match vertices."<<endl;
             string temp;
-            temp = nextLine.substr(nextLine.find("\("),
-             nextLine.find("\)") - nextLine.find("\("));
+            temp = nextLine.substr(nextLine.find("\("));
+            cout<<temp<<endl;
             temp = temp.substr(temp.find(" ") + 1);
             int numberOfVerticesInThisShell = stoi(temp);
+            cout<<numberOfVerticesInThisShell<<endl;
             numberOfVerticesInShells.push_back(numberOfVerticesInThisShell);
         }
     }
