@@ -269,3 +269,21 @@ void SlideGLWidget::subdivde(int level)
         }
     }
 }
+
+void SlideGLWidget::changeViewContent(int view_content)
+{
+    switch(view_content)
+    {
+        case 0:
+            cout<<"Not supported yet!"<<endl;
+            break;
+        case 1:
+            view_mesh = &master_mesh;
+        case 2:
+            view_mesh = subdiv_mesh;
+        case 3:
+            view_mesh = offset_mesh;
+        case 4:
+            view_mesh = subdiv_offset_mesh;
+    }
+}

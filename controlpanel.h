@@ -26,7 +26,10 @@ public:
     ControlPanel();
     /* @param canvas, the canvas that this panel control.*/
     ControlPanel(SlideGLWidget * canvas);
+    /* Set up the layout and widgets.*/
     void setupLayout();
+    /* Build the connections. */
+    void buildConnection();
     /* The selection mode of current program.
      * 1: vertex selection.
      * 2: whole border secletion.
@@ -40,6 +43,26 @@ public:
 private:
     SlideGLWidget *canvas;
     Ui::ControlPanel *ui;
+    /* Widgets and Layout in this Control Panel.*/
+    QVBoxLayout *mainLayout;
+    QVBoxLayout *viewLayout;
+    QVBoxLayout *modeLayout;
+    QVBoxLayout *mergeLayout;
+    QVBoxLayout *subdivLayout;
+    QVBoxLayout *offsetLayout;
+    QVBoxLayout *colorLayout;
+    QComboBox *viewContent;
+    QPushButton *mergeButton;
+    QHBoxLayout *subdivLevelLayout;
+    QSlider *subdivLevelSlider;
+    QHBoxLayout *offsetValueLayout;
+    QSlider *offsetValueSlider;
+    QHBoxLayout *foreColorLayout;
+    QHBoxLayout *backColorLayout;
+    QPushButton *foreColorButton;
+    QWidget *foreColorBox;
+    QPushButton *backColorButton;
+    QWidget *backColorBox;
 };
 
 #endif // CONTROLPANEL_H

@@ -113,6 +113,16 @@ protected:
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
+public slots:
+    /* Change the current view mesh.
+     * @param view_content,
+     * 0 for hirachical scene
+     * 1 for master mesh
+     * 2 for subdivision mesh
+     * 3 for offset mesh
+     * 4 for subdivision on offset mesh
+     */
+    void changeViewContent(int view_content);
 };
 
 #endif // SLIDEGLWIDGET_H
