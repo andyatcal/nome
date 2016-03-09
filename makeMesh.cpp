@@ -1348,18 +1348,18 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             //cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
             mesh.addTriFace(va, vb, vc);
         } else if(regex_match(nextLine, shRegex)) {
-            cout<<nextLine<<endl;
-            cout<<"match shell."<<endl;
+            //cout<<nextLine<<endl;
+            //cout<<"match shell."<<endl;
             shellNum += 1;
         } else if(regex_match(nextLine, verticesRegex)){
-            cout<<nextLine<<endl;
-            cout<<"match vertices."<<endl;
+            //cout<<nextLine<<endl;
+            //cout<<"match vertices."<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("));
-            cout<<temp<<endl;
+            //cout<<temp<<endl;
             temp = temp.substr(temp.find(" ") + 1);
             int numberOfVerticesInThisShell = stoi(temp);
-            cout<<numberOfVerticesInThisShell<<endl;
+            //cout<<numberOfVerticesInThisShell<<endl;
             numberOfVerticesInShells.push_back(numberOfVerticesInThisShell);
         }
     }
@@ -1394,7 +1394,9 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
     Vertex * vc;
     Vertex * vd;
     while(getline(file, nextLine)){
+#if __APPLE__
         nextLine.pop_back();
+#endif
         if(regex_match(nextLine, vRegex)){
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
