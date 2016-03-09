@@ -1277,7 +1277,9 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     unordered_map<int, int> mapBeforeMergeToAfter;
     int shellNum = 0;
     vector<int> numberOfVerticesInShells;
-    while(getline(file, nextLine)){
+    while(getline(file, nextLine)) {
+        // It turns out that apple system is functioning differently with
+        // Windows with getline function.
 #if __APPLE__
         nextLine.pop_back();
 #endif
