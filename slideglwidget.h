@@ -24,6 +24,7 @@
 #include "makeMesh.h"
 #include "polyline.h"
 #include "myselection.h"
+#include "subdivison.h"
 #include "stl.h"
 
 class SlideGLWidget: public QGLWidget
@@ -67,6 +68,8 @@ private:
      * Can be merged into the master mesh.
      */
     Mesh temp_mesh;
+    /* A subdivider to handler subdivision.*/
+    Subdivision *subdivider;
     /* A pointer to the subdivided mesh. */
     Mesh *subdiv_mesh;
     /* The cache of mesh that has been subdivided.
@@ -77,6 +80,8 @@ private:
     Mesh *offset_mesh;
     /* A pointer to the subdivided offset mesh. */
     Mesh *subdiv_offset_mesh;
+    /* A pointer to the current view mesh. */
+    Mesh *view_mesh;
     /* Selection object to handle mouse selection.*/
     MySelection mySelect;
     /**

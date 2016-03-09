@@ -63,3 +63,5 @@ win32{
     LIBS += -lopengl32 -lglu32 -lglut32
     INCLUDEPATH = $$PWD/../include
 }
+
+FORMS +=

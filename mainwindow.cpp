@@ -4,6 +4,7 @@ MainWindow::MainWindow()
 {
     createActions();
     createMenus();
+    createControlPanel(canvas);
     //setCentralWidget(controls);
 }
 

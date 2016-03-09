@@ -12,7 +12,12 @@ using namespace std;
 #include <QButtonGroup>
 #include <QRadioButton>
 #include <QPushButton>
+#include <QComboBox>
+#include <QColorDialog>
 #include "slideglwidget.h"
+namespace Ui {
+class ControlPanel;
+}
 class ControlPanel : public QWidget
 {
     Q_OBJECT
@@ -34,6 +39,7 @@ public:
     float offsetValue;
 private:
     SlideGLWidget *canvas;
+    Ui::ControlPanel *ui;
 };
 
 #endif // CONTROLPANEL_H

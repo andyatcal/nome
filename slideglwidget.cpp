@@ -37,6 +37,7 @@ void SlideGLWidget::makeSIFMesh(string name)
     // Figure out the QuadSIF or SIF later/
     makeWithSIF(master_mesh,name);
     master_mesh.computeNormals();
+    view_mesh = &master_mesh;
 }
 
 void SlideGLWidget::makeSLFMesh(string name)
@@ -69,7 +70,9 @@ vec3 SlideGLWidget::get_arcball_vector(int x, int y) {
 }
 
 void SlideGLWidget::mouse_select(int x, int y) {
-    makeCurrent();
+    if(view_mesh != &master_mesh) {
+        return;
+    }
     GLuint buff[64] = {0};
     GLint hits, view[4];
     GLdouble modelview[16];
@@ -107,12 +110,12 @@ void SlideGLWidget::mouse_select(int x, int y) {
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
     //mySelect.list_hits(hits, buff);
     if(selection_mode == 0){
-        mySelect.selectVertex(master_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectVertex(*view_mesh, hits,buff,posX, posY, posZ);
         (hits, buff, posX, posY, posZ);
     } else if(selection_mode == 1) {
-        mySelect.selectWholeBorder(master_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectWholeBorder(*view_mesh, hits,buff,posX, posY, posZ);
     } else {
-        mySelect.selectPartialBorder(master_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectPartialBorder(*view_mesh, hits,buff,posX, posY, posZ);
     }
     glMatrixMode(GL_MODELVIEW);
 }
@@ -162,8 +165,8 @@ void SlideGLWidget::paintGL()
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
     glMultMatrixf(&master_mesh.object2world[0][0]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
-    master_mesh.drawMesh();
-    master_mesh.drawVertices();
+    view_mesh->drawMesh();
+    view_mesh->drawVertices();
 }
 
 void SlideGLWidget::mousePressEvent(QMouseEvent* event)
@@ -257,9 +260,12 @@ void SlideGLWidget::subdivde(int level)
         subdiv_mesh = cache_subdivided_meshes[level - 1];
     } else {
         Mesh *currentLevel = cache_subdivided_meshes[currentTopLevel - 1];
-        Mesh *nextLevel;
         for(;currentTopLevel > level - 1; currentTopLevel++) {
-
+            subdivider = new Subdivision(*currentLevel);
+            /* Divide one more level.*/
+            Mesh subdividedMesh = (subdivider->ccSubdivision(1));
+            currentLevel = &subdividedMesh;
+            cache_subdivided_meshes.push_back(currentLevel);
         }
     }
 }
