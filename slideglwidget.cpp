@@ -7,11 +7,11 @@ SlideGLWidget::SlideGLWidget(QWidget *parent) :
     makeDefaultMesh();
 }
 
-SlideGLWidget::SlideGLWidget(string name, QWidget *parent) :
+SlideGLWidget::SlideGLWidget(string name, int i, QWidget *parent) :
     QGLWidget(parent)
 {
     generalSetup();
-    makeMesh(name);
+    makeSIFMesh(name);
 }
 
 void SlideGLWidget::generalSetup()
@@ -23,6 +23,7 @@ void SlideGLWidget::generalSetup()
     wireframe = false;
     smoothshading = true;
     selection_mode = 0;
+    resize(600, 480);
 }
 
 void SlideGLWidget::makeDefaultMesh()
@@ -31,11 +32,19 @@ void SlideGLWidget::makeDefaultMesh()
     master_mesh.computeNormals();
 }
 
-void SlideGLWidget::makeMesh(string name)
+void SlideGLWidget::makeSIFMesh(string name)
 {
     // Figure out the QuadSIF or SIF later/
     makeWithSIF(master_mesh,name);
     master_mesh.computeNormals();
+}
+
+void SlideGLWidget::makeSLFMesh(string name)
+{
+    // Figure out the QuadSIF or SIF later/
+    //makeWithSIF(master_mesh,name);
+    //master_mesh.computeNormals();
+    cout<<"Coming Soon!"<<endl;
 }
 
 void SlideGLWidget::saveMesh(string name)

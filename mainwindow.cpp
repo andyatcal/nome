@@ -4,6 +4,7 @@ MainWindow::MainWindow()
 {
     createActions();
     createMenus();
+    //setCentralWidget(controls);
 }
 
 void MainWindow::open()
@@ -14,7 +15,6 @@ void MainWindow::open()
         return;
     }
     createCanvas(fileName);
-    createControlPanel();
 }
 
 void MainWindow::save()
@@ -78,12 +78,19 @@ void MainWindow::createMenus()
 }
 void MainWindow::createCanvas(QString name)
 {
-    canvas = new SlideGLWidget(name.toStdString());
+    if(name.right(3).toLower() == "sif") {
+        canvas = new SlideGLWidget(name.toStdString(), 0);
+    } else if (name.right(3).toLower() == "slf"){
+        canvas = new SlideGLWidget(name.toStdString(), 1);
+    } else {
+        cout<<"File not supported!";
+    }
     canvas -> move(0, 50);
     canvas -> show();
+    createControlPanel(canvas);
 }
 
-void MainWindow::createControlPanel()
+void MainWindow::createControlPanel(SlideGLWidget * canvas)
 {
     controls = new ControlPanel();
     controls -> move(900, 50);

@@ -32,7 +32,10 @@ class SlideGLWidget: public QGLWidget
 
 public:
     explicit SlideGLWidget(QWidget *parent = 0);
-    SlideGLWidget(string name, QWidget *parent = 0);
+    /* @param name the path of the file.
+     * @param i, i = 0 is the SIF file, i = 1 is the SLF file.
+     */
+    SlideGLWidget(string name, int i, QWidget *parent = 0);
     ~SlideGLWidget();
     // Save the current master_mesh in a STL file
     void saveMesh(string name);
@@ -51,8 +54,10 @@ private:
     bool smoothshading;
     // Make a default mesh of a cube
     void makeDefaultMesh();
-    // Make a mesh by reading in a SIF or SLF file
-    void makeMesh(string name);
+    /* Make a mesh by reading in a SIF file. */
+    void makeSIFMesh(string name);
+    /* Make a mesh by reading in a SLF file.*/
+    void makeSLFMesh(string name);
     // The master_mesh that we work on.
     Mesh master_mesh;
     // The temp_mesh modified by the user.

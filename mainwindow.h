@@ -22,7 +22,7 @@ private:
     void createActions();
     void createMenus();
     void createCanvas(QString name);
-    void createControlPanel();
+    void createControlPanel(SlideGLWidget *canvas);
     QMenu *fileMenu;
     QAction *openAct;
     QAction *saveAct;
