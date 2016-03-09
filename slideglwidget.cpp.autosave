@@ -259,7 +259,7 @@ void SlideGLWidget::subdivde(int level)
         Mesh *currentLevel = cache_subdivided_meshes[currentTopLevel - 1];
         Mesh *nextLevel;
         for(;currentTopLevel > level - 1; currentTopLevel++) {
-
+            currentLevel = &
         }
     }
 }

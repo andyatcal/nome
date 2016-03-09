@@ -39,30 +39,45 @@ public:
     ~SlideGLWidget();
     // Save the current master_mesh in a STL file
     void saveMesh(string name);
+    void subdivde(int level);
 private:
-    // Viewer variables.
+    /* Viewer variables.*/
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
     mat4 transforms[MODE_LAST];
     float cameraDistance;
-    // Support arcball feature.
+    /* Support arcball feature.*/
     int last_mx, last_my, cur_mx, cur_my;
-    // Support arcball feature.
+    /* Support arcball feature. */
     int arcball_on;
-    // control of the wireframe mode.
+    /* control of the wireframe mode. */
     bool wireframe;
-    // control of the shading mode.
+    /* control of the shading mode. */
     bool smoothshading;
-    // Make a default mesh of a cube
+    /* Make a default mesh of a cube. */
     void makeDefaultMesh();
     /* Make a mesh by reading in a SIF file. */
     void makeSIFMesh(string name);
     /* Make a mesh by reading in a SLF file.*/
     void makeSLFMesh(string name);
-    // The master_mesh that we work on.
+    /* The master mesh. As a result of SIF parser.
+     * Or as a result of merging the scene.
+     */
     Mesh master_mesh;
-    // The temp_mesh modified by the user.
+    /* The working mesh that the user modified.
+     * Can be merged into the master mesh.
+     */
     Mesh temp_mesh;
-    // Selection object to handle mouse selection.
+    /* A pointer to the subdivided mesh. */
+    Mesh *subdiv_mesh;
+    /* The cache of mesh that has been subdivided.
+     * The index in this vector = subdivision level - 1.
+     */
+    vector<Mesh*> cache_subdivided_meshes;
+    /* A pointer to the offset mesh. */
+    Mesh *offset_mesh;
+    /* A pointer to the subdivided offset mesh. */
+    Mesh *subdiv_offset_mesh;
+    /* Selection object to handle mouse selection.*/
     MySelection mySelect;
     /**
      * Get a normalized vector from the center of the virtual ball O to a
