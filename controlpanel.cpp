@@ -162,6 +162,7 @@ void ControlPanel::resetForeColor(bool)
     QPalette forePal = foreColorBox->palette();
     forePal.setColor(foreColorBox->backgroundRole(), newColor);
     foreColorBox->setPalette(forePal);
+    canvas -> setForeColor(newColor);
 }
 
 void ControlPanel::resetBackColor(bool)
@@ -170,4 +171,5 @@ void ControlPanel::resetBackColor(bool)
     QPalette backPal = backColorBox->palette();
     backPal.setColor(backColorBox->backgroundRole(), newColor);
     backColorBox->setPalette(backPal);
+    canvas -> setBackColor(newColor);
 }

@@ -27,21 +27,38 @@
 #include "subdivison.h"
 #include "stl.h"
 #include <QMessageBox>
-
+#include <QColor>
 class SlideGLWidget: public QGLWidget
 {
     Q_OBJECT
 
 public:
     explicit SlideGLWidget(QWidget *parent = 0);
-    /* @param name the path of the file.
+    /**
+     * @param name the path of the file.
      * @param i, i = 0 is the SIF file, i = 1 is the SLF file.
      */
     SlideGLWidget(string name, int i, QWidget *parent = 0);
     ~SlideGLWidget();
-    // Save the current master_mesh in a STL file
+    /**
+     * Save the current master_mesh in a STL file.
+     */
     void saveMesh(string name);
+    /**
+     * @brief subdivide for certain level.
+     * @param level, level of subdivision.
+     */
     void subdivide(int level);
+    /**
+     * @brief setForeColor, set default foreground color.
+     * @param color, the color to be set.
+     */
+    void setForeColor(QColor color);
+    /**
+     * @brief setBackColor, set default background color.
+     * @param color, the color to be set.
+     */
+    void setBackColor(QColor color);
 private:
     /* Viewer variables.*/
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
@@ -75,7 +92,8 @@ private:
     Subdivision *subdivider;
     /* A pointer to the subdivided mesh. */
     Mesh subdiv_mesh;
-    /* The cache of mesh that has been subdivided.
+    /**
+     * The cache of mesh that has been subdivided.
      * The index in this vector = subdivision level - 1.
      */
     vector<Mesh> cache_subdivided_meshes;
@@ -95,17 +113,17 @@ private:
      */
     vec3 get_arcball_vector(int x, int y);
     /**
-     * Timer Event for this MainWindow. Similar to OnIdleFunc of GLUT.
+     * A wrapper function for selection with mouse
+     * @param x, the x coordinate of the mouse clicked
+     * @param y, the y coordinate of the mouse clicked
+     * @param mode, the mode of selection.
      */
-    void timerEvent(QTimerEvent *event);
-    // A wrapper function for selection with mouse
-    // @param x, the x coordinate of the mouse clicked
-    // @param y, the y coordinate of the mouse clicked
-    // @param mode, the mode of selection.
     void mouse_select(int x, int y);
-    // selection_mode = 1: vertex selection
-    // selection_mode = 2: whole border selection (line loop)
-    // selection_mode = 3: partial border selection (line strip)
+    /**
+     * selection_mode = 1: vertex selection
+     * selection_mode = 2: whole border selection (line loop)
+     * selection_mode = 3: partial border selection (line strip)
+     */
     int selection_mode;
     /* Called by constructor to setup general background parameters. */
     void generalSetup();
@@ -115,6 +133,15 @@ private:
     void zoom_in();
     /* Zoom out in the current view. */
     void zoom_out();
+    /**
+     * The default foreground color.
+     */
+    QColor foreColor;
+    /**
+     * The default background color.
+     */
+    QColor backColor;
+
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -122,6 +149,10 @@ protected:
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
+    /**
+     * Timer Event for this MainWindow. Similar to OnIdleFunc of GLUT.
+     */
+    void timerEvent(QTimerEvent *event);
     void wheelEvent(QWheelEvent *event);
 public slots:
     /* Change the current view mesh.

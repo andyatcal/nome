@@ -1,8 +1,6 @@
 #ifndef CONTROLPANEL_H
 #define CONTROLPANEL_H
 
-using namespace std;
-
 #include <QWidget>
 #include <iostream>
 #include <QVBoxLayout>

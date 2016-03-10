@@ -29,6 +29,8 @@ void SlideGLWidget::generalSetup()
     smoothshading = true;
     selection_mode = 0;
     object2world = mat4(1);
+    foreColor = QColor(255,0,0);
+    backColor = QColor(0,0,0);
     resize(600, 480);
 }
 
@@ -167,11 +169,19 @@ void SlideGLWidget::resizeGL(int w, int h)
 
 void SlideGLWidget::paintGL()
 {
+    glClearColor(1.0f * backColor.red() / 255,
+                 1.0f * backColor.green() / 255,
+                 1.0f * backColor.blue() / 255,
+                 1.0f * backColor.alpha() / 255);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
     glMultMatrixf(&object2world[0][0]);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
+    GLfloat fcolor[] = {1.0f * foreColor.red() / 255,
+                        1.0f * foreColor.green() / 255,
+                        1.0f * foreColor.blue() / 255,
+                        1.0f * foreColor.alpha() /255};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
     view_mesh->drawMesh();
     view_mesh->drawVertices();
 }
@@ -352,5 +362,17 @@ void SlideGLWidget::wheelEvent(QWheelEvent *event)
         }
     }
     event->accept();
+    repaint();
+}
+
+void SlideGLWidget::setForeColor(QColor color)
+{
+    foreColor = color;
+    repaint();
+}
+
+void SlideGLWidget::setBackColor(QColor color)
+{
+    backColor = color;
     repaint();
 }
