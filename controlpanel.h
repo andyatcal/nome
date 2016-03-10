@@ -80,6 +80,8 @@ public slots:
     void resetMaxOffset(QString maxOffset);
     void resetOffsetStep(QString offsetStep);
     void offSetSliderMoved(int value);
+    void resetForeColor(bool);
+    void resetBackColor(bool);
 signals:
     void makeOffsetMesh(float);
 };

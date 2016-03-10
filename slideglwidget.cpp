@@ -341,7 +341,6 @@ void SlideGLWidget::zoom_out()
 void SlideGLWidget::wheelEvent(QWheelEvent *event)
 {
     QPoint numDegrees = event->angleDelta() / 8;
-    cout<<"x "<<numDegrees.x()<<" y "<<numDegrees.y()<<endl;
     int numZoomIn = numDegrees.y() / 15;
     if(numZoomIn >= 1) {
         for(int i = 0; i < numZoomIn; i++) {

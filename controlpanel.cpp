@@ -26,7 +26,8 @@ void ControlPanel::buildConnection()
     connect(offsetStepBox, SIGNAL(textChanged(QString)), this, SLOT(resetOffsetStep(QString)));
     connect(offsetValueSlider, SIGNAL(valueChanged(int)), this, SLOT(offSetSliderMoved(int)));
     connect(this, SIGNAL(makeOffsetMesh(float)), canvas, SLOT(offsetValueChanged(float)));
-
+    connect(foreColorButton, SIGNAL(clicked(bool)), this, SLOT(resetForeColor(bool)));
+    connect(backColorButton, SIGNAL(clicked(bool)), this, SLOT(resetBackColor(bool)));
 }
 
 void ControlPanel::setupLayout()
@@ -153,4 +154,20 @@ void ControlPanel::offSetSliderMoved(int value)
 void ControlPanel::viewContentSetToSubdivOffset()
 {
     viewContent -> setCurrentIndex(4);
+}
+
+void ControlPanel::resetForeColor(bool)
+{
+    QColor newColor = QColorDialog::getColor();
+    QPalette forePal = foreColorBox->palette();
+    forePal.setColor(foreColorBox->backgroundRole(), newColor);
+    foreColorBox->setPalette(forePal);
+}
+
+void ControlPanel::resetBackColor(bool)
+{
+    QColor newColor = QColorDialog::getColor();
+    QPalette backPal = backColorBox->palette();
+    backPal.setColor(backColorBox->backgroundRole(), newColor);
+    backColorBox->setPalette(backPal);
 }
