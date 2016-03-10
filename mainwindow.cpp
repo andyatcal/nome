@@ -4,7 +4,7 @@ MainWindow::MainWindow()
 {
     createActions();
     createMenus();
-    createControlPanel(canvas);
+    //createControlPanel(canvas);
     //setCentralWidget(controls);
 }
 
@@ -93,7 +93,7 @@ void MainWindow::createCanvas(QString name)
 
 void MainWindow::createControlPanel(SlideGLWidget * canvas)
 {
-    controls = new ControlPanel();
+    controls = new ControlPanel(canvas);
     controls -> move(900, 50);
     controls -> show();
 }

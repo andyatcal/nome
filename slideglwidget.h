@@ -26,6 +26,7 @@
 #include "myselection.h"
 #include "subdivison.h"
 #include "stl.h"
+#include <QMessageBox>
 
 class SlideGLWidget: public QGLWidget
 {
@@ -106,6 +107,8 @@ private:
     int selection_mode;
     // Called by constructor to setup general background parameters.
     void generalSetup();
+    /* A message box that deliver error message.*/
+    QMessageBox *errorMsg;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -122,7 +125,14 @@ public slots:
      * 3 for offset mesh
      * 4 for subdivision on offset mesh
      */
-    void changeViewContent(int view_content);
+    void viewContentChanged(int view_content);
+    /* Receive the signal from control panel to do subdivision.*/
+    void levelChanged(int new_level);
+signals:
+    /* Feedback to the control panel. */
+    void viewContentError();
+    /* Feedback that subdivision is finished. */
+    void subdivisionFinished();
 };
 
 #endif // SLIDEGLWIDGET_H

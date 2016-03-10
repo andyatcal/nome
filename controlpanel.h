@@ -15,9 +15,6 @@ using namespace std;
 #include <QComboBox>
 #include <QColorDialog>
 #include "slideglwidget.h"
-namespace Ui {
-class ControlPanel;
-}
 class ControlPanel : public QWidget
 {
     Q_OBJECT
@@ -42,7 +39,6 @@ public:
     float offsetValue;
 private:
     SlideGLWidget *canvas;
-    Ui::ControlPanel *ui;
     /* Widgets and Layout in this Control Panel.*/
     QVBoxLayout *mainLayout;
     QVBoxLayout *viewLayout;
@@ -63,6 +59,14 @@ private:
     QWidget *foreColorBox;
     QPushButton *backColorButton;
     QWidget *backColorBox;
+public slots:
+    void test(QString test);
+    void test(bool);
+    void viewContentReset();
+    void viewContentSetToSubdiv();
+    void viewContentSetToOffset();
+    void viewContentSetToSubdivOffset();
 };
+
 
 #endif // CONTROLPANEL_H

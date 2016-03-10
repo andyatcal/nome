@@ -11,7 +11,12 @@ SlideGLWidget::SlideGLWidget(string name, int i, QWidget *parent) :
     QGLWidget(parent)
 {
     generalSetup();
-    makeSIFMesh(name);
+    if(i == 0) {
+        makeSIFMesh(name);
+    } else {
+        makeSLFMesh(name);
+    }
+    errorMsg = new QMessageBox();
 }
 
 void SlideGLWidget::generalSetup()
@@ -30,6 +35,9 @@ void SlideGLWidget::makeDefaultMesh()
 {
     makeCube(master_mesh,0.5,0.5,0.5);
     master_mesh.computeNormals();
+    subdiv_mesh = NULL;
+    offset_mesh = NULL;
+    subdiv_offset_mesh = NULL;
 }
 
 void SlideGLWidget::makeSIFMesh(string name)
@@ -38,6 +46,10 @@ void SlideGLWidget::makeSIFMesh(string name)
     makeWithSIF(master_mesh,name);
     master_mesh.computeNormals();
     view_mesh = &master_mesh;
+    subdiv_mesh = NULL;
+    cache_subdivided_meshes.push_back(&master_mesh);
+    offset_mesh = NULL;
+    subdiv_offset_mesh = NULL;
 }
 
 void SlideGLWidget::makeSLFMesh(string name)
@@ -163,7 +175,7 @@ void SlideGLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
-    glMultMatrixf(&master_mesh.object2world[0][0]);
+    glMultMatrixf(&(view_mesh->object2world[0][0]));
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     view_mesh->drawMesh();
     view_mesh->drawVertices();
@@ -202,9 +214,9 @@ void SlideGLWidget::timerEvent(QTimerEvent *event) {
         vec3 vb = get_arcball_vector( cur_mx,  cur_my);
         float angle = acos(glm::min(1.0f, dot(va, vb)));
         vec3 axis_in_camera_coord = cross(va, vb);
-        mat3 camera2object = inverse(mat3(transforms[MODE_CAMERA]) * mat3(master_mesh.object2world));
+        mat3 camera2object = inverse(mat3(transforms[MODE_CAMERA]) * mat3(view_mesh->object2world));
         vec3 axis_in_object_coord = camera2object * axis_in_camera_coord;
-        master_mesh.object2world = rotate(master_mesh.object2world, (float) ROTATION_SPEED * angle, axis_in_object_coord);
+        view_mesh -> object2world = rotate(view_mesh->object2world, (float) ROTATION_SPEED * angle, axis_in_object_coord);
         last_mx = cur_mx;
         last_my = cur_my;
     }
@@ -251,39 +263,61 @@ void SlideGLWidget::keyPressEvent(QKeyEvent* event)
 
 void SlideGLWidget::subdivde(int level)
 {
-    if(level == 0) {
-        subdiv_mesh = &master_mesh;
-        return;
-    }
-    int currentTopLevel = cache_subdivided_meshes.size();
-    if(currentTopLevel > level - 1) {
-        subdiv_mesh = cache_subdivided_meshes[level - 1];
-    } else {
-        Mesh *currentLevel = cache_subdivided_meshes[currentTopLevel - 1];
-        for(;currentTopLevel > level - 1; currentTopLevel++) {
-            subdivider = new Subdivision(*currentLevel);
-            /* Divide one more level.*/
-            Mesh subdividedMesh = (subdivider->ccSubdivision(1));
-            currentLevel = &subdividedMesh;
-            cache_subdivided_meshes.push_back(currentLevel);
-        }
-    }
+    makeDefaultMesh();
+    subdivider = new Subdivision(master_mesh);
+    Mesh sub = subdivider->ccSubdivision(level);
+    cout<<sub.vertList.size();
+    cout<<sub.faceList.size();
+    sub.computeNormals();
+    subdiv_mesh = &sub;
+    view_mesh = subdiv_mesh;
+    repaint();
 }
 
-void SlideGLWidget::changeViewContent(int view_content)
+void SlideGLWidget::viewContentChanged(int view_content)
 {
     switch(view_content)
     {
         case 0:
             cout<<"Not supported yet!"<<endl;
-            break;
+        break;
         case 1:
             view_mesh = &master_mesh;
+        break;
         case 2:
+            if(subdiv_mesh == NULL) {
+                errorMsg -> setText(tr("You have not done subdivision yet!"));
+                errorMsg->exec();
+                emit viewContentError();
+                return;
+            }
             view_mesh = subdiv_mesh;
+        break;
         case 3:
+            if(offset_mesh == NULL) {
+                errorMsg -> setText(tr("You have not done offset yet!"));
+                errorMsg->exec();
+                emit viewContentError();
+                return;
+            }
             view_mesh = offset_mesh;
+        break;
         case 4:
+            if(subdiv_offset_mesh == NULL) {
+                errorMsg -> setText(tr("You have not done "
+                                       "subdivision on offset mesh yet!"));
+                errorMsg->exec();
+                emit viewContentError();
+                return;
+            }
             view_mesh = subdiv_offset_mesh;
+        break;
     }
+    repaint();
+}
+
+void SlideGLWidget::levelChanged(int new_level)
+{
+    subdivde(new_level);
+    emit subdivisionFinished();
 }

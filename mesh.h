@@ -43,8 +43,6 @@ public:
     vector<Vertex*> vertList;
     // A list of all facets in this mesh.
     vector<Face*> faceList;
-    // A list of all edges in this mesh.
-    vector<Edge*> edgeList;
     // Transfromation matrix of the object (mesh).
     mat4 object2world;
     // This is an auxillary table to build a mesh, matching edge to vertex.

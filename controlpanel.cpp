@@ -3,6 +3,7 @@
 ControlPanel::ControlPanel()
 {
     setupLayout();
+    //buildConnection();
 }
 
 ControlPanel::ControlPanel(SlideGLWidget * canvas)
@@ -15,7 +16,11 @@ ControlPanel::ControlPanel(SlideGLWidget * canvas)
 void ControlPanel::buildConnection()
 {
     /* Build our connections. */
-    connect(viewContent, SIGNAL(currentIndexChanged(int)), canvas, SLOT(changeViewContent(int)));
+    connect(viewContent, SIGNAL(activated(int)), canvas, SLOT(viewContentChanged(int)));
+    connect(canvas, SIGNAL(viewContentError()), this, SLOT(viewContentReset()));
+    connect(mergeButton, SIGNAL(clicked(bool)), this, SLOT(test(bool)));
+    connect(subdivLevelSlider,SIGNAL(valueChanged(int)), canvas, SLOT(levelChanged(int)));
+    connect(canvas, SIGNAL(subdivisionFinished()), this, SLOT(viewContentSetToSubdiv()));
 }
 
 void ControlPanel::setupLayout()
@@ -33,14 +38,15 @@ void ControlPanel::setupLayout()
     viewLayout -> addWidget(new QLabel("View Panel"));
     viewLayout -> addWidget(new QLabel("View Content:"));
     viewLayout -> addWidget(viewContent = new QComboBox);
+    viewContent -> addItem("Hirachical Scene");
     viewContent -> addItem("Initial Mesh");
     viewContent -> addItem("Subdivision Mesh");
     viewContent -> addItem("Offset Mesh");
     viewContent -> addItem("Subdivision on Offset Mesh");
+    viewContent -> setCurrentIndex(1);
     /* Mode layout.*/
     modeLayout -> addWidget(new QLabel("Mode Panel"));
     /* Merge layout. */
-    mergeLayout -> addWidget(new QLabel("Merge Panel"));
     mergeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge")));
     /* Subdivision layout. */
     subdivLayout -> addWidget(new QLabel("Subvidision Panel"));
@@ -76,4 +82,34 @@ void ControlPanel::setupLayout()
     backColorBox->setPalette(backPal);
     backColorBox -> setAutoFillBackground(true);
     backColorBox -> resize(5,5);
+}
+
+void ControlPanel::test(QString test)
+{
+    cout<<test.toStdString()<<endl;
+}
+
+void ControlPanel::test(bool checked)
+{
+    cout<<"Hello!"<<endl;
+}
+
+void ControlPanel::viewContentReset()
+{
+    viewContent ->setCurrentIndex(1);
+}
+
+void ControlPanel::viewContentSetToSubdiv()
+{
+    viewContent -> setCurrentIndex(2);
+}
+
+void ControlPanel::viewContentSetToOffset()
+{
+    viewContent -> setCurrentIndex(3);
+}
+
+void ControlPanel::viewContentSetToSubdivOffset()
+{
+    viewContent -> setCurrentIndex(4);
 }
