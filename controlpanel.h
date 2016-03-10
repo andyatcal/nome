@@ -14,6 +14,7 @@ using namespace std;
 #include <QPushButton>
 #include <QComboBox>
 #include <QColorDialog>
+#include <QLineEdit>
 #include "slideglwidget.h"
 class ControlPanel : public QWidget
 {
@@ -51,7 +52,9 @@ private:
     QPushButton *resetViewButton;
     QPushButton *mergeButton;
     QHBoxLayout *subdivLevelLayout;
+    QLabel *currentLevelLabel;
     QSlider *subdivLevelSlider;
+    QHBoxLayout *offsetMinMaxLayout;
     QHBoxLayout *offsetValueLayout;
     QSlider *offsetValueSlider;
     QHBoxLayout *foreColorLayout;
@@ -60,13 +63,25 @@ private:
     QWidget *foreColorBox;
     QPushButton *backColorButton;
     QWidget *backColorBox;
+    float minOffset;
+    float maxOffset;
+    int offsetStep;
+    QLineEdit *minOffsetBox;
+    QLineEdit *maxOffsetBox;
+    QLineEdit *offsetStepBox;
 public slots:
     void test(QString test);
     void test(bool);
     void viewContentReset();
-    void viewContentSetToSubdiv();
+    void viewContentSetToSubdiv(int level);
     void viewContentSetToOffset();
     void viewContentSetToSubdivOffset();
+    void resetMinOffset(QString minOffset);
+    void resetMaxOffset(QString maxOffset);
+    void resetOffsetStep(QString offsetStep);
+    void offSetSliderMoved(int value);
+signals:
+    void makeOffsetMesh(float);
 };
 
 

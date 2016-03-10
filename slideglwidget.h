@@ -136,11 +136,9 @@ public slots:
     void levelChanged(int new_level);
     /* Receive the signal to reset the viewing direction. */
     void resetViewDirection(bool checked);
+    /* Receive the signal of offset value changed. */
+    void offsetValueChanged(float value);
 signals:
-    /* Feedback to the control panel. */
-    void viewContentError();
-    /* Feedback that subdivision is finished. */
-    void subdivisionFinished();
 };
 
 #endif // SLIDEGLWIDGET_H

@@ -315,13 +315,11 @@ void SlideGLWidget::viewContentChanged(int view_content)
 void SlideGLWidget::levelChanged(int new_level)
 {
     subdivide(new_level);
-    emit subdivisionFinished();
 }
 
-void SlideGLWidget::offsetValueChanged(int new_level)
+void SlideGLWidget::offsetValueChanged(float new_offset_value)
 {
-    subdivide(new_level);
-    emit subdivisionFinished();
+    cout<<new_offset_value<<endl;
 }
 
 void SlideGLWidget::resetViewDirection(bool checked)
