@@ -48,6 +48,7 @@ private:
     QVBoxLayout *offsetLayout;
     QVBoxLayout *colorLayout;
     QComboBox *viewContent;
+    QPushButton *resetViewButton;
     QPushButton *mergeButton;
     QHBoxLayout *subdivLevelLayout;
     QSlider *subdivLevelSlider;

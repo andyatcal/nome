@@ -503,3 +503,7 @@ void Mesh::drawVertices() {
     }
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, YELLOW);
 }
+
+bool Mesh::empty() {
+    return vertList.size() == 0 && faceList.size() == 0;
+}

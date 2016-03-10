@@ -41,7 +41,7 @@ public:
     ~SlideGLWidget();
     // Save the current master_mesh in a STL file
     void saveMesh(string name);
-    void subdivde(int level);
+    void subdivide(int level);
 private:
     /* Viewer variables.*/
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
@@ -51,6 +51,8 @@ private:
     int last_mx, last_my, cur_mx, cur_my;
     /* Support arcball feature. */
     int arcball_on;
+    /* object2world matrix for arcball.*/
+    mat4 object2world;
     /* control of the wireframe mode. */
     bool wireframe;
     /* control of the shading mode. */
@@ -72,15 +74,15 @@ private:
     /* A subdivider to handler subdivision.*/
     Subdivision *subdivider;
     /* A pointer to the subdivided mesh. */
-    Mesh *subdiv_mesh;
+    Mesh subdiv_mesh;
     /* The cache of mesh that has been subdivided.
      * The index in this vector = subdivision level - 1.
      */
-    vector<Mesh*> cache_subdivided_meshes;
+    vector<Mesh> cache_subdivided_meshes;
     /* A pointer to the offset mesh. */
-    Mesh *offset_mesh;
+    Mesh offset_mesh;
     /* A pointer to the subdivided offset mesh. */
-    Mesh *subdiv_offset_mesh;
+    Mesh subdiv_offset_mesh;
     /* A pointer to the current view mesh. */
     Mesh *view_mesh;
     /* Selection object to handle mouse selection.*/
@@ -105,10 +107,14 @@ private:
     // selection_mode = 2: whole border selection (line loop)
     // selection_mode = 3: partial border selection (line strip)
     int selection_mode;
-    // Called by constructor to setup general background parameters.
+    /* Called by constructor to setup general background parameters. */
     void generalSetup();
     /* A message box that deliver error message.*/
     QMessageBox *errorMsg;
+    /* A viewer mode. */
+    int mesh_mode;
+    /* Bind the current view_mesh to intended mesh based on view_mode.*/
+    void bindMeshMode();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -128,6 +134,8 @@ public slots:
     void viewContentChanged(int view_content);
     /* Receive the signal from control panel to do subdivision.*/
     void levelChanged(int new_level);
+    /* Receive the signal to reset the viewing direction. */
+    void resetViewDirection(bool checked);
 signals:
     /* Feedback to the control panel. */
     void viewContentError();

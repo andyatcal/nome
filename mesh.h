@@ -81,6 +81,8 @@ public:
     vector<Edge*> boundaryEdgeList();
     // The color of this mesh
     vec3 color;
+    /* Check if this mesh if empty. */
+    bool empty();
 };
 
 // @param p1, p2, p3 are positions of three vertices,

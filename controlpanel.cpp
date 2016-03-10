@@ -17,10 +17,10 @@ void ControlPanel::buildConnection()
 {
     /* Build our connections. */
     connect(viewContent, SIGNAL(activated(int)), canvas, SLOT(viewContentChanged(int)));
-    connect(canvas, SIGNAL(viewContentError()), this, SLOT(viewContentReset()));
     connect(mergeButton, SIGNAL(clicked(bool)), this, SLOT(test(bool)));
     connect(subdivLevelSlider,SIGNAL(valueChanged(int)), canvas, SLOT(levelChanged(int)));
     connect(canvas, SIGNAL(subdivisionFinished()), this, SLOT(viewContentSetToSubdiv()));
+    connect(resetViewButton, SIGNAL(clicked(bool)), canvas, SLOT(resetViewDirection(bool)));
 }
 
 void ControlPanel::setupLayout()
@@ -44,6 +44,7 @@ void ControlPanel::setupLayout()
     viewContent -> addItem("Offset Mesh");
     viewContent -> addItem("Subdivision on Offset Mesh");
     viewContent -> setCurrentIndex(1);
+    viewLayout -> addWidget(resetViewButton = new QPushButton(tr("Reset View")));
     /* Mode layout.*/
     modeLayout -> addWidget(new QLabel("Mode Panel"));
     /* Merge layout. */
