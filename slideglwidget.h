@@ -111,10 +111,10 @@ private:
     void generalSetup();
     /* A message box that deliver error message.*/
     QMessageBox *errorMsg;
-    /* A viewer mode. */
-    int mesh_mode;
-    /* Bind the current view_mesh to intended mesh based on view_mode.*/
-    void bindMeshMode();
+    /* Zoom in in the current view. */
+    void zoom_in();
+    /* Zoom out in the current view. */
+    void zoom_out();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -122,6 +122,7 @@ protected:
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
+    void wheelEvent(QWheelEvent *event);
 public slots:
     /* Change the current view mesh.
      * @param view_content,

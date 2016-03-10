@@ -167,7 +167,6 @@ void SlideGLWidget::resizeGL(int w, int h)
 
 void SlideGLWidget::paintGL()
 {
-    //bindMeshMode();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
@@ -233,14 +232,10 @@ void SlideGLWidget::keyPressEvent(QKeyEvent* event)
         wireframe = !wireframe;
         break;
     case Qt::Key_I:
-        if(cameraDistance > 0.1) {
-            cameraDistance *= 0.9;
-        }
+        zoom_in();
         break;
     case Qt::Key_O:
-        if(cameraDistance < 200) {
-            cameraDistance *= 1.1;
-        }
+        zoom_out();
         break;
     case Qt::Key_S:
         if (smoothshading) {
@@ -327,4 +322,26 @@ void SlideGLWidget::resetViewDirection(bool checked)
 {
     object2world = mat4(1);
     repaint();
+}
+
+void SlideGLWidget::zoom_in()
+{
+    if(cameraDistance > 0.1) {
+        cameraDistance *= 0.9;
+    }
+}
+
+void SlideGLWidget::zoom_out()
+{
+    if(cameraDistance < 200) {
+        cameraDistance *= 1.1;
+    }
+}
+
+void SlideGLWidget::wheelEvent(QWheelEvent *event)
+{
+    QPoint numDegrees = event->angleDelta() / 8;
+    cout<<"x "<<numDegrees.x()<<" y "<<numDegrees.y()<<endl;
+
+    event->accept();
 }
