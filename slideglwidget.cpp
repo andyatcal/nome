@@ -294,6 +294,23 @@ void SlideGLWidget::subdivide(int level)
     repaint();
 }
 
+void SlideGLWidget::offset(float value)
+{
+    if(value == 0)
+    {
+        return;
+    }
+    if(subdiv_mesh.empty()) {
+        offseter = new Offset(master_mesh, value);
+    } else {
+        offseter = new Offset(subdiv_mesh, value);
+    }
+    offseter -> makeFullOffset();
+    offset_mesh = offseter->offsetMesh;
+    view_mesh = &offset_mesh;
+    repaint();
+}
+
 void SlideGLWidget::viewContentChanged(int view_content)
 {
     switch(view_content)
@@ -321,11 +338,15 @@ void SlideGLWidget::viewContentChanged(int view_content)
 void SlideGLWidget::levelChanged(int new_level)
 {
     subdivide(new_level);
+    offset_mesh.clear();
+    subdiv_offset_mesh.clear();
 }
 
 void SlideGLWidget::offsetValueChanged(float new_offset_value)
 {
     cout<<new_offset_value<<endl;
+    offset(new_offset_value);
+    subdiv_offset_mesh.clear();
 }
 
 void SlideGLWidget::resetViewDirection(bool checked)

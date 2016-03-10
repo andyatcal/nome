@@ -91,7 +91,6 @@ Mesh meshCopy(Mesh & mesh) {
         vector<Vertex*>::iterator vtIt;
         newMesh.addPolygonFace(vertices);
     }
-    newMesh.object2world = mesh.object2world;
     newMesh.buildBoundary();
     newMesh.computeNormals();
     return newMesh;

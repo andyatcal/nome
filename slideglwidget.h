@@ -26,6 +26,7 @@
 #include "myselection.h"
 #include "subdivison.h"
 #include "stl.h"
+#include "offset.h"
 #include <QMessageBox>
 #include <QColor>
 class SlideGLWidget: public QGLWidget
@@ -49,6 +50,11 @@ public:
      * @param level, level of subdivision.
      */
     void subdivide(int level);
+    /**
+     * @brief offset: create offset mesh with given value.
+     * @param value: the value of this offset.
+     */
+    void offset(float value);
     /**
      * @brief setForeColor, set default foreground color.
      * @param color, the color to be set.
@@ -88,8 +94,10 @@ private:
      * Can be merged into the master mesh.
      */
     Mesh temp_mesh;
-    /* A subdivider to handler subdivision.*/
+    /* A subdivider to handle subdivision.*/
     Subdivision *subdivider;
+    /* An offseter to handle offsetting.*/
+    Offset *offseter;
     /* A pointer to the subdivided mesh. */
     Mesh subdiv_mesh;
     /**

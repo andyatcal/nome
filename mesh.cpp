@@ -7,22 +7,28 @@
 
 #include "mesh.h"
 
-Mesh::Mesh() {
-    object2world = mat4(1);
+Mesh::Mesh()
+{
+
 }
 
-void Mesh::addVertex(Vertex * v) {
+void Mesh::addVertex(Vertex * v)
+{
     vertList.push_back(v);
 }
 
-Edge * Mesh::findEdge(Vertex * v1, Vertex * v2) {
+Edge * Mesh::findEdge(Vertex * v1, Vertex * v2)
+{
     unordered_map<Vertex*, vector<Edge*> >::iterator vIt;
     vector<Edge*> currEdges;
     vector<Edge*>::iterator eIt;
     vIt = edgeTable.find(v2);
-    if(vIt != edgeTable.end()) {
-        for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt ++) {
-            if((*eIt) -> vb == v1) {
+    if(vIt != edgeTable.end())
+    {
+        for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt ++)
+        {
+            if((*eIt) -> vb == v1)
+            {
                 //cout<<"Find Edge from vertex "<<v2 -> ID<<" to vertex "<<v1 -> ID<<"."<<endl;
                 return (*eIt);
             }
@@ -506,4 +512,10 @@ void Mesh::drawVertices() {
 
 bool Mesh::empty() {
     return vertList.size() == 0 && faceList.size() == 0;
+}
+
+void Mesh::clear() {
+    vertList.clear();
+    faceList.clear();
+    edgeTable.clear();
 }

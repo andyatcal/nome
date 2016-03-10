@@ -473,7 +473,6 @@ Mesh Subdivision::ccSubdivision(int level){
         makeEdgePoints(newMesh.vertList);
         makeVertexPointsD(newMesh.vertList);
         compileNewMesh(newMesh.faceList);
-        newMesh.object2world = currMesh.object2world;
         currMesh = newMesh;
     }
     return currMesh;
