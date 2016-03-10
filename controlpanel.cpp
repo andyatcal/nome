@@ -25,7 +25,7 @@ void ControlPanel::buildConnection()
     connect(minOffsetBox, SIGNAL(textChanged(QString)), this, SLOT(resetMinOffset(QString)));
     connect(maxOffsetBox, SIGNAL(textChanged(QString)), this, SLOT(resetMaxOffset(QString)));
     connect(offsetStepBox, SIGNAL(textChanged(QString)), this, SLOT(resetOffsetStep(QString)));
-    connect(offsetValueSlider, SIGNAL(valueChanged(int)), this, SLOT(offSetSliderMoved(int)));
+    connect(offsetValueSlider, SIGNAL(sliderReleased()), this, SLOT(offSetSliderMoved()));
     connect(this, SIGNAL(makeOffsetMesh(float)), canvas, SLOT(offsetValueChanged(float)));
     connect(foreColorButton, SIGNAL(clicked(bool)), this, SLOT(resetForeColor(bool)));
     connect(backColorButton, SIGNAL(clicked(bool)), this, SLOT(resetBackColor(bool)));
@@ -59,9 +59,15 @@ void ControlPanel::setupLayout()
     modeLayout -> addLayout(addLayout = new QHBoxLayout);
     modeLayout -> addLayout(zipLayout = new QHBoxLayout);
     addLayout -> addWidget(addModeButton = new QRadioButton(tr("Add Mode")));
+    addModeButton -> setChecked(true);
     addLayout -> addWidget(addButton = new QPushButton(tr("Add")));
     zipLayout -> addWidget(zipModeButton = new QRadioButton(tr("Zip Mode")));
     zipLayout -> addWidget(zipButton = new QPushButton(tr("Zip")));
+    modeLayout-> addWidget(autoCorrectCheck = new QCheckBox(tr("Auto Correct Adding Face Oreinataion")));
+    autoCorrectCheck -> setChecked(true);
+    modeLayout-> addWidget(wholeBorderCheck = new QCheckBox(tr("Zip whole border loop")));
+    wholeBorderCheck -> setChecked(true);
+    wholeBorderCheck -> setEnabled(false);
     modeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge All!")));
     /* Subdivision layout. */
     subdivLayout -> addLayout(subdivLevelLayout = new QHBoxLayout);
@@ -147,8 +153,9 @@ void ControlPanel::resetOffsetStep(QString offsetStep)
     offsetValueSlider->setMaximum(this->offsetStep);
 }
 
-void ControlPanel::offSetSliderMoved(int value)
+void ControlPanel::offSetSliderMoved()
 {
+    int value = offsetValueSlider ->value();
     float realOffsetValue = minOffset + (maxOffset - minOffset) / offsetStep * value;
     emit makeOffsetMesh(realOffsetValue);
     viewContent -> setCurrentIndex(3);

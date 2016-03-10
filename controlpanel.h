@@ -14,6 +14,7 @@
 #include <QColorDialog>
 #include <QLineEdit>
 #include <QStatusBar>
+#include <QCheckBox>
 #include "slideglwidget.h"
 class ControlPanel : public QWidget
 {
@@ -51,6 +52,8 @@ private:
     QRadioButton *zipModeButton;
     QPushButton *addButton;
     QPushButton *zipButton;
+    QCheckBox *autoCorrectCheck;
+    QCheckBox *wholeBorderCheck;
     QVBoxLayout *subdivLayout;
     QVBoxLayout *offsetLayout;
     QVBoxLayout *colorLayout;
@@ -86,7 +89,7 @@ public slots:
     void resetMinOffset(QString minOffset);
     void resetMaxOffset(QString maxOffset);
     void resetOffsetStep(QString offsetStep);
-    void offSetSliderMoved(int value);
+    void offSetSliderMoved();
     void resetForeColor(bool);
     void resetBackColor(bool);
 signals:
