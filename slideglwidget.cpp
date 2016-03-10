@@ -265,7 +265,7 @@ void SlideGLWidget::subdivide(int level)
     if(cachedLevel >= level) {
         subdiv_mesh = cache_subdivided_meshes[level - 1];
     } else {
-        if(level == 1) {
+        if(cachedLevel == 0) {
             subdiv_mesh = master_mesh;
         } else {
             subdiv_mesh = cache_subdivided_meshes[cachedLevel - 1];
@@ -278,11 +278,13 @@ void SlideGLWidget::subdivide(int level)
             cache_subdivided_meshes.push_back(subdiv_mesh);
             cachedLevel++;
         }
-        //subdivider = new Subdivision(m);
-        //subdiv_mesh = subdivider->ccSubdivision(level);
-        //subdiv_mesh.computeNormals();
         view_mesh = &subdiv_mesh;
     }
+    /* Alternative.
+    /* subdivider = new Subdivision(m);
+    /* subdiv_mesh = subdivider->ccSubdivision(level);
+    /* subdiv_mesh.computeNormals();
+     */
     repaint();
 }
 
@@ -311,6 +313,12 @@ void SlideGLWidget::viewContentChanged(int view_content)
 }
 
 void SlideGLWidget::levelChanged(int new_level)
+{
+    subdivide(new_level);
+    emit subdivisionFinished();
+}
+
+void SlideGLWidget::offsetValueChanged(int new_level)
 {
     subdivide(new_level);
     emit subdivisionFinished();
