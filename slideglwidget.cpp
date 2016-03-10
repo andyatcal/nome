@@ -298,6 +298,7 @@ void SlideGLWidget::offset(float value)
 {
     if(value == 0)
     {
+        view_mesh = &master_mesh;
         return;
     }
     if(subdiv_mesh.empty()) {
@@ -344,7 +345,6 @@ void SlideGLWidget::levelChanged(int new_level)
 
 void SlideGLWidget::offsetValueChanged(float new_offset_value)
 {
-    cout<<new_offset_value<<endl;
     offset(new_offset_value);
     subdiv_offset_mesh.clear();
 }

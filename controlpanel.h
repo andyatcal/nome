@@ -55,6 +55,7 @@ private:
     QHBoxLayout *offsetMinMaxLayout;
     QHBoxLayout *offsetValueLayout;
     QSlider *offsetValueSlider;
+    QLabel *currentOffsetValueLabel;
     QHBoxLayout *foreColorLayout;
     QHBoxLayout *backColorLayout;
     QPushButton *foreColorButton;
@@ -72,7 +73,6 @@ public slots:
     void test(bool);
     void viewContentReset();
     void viewContentSetToSubdiv(int level);
-    void viewContentSetToOffset();
     void viewContentSetToSubdivOffset();
     void resetMinOffset(QString minOffset);
     void resetMaxOffset(QString maxOffset);

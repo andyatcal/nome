@@ -62,14 +62,14 @@ void ControlPanel::setupLayout()
     subdivLevelLayout -> addWidget(new QLabel("Level 0"));
     subdivLevelLayout -> addWidget(subdivLevelSlider = new QSlider(Qt::Horizontal));
     subdivLevelLayout -> addWidget(new QLabel("Level 5"));
-    subdivLayout -> addWidget(currentLevelLabel = new QLabel("Current Subdivision Level:    0"));
+    subdivLayout -> addWidget(currentLevelLabel = new QLabel(tr("Current Subdivision Level:    0")));
     subdivLevelSlider -> setMinimum(0);
     subdivLevelSlider -> setMaximum(5);
     subdivLevelSlider -> setValue(0);
     /* Offset Layout. */
-    maxOffset = 0.11;
-    minOffset = 0.01;
-    offsetStep = 2;
+    maxOffset = 0.005;
+    minOffset = 0.001;
+    offsetStep = 4;
     offsetLayout -> addWidget(new QLabel("Offset Panel"));
     offsetLayout -> addLayout(offsetMinMaxLayout = new QHBoxLayout);
     offsetMinMaxLayout -> addWidget((new QLabel(tr("Min"))));
@@ -83,6 +83,7 @@ void ControlPanel::setupLayout()
     offsetValueSlider -> setMinimum(0);
     offsetValueSlider -> setMaximum(offsetStep);
     offsetValueSlider -> setValue(0);
+    offsetLayout -> addWidget(currentOffsetValueLabel = new QLabel(tr("Current Offset Value:    ")));
     /* Color Layout. */
     colorLayout -> addWidget(new QLabel("Color Panel"));
     colorLayout -> addLayout(foreColorLayout = new QHBoxLayout);
@@ -121,12 +122,8 @@ void ControlPanel::viewContentReset()
 void ControlPanel::viewContentSetToSubdiv(int level)
 {
     viewContent -> setCurrentIndex(2);
-    currentLevelLabel -> setText(tr("Current Subdivision Level:    ") + QString::number(level));
-}
-
-void ControlPanel::viewContentSetToOffset()
-{
-    viewContent -> setCurrentIndex(3);
+    currentLevelLabel -> setText(tr("Current Subdivision Level:    "
+                                    ) + QString::number(level));
 }
 
 void ControlPanel::resetMinOffset(QString minOffset)
@@ -149,6 +146,9 @@ void ControlPanel::offSetSliderMoved(int value)
 {
     float realOffsetValue = minOffset + (maxOffset - minOffset) / offsetStep * value;
     emit makeOffsetMesh(realOffsetValue);
+    viewContent -> setCurrentIndex(3);
+    currentOffsetValueLabel -> setText(tr("Current Offset Value:    "
+                                          ) + QString::number(realOffsetValue));
 }
 
 void ControlPanel::viewContentSetToSubdivOffset()
