@@ -124,6 +124,7 @@ void SlideGLWidget::mouse_select(int x, int y) {
         mySelect.selectPartialBorder(*view_mesh, hits,buff,posX, posY, posZ);
     }
     glMatrixMode(GL_MODELVIEW);
+    repaint();
 }
 SlideGLWidget::~SlideGLWidget()
 {
