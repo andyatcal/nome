@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QSlider>
-#include <QGroupBox>
+#include <QButtonGroup>
 #include <QRadioButton>
 #include <QPushButton>
 #include <QComboBox>
@@ -40,12 +40,6 @@ private:
     SlideGLWidget *canvas;
     /* Widgets and Layout in this Control Panel.*/
     QVBoxLayout *mainLayout;
-    QGroupBox *viewGroupBox;
-    QGroupBox *modeGroupBox;
-    QGroupBox *mergeGroupBox;
-    QGroupBox *subdivGroupBox;
-    QGroupBox *offsetGroupBox;
-    QGroupBox *colorGroupBox;
     QVBoxLayout *viewLayout;
     QVBoxLayout *modeLayout;
     QVBoxLayout *mergeLayout;
@@ -54,10 +48,6 @@ private:
     QVBoxLayout *colorLayout;
     QComboBox *viewContent;
     QPushButton *resetViewButton;
-    QGroupBox *modeGroupBox1;
-    QVBoxLayout *modeSelectLayout;
-    QRadioButton *addModeButton;
-    QRadioButton *zipModeButton;
     QPushButton *mergeButton;
     QHBoxLayout *subdivLevelLayout;
     QLabel *currentLevelLabel;
@@ -78,7 +68,6 @@ private:
     QLineEdit *minOffsetBox;
     QLineEdit *maxOffsetBox;
     QLineEdit *offsetStepBox;
-    QStatusBar *statusBar;
 public slots:
     void test(QString test);
     void test(bool);

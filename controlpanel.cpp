@@ -11,7 +11,6 @@ ControlPanel::ControlPanel(SlideGLWidget * canvas)
     setupLayout();
     this -> canvas = canvas;
     buildConnection();
-    resize(300, 600);
 }
 
 void ControlPanel::buildConnection()
@@ -36,18 +35,15 @@ void ControlPanel::setupLayout()
     /* Main Layout.
      * Contains view, mode, merge, subdivision, offset, color.*/
     setLayout(mainLayout = new QVBoxLayout);
-    mainLayout -> addWidget(viewGroupBox = new QGroupBox(tr("view")));
-    mainLayout -> addWidget(modeGroupBox = new QGroupBox(tr("mode")));
-    mainLayout -> addWidget(subdivGroupBox = new QGroupBox(tr("subdivision")));
-    mainLayout -> addWidget(offsetGroupBox = new QGroupBox(tr("offset")));
-    mainLayout -> addWidget(colorGroupBox = new QGroupBox(tr("color")));
-    viewGroupBox -> setLayout(viewLayout = new QVBoxLayout);
-    modeGroupBox -> setLayout(modeLayout = new QVBoxLayout);
-    subdivGroupBox -> setLayout(subdivLayout = new QVBoxLayout);
-    offsetGroupBox -> setLayout(offsetLayout = new QVBoxLayout);
-    colorGroupBox -> setLayout(colorLayout = new QVBoxLayout);
+    mainLayout -> addLayout(viewLayout = new QVBoxLayout);
+    mainLayout -> addLayout(modeLayout = new QVBoxLayout);
+    mainLayout -> addLayout(mergeLayout = new QVBoxLayout);
+    mainLayout -> addLayout(subdivLayout = new QVBoxLayout);
+    mainLayout -> addLayout(offsetLayout = new QVBoxLayout);
+    mainLayout -> addLayout(colorLayout = new QVBoxLayout);
     /* View layout. */
-    viewLayout -> addWidget(new QLabel("View"));
+    viewLayout -> addWidget(new QLabel("View Panel"));
+    viewLayout -> addWidget(new QLabel("View Content:"));
     viewLayout -> addWidget(viewContent = new QComboBox);
     viewContent -> addItem("Hirachical Scene");
     viewContent -> addItem("Initial Mesh");
@@ -57,13 +53,11 @@ void ControlPanel::setupLayout()
     viewContent -> setCurrentIndex(1);
     viewLayout -> addWidget(resetViewButton = new QPushButton(tr("Reset View")));
     /* Mode layout.*/
-    modeLayout -> addWidget(new QLabel("Mode"));
-    modeLayout -> addWidget(addModeButton = new QRadioButton(tr("Add Mode")));
-    modeLayout -> addWidget(zipModeButton = new QRadioButton(tr("Zip Mode")));
+    modeLayout -> addWidget(new QLabel("Mode Panel"));
     /* Merge layout. */
-    //mergeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge")));
+    mergeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge")));
     /* Subdivision layout. */
-    subdivLayout -> addWidget(new QLabel("Subvidision"));
+    subdivLayout -> addWidget(new QLabel("Subvidision Panel"));
     subdivLayout -> addLayout(subdivLevelLayout = new QHBoxLayout);
     subdivLevelLayout -> addWidget(new QLabel("Level 0"));
     subdivLevelLayout -> addWidget(subdivLevelSlider = new QSlider(Qt::Horizontal));
@@ -76,7 +70,7 @@ void ControlPanel::setupLayout()
     maxOffset = 0.005;
     minOffset = 0.001;
     offsetStep = 4;
-    offsetLayout -> addWidget(new QLabel("Offset"));
+    offsetLayout -> addWidget(new QLabel("Offset Panel"));
     offsetLayout -> addLayout(offsetMinMaxLayout = new QHBoxLayout);
     offsetMinMaxLayout -> addWidget((new QLabel(tr("Min"))));
     offsetMinMaxLayout -> addWidget(minOffsetBox = new QLineEdit(QString::number(minOffset)));
@@ -91,7 +85,7 @@ void ControlPanel::setupLayout()
     offsetValueSlider -> setValue(0);
     offsetLayout -> addWidget(currentOffsetValueLabel = new QLabel(tr("Current Offset Value:    ")));
     /* Color Layout. */
-    colorLayout -> addWidget(new QLabel("Color"));
+    colorLayout -> addWidget(new QLabel("Color Panel"));
     colorLayout -> addLayout(foreColorLayout = new QHBoxLayout);
     colorLayout -> addLayout(backColorLayout = new QHBoxLayout);
     foreColorLayout -> addWidget(foreColorButton = new QPushButton(tr("Foreground Color")));
@@ -108,7 +102,6 @@ void ControlPanel::setupLayout()
     backColorBox->setPalette(backPal);
     backColorBox -> setAutoFillBackground(true);
     backColorBox -> resize(5,5);
-    mainLayout -> addWidget(statusBar = new QStatusBar);
 }
 
 void ControlPanel::test(QString test)
