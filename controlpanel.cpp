@@ -29,6 +29,13 @@ void ControlPanel::buildConnection()
     connect(this, SIGNAL(makeOffsetMesh(float)), canvas, SLOT(offsetValueChanged(float)));
     connect(foreColorButton, SIGNAL(clicked(bool)), this, SLOT(resetForeColor(bool)));
     connect(backColorButton, SIGNAL(clicked(bool)), this, SLOT(resetBackColor(bool)));
+    connect(addModeButton, SIGNAL(clicked(bool)), this, SLOT(addModeChecked(bool)));
+    connect(zipModeButton, SIGNAL(clicked(bool)), this, SLOT(zipModeChecked(bool)));
+    connect(canvas, SIGNAL(feedback_status_bar(QString, int)), statusBar, SLOT(showMessage(QString,int)));
+    connect(addModeButton, SIGNAL(clicked(bool)), canvas, SLOT(addModeChecked(bool)));
+    connect(zipModeButton, SIGNAL(clicked(bool)), canvas, SLOT(zipModeChecked(bool)));
+    connect(addButton, SIGNAL(clicked(bool)), canvas, SLOT(addToTempCalled(bool)));
+    connect(zipButton, SIGNAL(clicked(bool)), canvas, SLOT(zipToTempCalled(bool)));
 }
 
 void ControlPanel::setupLayout()
@@ -36,6 +43,8 @@ void ControlPanel::setupLayout()
     /* Main Layout.
      * Contains view, mode, subdivision, offset, color, status.*/
     setLayout(mainLayout = new QVBoxLayout);
+    mainLayout -> setMargin(10);
+    mainLayout->setSpacing(5);
     mainLayout -> addWidget(new QLabel("VIEW"));
     mainLayout -> addLayout(viewLayout = new QVBoxLayout);
     mainLayout -> addWidget(new QLabel("MODE"));
@@ -63,9 +72,10 @@ void ControlPanel::setupLayout()
     addLayout -> addWidget(addButton = new QPushButton(tr("Add")));
     zipLayout -> addWidget(zipModeButton = new QRadioButton(tr("Zip Mode")));
     zipLayout -> addWidget(zipButton = new QPushButton(tr("Zip")));
+    modeLayout -> addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
     modeLayout-> addWidget(autoCorrectCheck = new QCheckBox(tr("Auto Correct Adding Face Oreinataion")));
     autoCorrectCheck -> setChecked(true);
-    modeLayout-> addWidget(wholeBorderCheck = new QCheckBox(tr("Zip whole border loop")));
+    modeLayout-> addWidget(wholeBorderCheck = new QCheckBox(tr("Zip Whole Border Loop")));
     wholeBorderCheck -> setChecked(true);
     wholeBorderCheck -> setEnabled(false);
     modeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge All!")));
@@ -98,6 +108,7 @@ void ControlPanel::setupLayout()
     /* Color Layout. */
     colorLayout -> addLayout(foreColorLayout = new QHBoxLayout);
     colorLayout -> addLayout(backColorLayout = new QHBoxLayout);
+    colorLayout -> setSpacing(2);
     foreColorLayout -> addWidget(foreColorButton = new QPushButton(tr("Foreground Color")));
     foreColorLayout -> addWidget(foreColorBox = new QWidget());
     foreColorBox -> resize(5,5);
@@ -184,4 +195,18 @@ void ControlPanel::resetBackColor(bool)
     backPal.setColor(backColorBox->backgroundRole(), newColor);
     backColorBox->setPalette(backPal);
     canvas -> setBackColor(newColor);
+}
+
+void ControlPanel::addModeChecked(bool checked)
+{
+    autoCorrectCheck->setEnabled(checked);
+    wholeBorderCheck->setEnabled(!checked);
+    statusBar -> showMessage(tr("Switch to Add Mode"));
+}
+
+void ControlPanel::zipModeChecked(bool checked)
+{
+    autoCorrectCheck->setEnabled(!checked);
+    wholeBorderCheck->setEnabled(checked);
+    statusBar -> showMessage(tr("Switch to Zip Mode"));
 }

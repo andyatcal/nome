@@ -1,9 +1,9 @@
-//
-// @author Andy Wang, UC Berkeley. Copyright 2015 reserve.
-// Catmull-Clark subdivision project in order to create sculptures like Eva-Hilds.
-// Advised by Prof. Sequin H. Carlos.
-//
-//
+/**
+ * @author Andy Wang, UC Berkeley.
+ * Copyright 2016 reserve.
+ * UC Berkeley, Slide_2016 project.
+ * Advised by Prof. Sequin H. Carlos.
+ */
 
 #ifndef __TRANSFORMATION_H__
 #define __TRANSFORMATION_H__

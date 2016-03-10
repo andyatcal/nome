@@ -1,3 +1,10 @@
+/**
+ * @author Andy Wang, UC Berkeley.
+ * Copyright 2016 reserve.
+ * UC Berkeley, Slide_2016 project.
+ * Advised by Prof. Sequin H. Carlos.
+ */
+
 #ifndef CONTROLPANEL_H
 #define CONTROLPANEL_H
 
@@ -80,6 +87,7 @@ private:
     QLineEdit *maxOffsetBox;
     QLineEdit *offsetStepBox;
     QStatusBar *statusBar;
+    QPushButton *addTempToMasterButton;
 public slots:
     void test(QString test);
     void test(bool);
@@ -92,6 +100,8 @@ public slots:
     void offSetSliderMoved();
     void resetForeColor(bool);
     void resetBackColor(bool);
+    void addModeChecked(bool);
+    void zipModeChecked(bool);
 signals:
     void makeOffsetMesh(float);
 };

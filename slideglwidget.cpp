@@ -287,9 +287,9 @@ void SlideGLWidget::subdivide(int level)
         view_mesh = &subdiv_mesh;
     }
     /* Alternative.
-    /* subdivider = new Subdivision(m);
-    /* subdiv_mesh = subdivider->ccSubdivision(level);
-    /* subdiv_mesh.computeNormals();
+     * subdivider = new Subdivision(m);
+     * subdiv_mesh = subdivider->ccSubdivision(level);
+     * subdiv_mesh.computeNormals();
      */
     repaint();
 }
@@ -341,6 +341,8 @@ void SlideGLWidget::levelChanged(int new_level)
     subdivide(new_level);
     offset_mesh.clear();
     subdiv_offset_mesh.clear();
+    //emit feedback_status_bar(tr("Subdivision Finished. Level: ")
+    //                         + QString::number(new_level), 0);
 }
 
 void SlideGLWidget::offsetValueChanged(float new_offset_value)
@@ -349,7 +351,7 @@ void SlideGLWidget::offsetValueChanged(float new_offset_value)
     subdiv_offset_mesh.clear();
 }
 
-void SlideGLWidget::resetViewDirection(bool checked)
+void SlideGLWidget::resetViewDirection(bool)
 {
     object2world = mat4(1);
     repaint();
@@ -396,4 +398,132 @@ void SlideGLWidget::setBackColor(QColor color)
 {
     backColor = color;
     repaint();
+}
+void SlideGLWidget::addModeChecked(bool checked)
+{
+    if(checked)
+    {
+        selection_mode = 1;
+    }
+    else
+    {
+        if(whole_border)
+        {
+            selection_mode = 2;
+        }
+        else
+        {
+            selection_mode = 3;
+        }
+    }
+}
+
+void SlideGLWidget::zipModeChecked(bool checked)
+{
+    addModeChecked(!checked);
+}
+
+void SlideGLWidget::autoCorrectChecked(bool checked)
+{
+    auto_check = checked;
+}
+
+void SlideGLWidget::wholeBorderSelectionChecked(bool checked)
+{
+    whole_border = checked;
+    if(checked) {
+        selection_mode = 2;
+    } else {
+        selection_mode = 3;
+    }
+    mySelect.clearSelection();
+}
+
+void SlideGLWidget::addToTempCalled(bool)
+{
+
+}
+
+void SlideGLWidget::zipToTempCalled(bool)
+{
+
+}
+
+void SlideGLWidget::addTempToMaster()
+{
+    Mesh newMesh;
+    vector<Vertex*>::iterator vIt;
+    for(vIt = master_mesh.vertList.begin();
+        vIt < master_mesh.vertList.end(); vIt ++)
+    {
+        Vertex * vertCopy = new Vertex;
+        vertCopy -> ID = (*vIt) -> ID;
+        vertCopy -> position = (*vIt) -> position;
+        newMesh.addVertex(vertCopy);
+    }
+    vector<Face*>::iterator fIt;
+    for(fIt = master_mesh.faceList.begin();
+     fIt < master_mesh.faceList.end(); fIt ++)
+    {
+        Face * tempFace = *fIt;
+        Edge * firstEdge = tempFace -> oneEdge;
+        Edge * currEdge = firstEdge;
+        Edge * nextEdge;
+        vector<Vertex*> vertices;
+        Vertex * tempv;
+        vertices.clear();
+        do {
+            if(tempFace == currEdge -> fa) {
+                tempv = currEdge -> vb;
+                nextEdge = currEdge -> nextVbFa;
+            } else {
+                if(currEdge -> mobius) {
+                    tempv = currEdge -> vb;
+                    nextEdge = currEdge -> nextVbFb;
+                } else {
+                    tempv = currEdge -> va;
+                    nextEdge = currEdge -> nextVaFb;
+                }
+            }
+            vertices.push_back(newMesh.vertList[tempv -> ID]);
+            currEdge = nextEdge;
+        } while (currEdge != firstEdge);
+        newMesh.addPolygonFace(vertices);
+    }
+    for(fIt = temp_mesh.faceList.begin();
+     fIt < temp_mesh.faceList.end(); fIt ++)
+    {
+        Face * tempFace = *fIt;
+        Edge * firstEdge = tempFace -> oneEdge;
+        Edge * currEdge = firstEdge;
+        Edge * nextEdge;
+        vector<Vertex*> vertices;
+        Vertex * tempv;
+        vertices.clear();
+        do {
+            if(tempFace == currEdge -> fa) {
+                tempv = currEdge -> vb;
+                nextEdge = currEdge -> nextVbFa;
+            } else {
+                if(currEdge -> mobius) {
+                    tempv = currEdge -> vb;
+                    nextEdge = currEdge -> nextVbFb;
+                } else {
+                    tempv = currEdge -> va;
+                    nextEdge = currEdge -> nextVaFb;
+                }
+            }
+            vertices.push_back(newMesh.vertList[tempv -> ID]);
+            currEdge = nextEdge;
+        } while (currEdge != firstEdge);
+        newMesh.addPolygonFace(vertices);
+    }
+    master_mesh = newMesh;
+    master_mesh.buildBoundary();
+    master_mesh.computeNormals();
+}
+
+void SlideGLWidget::addTempToMasterCalled(bool) {
+    addTempToMaster();
+    emit feedback_status_bar(tr("Joining temp mesh into initial mesh"),0);
 }

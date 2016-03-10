@@ -1,9 +1,9 @@
-//
-// @author Andy Wang, UC Berkeley. Copyright 2015 reserve.
-// Catmull-Clark subdivision project in order to create sculptures like Eva-Hilds.
-// Advised by Prof. Sequin H. Carlos.
-//
-//
+/**
+ * @author Andy Wang, UC Berkeley.
+ * Copyright 2016 reserve.
+ * UC Berkeley, Slide_2016 project.
+ * Advised by Prof. Sequin H. Carlos.
+ */
 
 #ifndef __MYSELECTION_H__
 #define __MYSELECTION_H__
@@ -21,33 +21,74 @@ using namespace std;
 // Selection Class -- Handles Mouse Selection.
 
 class MySelection {
-    // Vertices selected. Can be used to create Face or Polyline.
+    /* Vertices selected. Can be used to create Face or Polyline.*/
     vector<Vertex*> selectedVertices;
-    // For partial border selection
+    /* For partial border selection/*/
     Vertex * firstBorderSelectionPoint = NULL;
     Vertex * secondBorderSelectionPoint = NULL;
     vector<Vertex*> allBorderPoints;
     vector<Vertex*> firstHalfBorder;
     vector<Vertex*> vertToSelect;
 public:
-    // Debug function
+    /**
+     * @brief list_hits: A debug function. Shows the current hit
+     * objects names.
+     * @param hits: The returned hits from GL_SELECT mode name buffer.
+     * Indicating objects hit by the clicking ray.
+     * @param names: The user defined name buffer.
+     */
     void list_hits(GLint hits, GLuint *names);
-    // Select the hitted face from mesh.
-    // @param mesh, the mesh that contains this face.
+    /**
+     * @brief: Select the hitted face from mesh.
+     * @param mesh: the mesh that contains this face.
+     * @param hits: The returned hits from GL_SELECT mode name buffer.
+     * Indicating objects hit by the clicking ray.
+     * @param names: The user defined name buffer.
+     */
     void selectFace(Mesh & mesh, GLint hits, GLuint *names);
-    // Select the nearst point.
-    // @param mesh, the mesh that contains this vertex.
+    /**
+     * @brief selectVertex: Select the nearest vertex.
+     * @param mesh: the mesh that contains this face.
+     * @param hits: The returned hits from GL_SELECT mode name buffer.
+     * Indicating objects hit by the clicking ray.
+     * @param names: The user defined name buffer.
+     * @param posX: X position from the actual hit point on polygon.
+     * @param posY: Y position from the actual hit point on polygon.
+     * @param posZ: Z position from the actual hit point on polygon.
+     */
     void selectVertex(Mesh & mesh, GLint hits, GLuint *names,
                       GLdouble posX, GLdouble posY, GLdouble posZ);
     // Select all border vertices
-    // @param mesh, the mesh that contains this border
+
+    /**
+     * @brief selectWholeBorder: Select all vertices from a border.
+     * The border is the cloest one to the clicking ray hit.
+     * @param mesh: the mesh that contains this face.
+     * @param hits: The returned hits from GL_SELECT mode name buffer.
+     * Indicating objects hit by the clicking ray.
+     * @param names: The user defined name buffer.
+     * @param posX: X position from the actual hit point on polygon.
+     * @param posY: Y position from the actual hit point on polygon.
+     * @param posZ: Z position from the actual hit point on polygon.
+     */
     void selectWholeBorder(Mesh & mesh, GLint hits, GLuint *names,
                            GLdouble posX, GLdouble posY, GLdouble posZ);
-    // Select partial border vertices by three clicks
-    // @param mesh, the mesh that contains this border
+    /**
+     * @brief selectPartialBorder: Select all vertices from a border.
+     * The border is the cloest one to the clicking ray hit.
+     * @param mesh: the mesh that contains this face.
+     * @param hits: The returned hits from GL_SELECT mode name buffer.
+     * Indicating objects hit by the clicking ray.
+     * @param names: The user defined name buffer.
+     * @param posX: X position from the actual hit point on polygon.
+     * @param posY: Y position from the actual hit point on polygon.
+     * @param posZ: Z position from the actual hit point on polygon.
+     */
     void selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
                              GLdouble posX, GLdouble posY, GLdouble posZ);
-    // Clear the current selection
+    /**
+     * @brief: clear the current selection
+     */
     void clearSelection();
 };
 

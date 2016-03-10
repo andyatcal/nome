@@ -1,3 +1,10 @@
+/**
+ * @author Andy Wang, UC Berkeley.
+ * Copyright 2016 reserve.
+ * UC Berkeley, Slide_2016 project.
+ * Advised by Prof. Sequin H. Carlos.
+ */
+
 #ifndef SLIDEGLWIDGET_H
 #define SLIDEGLWIDGET_H
 
@@ -29,6 +36,7 @@
 #include "offset.h"
 #include <QMessageBox>
 #include <QColor>
+#include <QString>
 class SlideGLWidget: public QGLWidget
 {
     Q_OBJECT
@@ -149,7 +157,11 @@ private:
      * The default background color.
      */
     QColor backColor;
-
+    /* Auto check if the newly added face can have
+     * same orientation with master_mesh. */
+    bool auto_check;
+    /* Check if whole border selection is on.*/
+    bool whole_border;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -171,14 +183,33 @@ public slots:
      * 3 for offset mesh
      * 4 for subdivision on offset mesh
      */
-    void viewContentChanged(int view_content);
+    void viewContentChanged(int);
     /* Receive the signal from control panel to do subdivision.*/
-    void levelChanged(int new_level);
+    void levelChanged(int);
     /* Receive the signal to reset the viewing direction. */
-    void resetViewDirection(bool checked);
+    void resetViewDirection(bool);
     /* Receive the signal of offset value changed. */
-    void offsetValueChanged(float value);
+    void offsetValueChanged(float);
+    /* Recevie the signal of changing to add mode. */
+    void addModeChecked(bool);
+    /* Recevie the signal of changing to zip mode. */
+    void zipModeChecked(bool);
+    /* Receive the signal auto correct orientation in adding mode. */
+    void autoCorrectChecked(bool);
+    /* Receive the signal whole border selection in zipping mode. */
+    void wholeBorderSelectionChecked(bool);
+    /* Receive the signal to add a polygon to temp_mesh. */
+    void addToTempCalled(bool);
+    /* Receive the signal to zip two borders.
+     * And add the result polygons to temp_mesh. */
+    void zipToTempCalled(bool);
+    /* Recieve signal to add the temp_mesh to master_mesh.*/
+    void addTempToMasterCalled(bool);
+    /* Add temp_mesh to master_mesh. */
+    void addTempToMaster();
 signals:
+    /* A feedback signal send back to control panel statusBar.*/
+    void feedback_status_bar(QString, int);
 };
 
 #endif // SLIDEGLWIDGET_H
