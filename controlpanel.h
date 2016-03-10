@@ -7,12 +7,13 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QSlider>
-#include <QButtonGroup>
+#include <QGroupBox>
 #include <QRadioButton>
 #include <QPushButton>
 #include <QComboBox>
 #include <QColorDialog>
 #include <QLineEdit>
+#include <QStatusBar>
 #include "slideglwidget.h"
 class ControlPanel : public QWidget
 {
@@ -41,8 +42,15 @@ private:
     /* Widgets and Layout in this Control Panel.*/
     QVBoxLayout *mainLayout;
     QVBoxLayout *viewLayout;
+    QGroupBox *modeGroupBox;
     QVBoxLayout *modeLayout;
-    QVBoxLayout *mergeLayout;
+    QHBoxLayout *modeSelectLayout;
+    QHBoxLayout *zipLayout;
+    QHBoxLayout *addLayout;
+    QRadioButton *addModeButton;
+    QRadioButton *zipModeButton;
+    QPushButton *addButton;
+    QPushButton *zipButton;
     QVBoxLayout *subdivLayout;
     QVBoxLayout *offsetLayout;
     QVBoxLayout *colorLayout;
@@ -68,6 +76,7 @@ private:
     QLineEdit *minOffsetBox;
     QLineEdit *maxOffsetBox;
     QLineEdit *offsetStepBox;
+    QStatusBar *statusBar;
 public slots:
     void test(QString test);
     void test(bool);
