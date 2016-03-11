@@ -192,14 +192,14 @@ void SlideGLWidget::paintGL()
                         1.0f * foreColor.alpha() /255};
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
     view_mesh->drawMesh(0);
+    GLfloat reversefcolor[] = {1.0f - 1.0f * foreColor.red() / 255,
+                                1.0f - 1.0f * foreColor.green() / 255,
+                                1.0f - 1.0f * foreColor.blue() / 255,
+                                1.0f - 1.0f * foreColor.alpha() /255};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, reversefcolor);
     view_mesh->drawVertices();
     if(view_mesh == &master_mesh && !temp_mesh.isEmpty())
     {
-        GLfloat reversefcolor[] = {1.0f - 1.0f * foreColor.red() / 255,
-                                    1.0f - 1.0f * foreColor.green() / 255,
-                                    1.0f - 1.0f * foreColor.blue() / 255,
-                                    1.0f - 1.0f * foreColor.alpha() /255};
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, reversefcolor);
         temp_mesh.drawMesh(master_mesh.vertList.size());
     }
     if(!border1.isEmpty() || !border2.isEmpty())
