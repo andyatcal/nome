@@ -292,11 +292,13 @@ void SlideGLWidget::keyPressEvent(QKeyEvent* event)
 void SlideGLWidget::subdivide(int level)
 {
     if(level == 0) {
+        view_mesh = &master_mesh;
         return;
     }
     int cachedLevel = cache_subdivided_meshes.size();
     if(cachedLevel >= level) {
         subdiv_mesh = cache_subdivided_meshes[level - 1];
+        view_mesh = &subdiv_mesh;
     } else {
         if(cachedLevel == 0) {
             subdiv_mesh = master_mesh;
