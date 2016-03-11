@@ -13,37 +13,41 @@
 using namespace glm;
 using namespace std;
 
-// Forward declarations
 class Edge;
 class Mesh;
 
-//////////////////////////////////////////////////////////////////////
-// Vertex Class -- 3D Vertex for Catmull-Clark Subdivision.
-//
+/**
+ * @brief The Vertex class. Build for vertex in winged-
+ * edge data structure.
+ */
 class Vertex{
 public:
-    // The position of this vertex.
-    vec3 position;
-    // The normal of this Vertex.
-    vec3 normal;
-    // One out-going halfedge of this vertex.
-    Edge * oneEdge;
-    // An ID to track this Vertex.
-    unsigned long ID;
-    // A flag of on Mobius edge.
-    bool onMobius;
-    // A pointer to the vertex point after makeVertexPoints in subdivision.
-    Vertex * vertexPoint;
-    // A pointer to the positive offset of the vertex.
-    Vertex * posOffset;
-    // A pointer to the negative offset of the vertex.
-    Vertex * negOffset;
-    // Constructor.
     Vertex();
-    // Contructor given initial location of vertex.
-    // @param x, y, z as the coordinates of this vertex.
+    /**
+     * @brief Vertex: Constructor of class Vertex.
+     * @param x: x coordinate.
+     * @param y: y coordinate.
+     * @param z: z coordinate.
+     * @param ID: The vertex ID.
+     */
     Vertex(float x, float y, float z, unsigned long ID);
-    // Test if the current vertex is selected or not
+    /* The position. */
+    vec3 position;
+    /* Vertex normal. */
+    vec3 normal;
+    /* One out-going halfedge of this vertex.*/
+    Edge * oneEdge;
+    /* A tracking identifier. Generally the index from global vertex list.*/
+    unsigned long ID;
+    /* True if it is the end of any Mobius edge.*/
+    bool onMobius;
+    /* A pointer to the vertex point in subdivision.*/
+    Vertex * vertexPoint;
+    /* A pointer to the positive offset vertex in offsetting. */
+    Vertex * posOffset;
+    /* A pointer to the negative offset vertex in offsetting. */
+    Vertex * negOffset;
+    /* Indicator of whether this vertex is selected.*/
     bool selected;
 };
 

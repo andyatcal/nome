@@ -11,31 +11,30 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "edge.h"
+#include "vertex.h"
 
 using namespace glm;
 using namespace std;
 
-// Forward declarations
-class Vertex;
-
-//////////////////////////////////////////////////////////////////////
-// Face Class -- Polygon Face for Catmull-Clark Subdivision.
-//
-class Face{
+/**
+ * @brief The Face class. The face class build for winged-
+ * edge data structure. A face is constructed by a seqence of
+ * vertices/edges.
+ */
+class Face
+{
 public:
-    // The surface normal of this face.
-    vec3 normal;
-    // A pointer to one edge that constructs this face.
-    Edge * oneEdge;
-    // A pointer to the face point after makeFacePoints in subdivision.
-    Vertex * facePoint;
-    // Constructor.
     Face();
-    // Test if this face is selected
+    /* The face normal.*/
+    vec3 normal;
+    /* Pointer to one edge in this face.*/
+    Edge *oneEdge;
+    /* Pointer to the face point in subdivision. */
+    Vertex *facePoint;
+    /* Indicator of whether this face is selected.*/
     bool selected;
-    // FaceID, should be an unique int
+    /* FaceID, is the index from the global face list.*/
     int id;
-
 };
 
 #endif // __FACE_H__
