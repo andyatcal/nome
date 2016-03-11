@@ -69,8 +69,11 @@ void SlideGLWidget::saveMesh(string name)
 {
     // Figure out the QuadSIF or SIF later/
     STL *stl = new STL;
-    stl -> STLOutput(master_mesh, name);
-    master_mesh.computeNormals();
+    if(!offset_mesh.isEmpty()) {
+        stl -> STLOutput(offset_mesh, name);
+    } else {
+        emit feedback_status_bar(tr("Offset is empty, can't save file!"),0);
+    }
 }
 
 vec3 SlideGLWidget::get_arcball_vector(int x, int y) {
