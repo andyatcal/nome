@@ -34,7 +34,7 @@ void SlideGLWidget::generalSetup()
     arcball_on = false;
     wireframe = false;
     smoothshading = true;
-    selection_mode = 0;
+    selection_mode = 1;
     object2world = mat4(1);
     foreColor = QColor(255,0,0);
     backColor = QColor(0,0,0);
@@ -461,9 +461,11 @@ void SlideGLWidget::autoCorrectChecked(bool checked)
 void SlideGLWidget::wholeBorderSelectionChecked(bool checked)
 {
     whole_border = checked;
-    if(checked) {
+    if(checked)
+    {
         selection_mode = 2;
-    } else {
+    } else
+    {
         selection_mode = 3;
     }
     clearSelection();
