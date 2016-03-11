@@ -90,7 +90,7 @@ public:
     // The color of this mesh
     vec3 color;
     /* Check if this mesh if empty. */
-    bool empty();
+    bool isEmpty();
     /**
      * @brief clear: clear the current mesh.
      */

@@ -39,8 +39,6 @@ void SlideGLWidget::generalSetup()
     foreColor = QColor(255,0,0);
     backColor = QColor(0,0,0);
     whole_border = true;
-    border1 = NULL;
-    border2 = NULL;
     resize(600, 480);
 }
 
@@ -195,13 +193,23 @@ void SlideGLWidget::paintGL()
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
     view_mesh->drawMesh(0);
     view_mesh->drawVertices();
-    if(view_mesh == &master_mesh && !temp_mesh.empty())
+    if(view_mesh == &master_mesh && !temp_mesh.isEmpty())
     {
         GLfloat reversefcolor[] = {1.0f - 1.0f * foreColor.red() / 255,
                                     1.0f - 1.0f * foreColor.green() / 255,
                                     1.0f - 1.0f * foreColor.blue() / 255,
                                     1.0f - 1.0f * foreColor.alpha() /255};
         temp_mesh.drawMesh(master_mesh.vertList.size());
+    }
+    if(!border1.isEmpty() || !border2.isEmpty())
+    {
+        //float line_width = glGet(GL_LINE_WIDTH);
+        glLineWidth(4.0);
+        border1.drawLine();
+        if(!border2.isEmpty()) {
+            border2.drawLine();
+        }
+        glLineWidth(1.0);
     }
 }
 
@@ -320,7 +328,7 @@ void SlideGLWidget::offset(float value)
         view_mesh = &master_mesh;
         return;
     }
-    if(subdiv_mesh.empty()) {
+    if(subdiv_mesh.isEmpty()) {
         offseter = new Offset(master_mesh, value);
     } else {
         offseter = new Offset(subdiv_mesh, value);
@@ -465,11 +473,11 @@ void SlideGLWidget::addToTempCalled(bool)
 
 void SlideGLWidget::zipToTempCalled(bool)
 {
-    if(border1 == NULL || border2 == NULL) {
+    if(border1.isEmpty() || border2.isEmpty()) {
         emit feedback_status_bar(tr("Please select two borders to zip!"), 0);
         return;
     }
-    temp_mesh = zipper->zip(border1, border2, 1.3);
+    temp_mesh = zipper->zip(&border1, &border2, 1.3);
 }
 
 void SlideGLWidget::addTempToMaster()
@@ -548,7 +556,7 @@ void SlideGLWidget::addTempToMaster()
 }
 
 void SlideGLWidget::addTempToMasterCalled(bool) {
-    if(temp_mesh.empty()) {
+    if(temp_mesh.isEmpty()) {
         emit feedback_status_bar(tr("Current temp mesh is empty."), 0);
         return;
     }
@@ -559,12 +567,12 @@ void SlideGLWidget::addTempToMasterCalled(bool) {
 
 void SlideGLWidget::addBorderCalled(bool)
 {
-    if(border1 == NULL)
+    if(border1.isEmpty())
     {
         border1 = mySelect.addSelectedToPolyline(whole_border);
         emit feedback_status_bar(tr("First border added."), 0);
     }
-    else if(border2 == NULL)
+    else if(border2.isEmpty())
     {
         border2 = mySelect.addSelectedToPolyline(whole_border);
         emit feedback_status_bar(tr("Second border added."), 0);
@@ -585,7 +593,7 @@ void SlideGLWidget::clearSubDivisionAndOffset() {
 void SlideGLWidget::clearSelectionCalled(bool)
 {
     cout<<"Now Clearing Selection."<<endl;
-    border1 == NULL;
-    border2 == NULL;
+    border1.clear();
+    border2.clear();
     temp_mesh.clear();
 }

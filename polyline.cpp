@@ -32,6 +32,16 @@ void PolyLine::drawLine()
     glEnd();
 }
 
+void PolyLine::clear()
+{
+    vertices.clear();
+}
+
+bool PolyLine::isEmpty()
+{
+    return vertices.size() == 0;
+}
+
 vector<float> PolyLine::skewness()
 {
     if(vertices.size() < 2) {

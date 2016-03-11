@@ -438,20 +438,20 @@ void MySelection::addSelectedToMesh(Mesh &mesh)
     clearSelection();
 }
 
-PolyLine *MySelection::addSelectedToPolyline(bool isLoop)
+PolyLine MySelection::addSelectedToPolyline(bool isLoop)
 {
+    PolyLine newBorder;
     if(selectedVertices.size() < 2) {
         cout<<"A Line have size greater than 1."<<endl;
         clearSelection();
-        return NULL;
+        return newBorder;
     }
     vector<Vertex*>::iterator vIt;
-    PolyLine *newBorder;
     for(vIt = selectedVertices.begin();
       vIt < selectedVertices.end(); vIt ++) {
-        newBorder->vertices.push_back(*vIt);
+        newBorder.vertices.push_back(*vIt);
     }
-    newBorder->isLoop = isLoop;
+    newBorder.isLoop = isLoop;
     clearSelection();
     return newBorder;
 }

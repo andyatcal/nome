@@ -176,9 +176,9 @@ private:
     /* The zipper.*/
     Zipper *zipper;
     /* The first border to zip.*/
-    PolyLine *border1;
+    PolyLine border1;
     /* The second border to zip. */
-    PolyLine *border2;
+    PolyLine border2;
     /**
      * @brief clearSubDivisionAndOffset: Clear the subdiv_mesh
      * and offset_mesh.

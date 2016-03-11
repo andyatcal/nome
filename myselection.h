@@ -101,7 +101,7 @@ public:
      * @param isLoop: indicate if this polyline is a loop.
      * @return pointer to the new polyline
      */
-    PolyLine *addSelectedToPolyline(bool isLoop = false);
+    PolyLine addSelectedToPolyline(bool isLoop = false);
 };
 
 #endif // SELECTION_H

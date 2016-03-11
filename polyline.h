@@ -21,12 +21,26 @@ class PolyLine {
 public:
     vector<Vertex*> vertices;
     bool isLoop;
-    // Constructor
     PolyLine();
-    // Draw this polyline in OpenGL;
+    /**
+     * @brief drawLine: Draw this polyline in OpenGL
+     */
     void drawLine();
     // Return the skewness of points in this polyline.
+    /**
+     * @brief skewness: Find the skeness of all points.
+     * @return the skewness of points in this polyline.
+     */
     vector<float> skewness();
+    /**
+     * @brief clear: clear this Polyline.
+     */
+    void clear();
+    /**
+     * @brief isEmpty: Find if this line is empty.
+     * @return indicator of this polyline is empty.
+     */
+    bool isEmpty();
 };
 
 #endif // __POLYLINE_H__
