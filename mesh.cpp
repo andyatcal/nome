@@ -412,17 +412,20 @@ void Mesh::computeNormals(){
 
 }
 
-void Mesh::drawMesh() {
+void Mesh::drawMesh(int startIndex)
+{
     Face * tempFace;
     vector<Face*>::iterator fIt;
-    for(fIt = faceList.begin(); fIt < faceList.end(); fIt++) {
+    for(fIt = faceList.begin(); fIt < faceList.end(); fIt++)
+    {
         tempFace = (*fIt);
         vec3 fNormal = tempFace -> normal;
         Vertex * tempv;
         Edge * firstEdge = (*fIt) -> oneEdge;
         //cout<<"New Face: "<<endl;
-        glLoadName(tempFace -> id);
-        if(tempFace -> selected) {
+        glLoadName(tempFace -> id + startIndex);
+        if(tempFace -> selected)
+        {
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, PURPLE);
         }
         glBegin(GL_POLYGON);
@@ -431,15 +434,22 @@ void Mesh::drawMesh() {
         //tempv = currEdge -> va;
         //cout<<"Hmm?"<<endl;
         //cout<<"Hello! I am on the "<<fIt - faceList.begin()<<" face."<<endl;
-        do {
-            if(tempFace == currEdge -> fa) {
+        do
+        {
+            if(tempFace == currEdge -> fa)
+            {
                 tempv = currEdge -> vb;
                 nextEdge = currEdge -> nextVbFa;
-            } else {
-                if(currEdge -> mobius) {
+            }
+            else
+            {
+                if(currEdge -> mobius)
+                {
                     tempv = currEdge -> vb;
                     nextEdge = currEdge -> nextVbFb;
-                } else {
+                }
+                else
+                {
                     tempv = currEdge -> va;
                     nextEdge = currEdge -> nextVaFb;
                 }
@@ -447,18 +457,24 @@ void Mesh::drawMesh() {
             float normx;
             float normy;
             float normz;
-            if(tempv -> onMobius) {
+            if(tempv -> onMobius)
+            {
                 vec3 vNormal = tempv -> normal;
-                if(dot(vNormal, fNormal) >= 0) {
+                if(dot(vNormal, fNormal) >= 0)
+                {
                     normx = tempv -> normal[0];
                     normy = tempv -> normal[1];
                     normz = tempv -> normal[2];
-                } else {
+                }
+                else
+                {
                     normx = - tempv -> normal[0];
                     normy = - tempv -> normal[1];
                     normz = - tempv -> normal[2];
                 }
-            } else {
+            }
+            else
+            {
                 normx = tempv -> normal[0];
                 normy = tempv -> normal[1];
                 normz = tempv -> normal[2];

@@ -179,6 +179,11 @@ private:
     PolyLine *border1;
     /* The second border to zip. */
     PolyLine *border2;
+    /**
+     * @brief clearSubDivisionAndOffset: Clear the subdiv_mesh
+     * and offset_mesh.
+     */
+    void clearSubDivisionAndOffset();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -233,6 +238,9 @@ public slots:
     void addTempToMaster();
     /* Receive the signal to add a border. Add border1 first*/
     void addBorderCalled(bool);
+    /* Receive the signal to clear all selections.
+     * Including selected vertices and border. */
+    void clearSelectionCalled(bool);
 signals:
     /* A feedback signal send back to control panel statusBar.*/
     void feedback_status_bar(QString, int);

@@ -74,8 +74,11 @@ public:
     // Add a arbitrary polygon face to a mesh, with three vertices.
     // @param vertices is a list of consequtive vertices of the face.
     void addPolygonFace(vector<Vertex*> vertices, bool reverseOrder = false);
-    // Draw mesh in OpenGL
-    void drawMesh();
+    /**
+     * @brief drawMesh:  Draw a mesh in OpenGL
+     * @param startIndex: The starting index of drawing polygon name.
+     */
+    void drawMesh(int startIndex);
     // Draw the selected vertices in OpenGL
     void drawVertices();
     // Build Boundary Pointers for Mesh.
