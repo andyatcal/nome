@@ -443,6 +443,7 @@ void SlideGLWidget::addModeChecked(bool checked)
             selection_mode = 3;
         }
     }
+    clearSelection();
 }
 
 void SlideGLWidget::zipModeChecked(bool checked)
@@ -463,7 +464,7 @@ void SlideGLWidget::wholeBorderSelectionChecked(bool checked)
     } else {
         selection_mode = 3;
     }
-    mySelect.clearSelection();
+    clearSelection();
 }
 
 void SlideGLWidget::addToTempCalled(bool)
@@ -564,6 +565,7 @@ void SlideGLWidget::addTempToMasterCalled(bool) {
     clearSubDivisionAndOffset();
     clearSelectionCalled(true);
     emit feedback_status_bar(tr("Joining temp mesh into initial mesh"), 0);
+    repaint();
 }
 
 void SlideGLWidget::addBorderCalled(bool)
@@ -582,6 +584,7 @@ void SlideGLWidget::addBorderCalled(bool)
     {
         emit feedback_status_bar(tr("The two borders are added. You are ready to zip."), 0);
     }
+    repaint();
 }
 
 void SlideGLWidget::clearSubDivisionAndOffset() {
@@ -597,6 +600,7 @@ void SlideGLWidget::clearSelection()
     border1.clear();
     border2.clear();
     temp_mesh.clear();
+    repaint();
 }
 
 void SlideGLWidget::clearSelectionCalled(bool)
