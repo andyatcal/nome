@@ -54,7 +54,7 @@ public:
      */
     void saveMesh(string name);
     /**
-     * @brief subdivide for certain level.
+     * @brief subdivide: for certain level.
      * @param level, level of subdivision.
      */
     void subdivide(int level);
@@ -88,17 +88,27 @@ private:
     bool wireframe;
     /* control of the shading mode. */
     bool smoothshading;
-    /* Make a default mesh of a cube. */
+    /**
+     * @brief makeDefaultMesh: Make a default mesh of a cube.
+     */
     void makeDefaultMesh();
-    /* Make a mesh by reading in a SIF file. */
+    /**
+     * @brief makeSIFMesh: Make a mesh by reading in a SIF file.
+     * @param name: The path to the input file.
+     */
     void makeSIFMesh(string name);
-    /* Make a mesh by reading in a SLF file.*/
+    /**
+     * @brief makeSLFMesh: Make a mesh by reading in a SLF file.
+     * @param name: The path to the input file.
+     */
     void makeSLFMesh(string name);
-    /* The master mesh. As a result of SIF parser.
+    /*
+     * The master mesh. As a result of SIF parser.
      * Or as a result of merging the scene.
      */
     Mesh master_mesh;
-    /* The working mesh that the user modified.
+    /*
+     * The working mesh that the user modified.
      * Can be merged into the master mesh.
      */
     Mesh temp_mesh;
@@ -149,11 +159,11 @@ private:
     void zoom_in();
     /* Zoom out in the current view. */
     void zoom_out();
-    /**
+    /*
      * The default foreground color.
      */
     QColor foreColor;
-    /**
+    /*
      * The default background color.
      */
     QColor backColor;
@@ -170,9 +180,15 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
     /**
-     * Timer Event for this MainWindow. Similar to OnIdleFunc of GLUT.
+     * @brief timerEvent: Timer Event for this MainWindow.
+     * Similar to OnIdleFunc of GLUT.
      */
     void timerEvent(QTimerEvent *event);
+    /**
+     * @brief wheelEvent: Handles mouse wheel event.
+     * Will zoom in or zoom out in the scene.
+     * @param event: The qt wheel event.
+     */
     void wheelEvent(QWheelEvent *event);
 public slots:
     /* Change the current view mesh.
