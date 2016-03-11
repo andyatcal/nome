@@ -199,6 +199,7 @@ void SlideGLWidget::paintGL()
                                     1.0f - 1.0f * foreColor.green() / 255,
                                     1.0f - 1.0f * foreColor.blue() / 255,
                                     1.0f - 1.0f * foreColor.alpha() /255};
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, reversefcolor);
         temp_mesh.drawMesh(master_mesh.vertList.size());
     }
     if(!border1.isEmpty() || !border2.isEmpty())
