@@ -184,6 +184,10 @@ private:
      * and offset_mesh.
      */
     void clearSubDivisionAndOffset();
+    /**
+     * @brief clearSelection: clear the selected items.
+     */
+    void clearSelection();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

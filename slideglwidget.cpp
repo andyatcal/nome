@@ -562,6 +562,7 @@ void SlideGLWidget::addTempToMasterCalled(bool) {
     }
     addTempToMaster();
     clearSubDivisionAndOffset();
+    clearSelectionCalled(true);
     emit feedback_status_bar(tr("Joining temp mesh into initial mesh"), 0);
 }
 
@@ -590,10 +591,15 @@ void SlideGLWidget::clearSubDivisionAndOffset() {
     cache_subdivided_meshes.clear();
 }
 
-void SlideGLWidget::clearSelectionCalled(bool)
+void SlideGLWidget::clearSelection()
 {
-    cout<<"Now Clearing Selection."<<endl;
+    mySelect.clearSelection();
     border1.clear();
     border2.clear();
     temp_mesh.clear();
+}
+
+void SlideGLWidget::clearSelectionCalled(bool)
+{
+    clearSelection();
 }
