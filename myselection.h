@@ -90,6 +90,18 @@ public:
      * @brief: clear the current selection
      */
     void clearSelection();
+    /**
+     * @brief addSelectedToMesh: Add the selected vertices as a polygon to
+     * a mesh.
+     * @param mesh. The destiny mesh.
+     */
+    void addSelectedToMesh(Mesh &mesh);
+    /**
+     * @brief addSelectedToPolyline: Add the selected vertices to a new polyline.
+     * @param isLoop: indicate if this polyline is a loop.
+     * @return pointer to the new polyline
+     */
+    PolyLine *addSelectedToPolyline(bool isLoop = false);
 };
 
 #endif // SELECTION_H

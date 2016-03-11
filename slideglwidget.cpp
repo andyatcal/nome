@@ -38,6 +38,8 @@ void SlideGLWidget::generalSetup()
     object2world = mat4(1);
     foreColor = QColor(255,0,0);
     backColor = QColor(0,0,0);
+    border1 = NULL;
+    border2 = NULL;
     resize(600, 480);
 }
 
@@ -49,15 +51,16 @@ void SlideGLWidget::makeDefaultMesh()
 
 void SlideGLWidget::makeSIFMesh(string name)
 {
-    // Figure out the QuadSIF or SIF later/
+    /* Figure out the QuadSIF or SIF later.*/
     makeWithSIF(master_mesh,name);
     master_mesh.computeNormals();
     view_mesh = &master_mesh;
+    temp_mesh.clear();
 }
 
 void SlideGLWidget::makeSLFMesh(string name)
 {
-    // Figure out the QuadSIF or SIF later/
+    //Figure out the QuadSIF or SIF later/
     //makeWithSIF(master_mesh,name);
     //master_mesh.computeNormals();
     cout<<"Coming Soon!"<<endl;
@@ -448,12 +451,16 @@ void SlideGLWidget::wholeBorderSelectionChecked(bool checked)
 
 void SlideGLWidget::addToTempCalled(bool)
 {
-
+    mySelect.addSelectedToMesh(temp_mesh);
 }
 
 void SlideGLWidget::zipToTempCalled(bool)
 {
-
+    if(border1 == NULL || border2 == NULL) {
+        emit feedback_status_bar(tr("Please select two borders to zip!"), 0);
+        return;
+    }
+    temp_mesh = zipper->zip(border1, border2, 1.3);
 }
 
 void SlideGLWidget::addTempToMaster()
@@ -532,5 +539,22 @@ void SlideGLWidget::addTempToMaster()
 
 void SlideGLWidget::addTempToMasterCalled(bool) {
     addTempToMaster();
-    emit feedback_status_bar(tr("Joining temp mesh into initial mesh"),0);
+    emit feedback_status_bar(tr("Joining temp mesh into initial mesh"), 0);
+}
+
+void SlideGLWidget::addBorderCalled(bool) {
+    if(border1 == NULL)
+    {
+        border1 = mySelect.addSelectedToPolyline(whole_border);
+        emit feedback_status_bar(tr("First border added."), 0);
+    }
+    else if(border2 == NULL)
+    {
+        border2 = mySelect.addSelectedToPolyline(whole_border);
+        emit feedback_status_bar(tr("Second border added."), 0);
+    }
+    else
+    {
+        emit feedback_status_bar(tr("The two borders are added. You are ready to zip."), 0);
+    }
 }

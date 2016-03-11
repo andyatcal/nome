@@ -174,6 +174,10 @@ void Mesh::addQuadFace(Vertex * v1, Vertex * v2, Vertex * v3, Vertex * v4) {
 }
 
 void Mesh::addPolygonFace(vector<Vertex*> vertices, bool reverseOrder) {
+    if(vertices.size() < 3) {
+        cout<<"A face have at least 3 vertices"<<endl;
+        return;
+    }
     Face * newFace = new Face;
     vector<Vertex*>::iterator vIt;
     vector<Edge*> edgesInFace;

@@ -58,9 +58,13 @@ private:
     QRadioButton *addModeButton;
     QRadioButton *zipModeButton;
     QPushButton *addButton;
+    QPushButton *addBorderButton;
     QPushButton *zipButton;
     QCheckBox *autoCorrectCheck;
     QCheckBox *wholeBorderCheck;
+    QHBoxLayout *addOrClearLayout;
+    QPushButton *addTempToMasterButton;
+    QPushButton *clearSelectionButton;
     QVBoxLayout *subdivLayout;
     QVBoxLayout *offsetLayout;
     QVBoxLayout *colorLayout;
@@ -87,7 +91,6 @@ private:
     QLineEdit *maxOffsetBox;
     QLineEdit *offsetStepBox;
     QStatusBar *statusBar;
-    QPushButton *addTempToMasterButton;
 public slots:
     void test(QString test);
     void test(bool);

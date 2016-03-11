@@ -386,3 +386,37 @@ void MySelection::clearSelection() {
     allBorderPoints.clear();
     vertToSelect.clear();
 }
+
+void MySelection::addSelectedToMesh(Mesh &mesh)
+{
+    vector<Vertex*> vertices;
+    vector<Vertex*>::iterator vIt;
+    for(vIt = selectedVertices.begin();
+     vIt < selectedVertices.end(); vIt++)
+    {
+        mesh.addVertex(*vIt);
+        vertices.push_back(*vIt);
+    }
+    mesh.addPolygonFace(vertices);
+    mesh.buildBoundary();
+    mesh.computeNormals();
+    clearSelection();
+}
+
+PolyLine *MySelection::addSelectedToPolyline(bool isLoop)
+{
+    if(selectedVertices.size() < 2) {
+        cout<<"A Line have size greater than 1."<<endl;
+        clearSelection();
+        return NULL;
+    }
+    vector<Vertex*>::iterator vIt;
+    PolyLine *newBorder;
+    for(vIt = selectedVertices.begin();
+      vIt < selectedVertices.end(); vIt ++) {
+        newBorder->vertices.push_back(*vIt);
+    }
+    newBorder->isLoop = isLoop;
+    clearSelection();
+    return newBorder;
+}

@@ -42,6 +42,7 @@ void ControlPanel::buildConnection()
     connect(addModeButton, SIGNAL(clicked(bool)), canvas, SLOT(addModeChecked(bool)));
     connect(zipModeButton, SIGNAL(clicked(bool)), canvas, SLOT(zipModeChecked(bool)));
     connect(addButton, SIGNAL(clicked(bool)), canvas, SLOT(addToTempCalled(bool)));
+    connect(addBorderButton, SIGNAL(clicked(bool)), canvas, SLOT(addBorderCalled(bool)));
     connect(zipButton, SIGNAL(clicked(bool)), canvas, SLOT(zipToTempCalled(bool)));
 }
 
@@ -78,14 +79,18 @@ void ControlPanel::setupLayout()
     addModeButton -> setChecked(true);
     addLayout -> addWidget(addButton = new QPushButton(tr("Add")));
     zipLayout -> addWidget(zipModeButton = new QRadioButton(tr("Zip Mode")));
+    zipLayout -> addWidget(addBorderButton = new QPushButton(tr("Add Border")));
     zipLayout -> addWidget(zipButton = new QPushButton(tr("Zip")));
-    modeLayout -> addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
+    modeLayout -> addLayout(addOrClearLayout = new QHBoxLayout);
+    //modeLayout -> addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
     modeLayout-> addWidget(autoCorrectCheck = new QCheckBox(tr("Auto Correct Adding Face Oreinataion")));
     autoCorrectCheck -> setChecked(true);
     modeLayout-> addWidget(wholeBorderCheck = new QCheckBox(tr("Zip Whole Border Loop")));
     wholeBorderCheck -> setChecked(true);
     wholeBorderCheck -> setEnabled(false);
-    modeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge All!")));
+    addOrClearLayout->addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
+    addOrClearLayout->addWidget(clearSelectionButton = new QPushButton(tr("Clear Selection and Temp Mesh.")));
+    modeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge All")));
     /* Subdivision layout. */
     subdivLayout -> addLayout(subdivLevelLayout = new QHBoxLayout);
     subdivLevelLayout -> addWidget(new QLabel("Level 0"));

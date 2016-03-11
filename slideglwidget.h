@@ -34,6 +34,7 @@
 #include "subdivison.h"
 #include "stl.h"
 #include "offset.h"
+#include "zipper.h"
 #include <QMessageBox>
 #include <QColor>
 #include <QString>
@@ -172,6 +173,12 @@ private:
     bool auto_check;
     /* Check if whole border selection is on.*/
     bool whole_border;
+    /* The zipper.*/
+    Zipper *zipper;
+    /* The first border to zip.*/
+    PolyLine *border1;
+    /* The second border to zip. */
+    PolyLine *border2;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -191,8 +198,9 @@ protected:
      */
     void wheelEvent(QWheelEvent *event);
 public slots:
-    /* Change the current view mesh.
-     * @param view_content,
+    /**
+     * @brief viewContentChanged: Change the current view mesh.
+     * @param view_content:
      * 0 for hirachical scene
      * 1 for master mesh
      * 2 for subdivision mesh
@@ -223,6 +231,8 @@ public slots:
     void addTempToMasterCalled(bool);
     /* Add temp_mesh to master_mesh. */
     void addTempToMaster();
+    /* Receive the signal to add a border. Add border1 first*/
+    void addBorderCalled(bool);
 signals:
     /* A feedback signal send back to control panel statusBar.*/
     void feedback_status_bar(QString, int);
