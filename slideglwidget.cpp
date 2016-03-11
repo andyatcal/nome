@@ -38,6 +38,7 @@ void SlideGLWidget::generalSetup()
     object2world = mat4(1);
     foreColor = QColor(255,0,0);
     backColor = QColor(0,0,0);
+    whole_border = true;
     border1 = NULL;
     border2 = NULL;
     resize(600, 480);
@@ -127,10 +128,10 @@ void SlideGLWidget::mouse_select(int x, int y) {
     hits = glRenderMode(GL_RENDER);
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
     //mySelect.list_hits(hits, buff);
-    if(selection_mode == 0){
+    if(selection_mode == 1){
         mySelect.selectVertex(*view_mesh, hits,buff,posX, posY, posZ);
         (hits, buff, posX, posY, posZ);
-    } else if(selection_mode == 1) {
+    } else if(selection_mode == 2) {
         mySelect.selectWholeBorder(*view_mesh, hits,buff,posX, posY, posZ);
     } else {
         mySelect.selectPartialBorder(*view_mesh, hits,buff,posX, posY, posZ);
@@ -547,6 +548,10 @@ void SlideGLWidget::addTempToMaster()
 }
 
 void SlideGLWidget::addTempToMasterCalled(bool) {
+    if(temp_mesh.empty()) {
+        emit feedback_status_bar(tr("Current temp mesh is empty."), 0);
+        return;
+    }
     addTempToMaster();
     clearSubDivisionAndOffset();
     emit feedback_status_bar(tr("Joining temp mesh into initial mesh"), 0);

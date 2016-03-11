@@ -45,6 +45,7 @@ void ControlPanel::buildConnection()
     connect(addBorderButton, SIGNAL(clicked(bool)), canvas, SLOT(addBorderCalled(bool)));
     connect(zipButton, SIGNAL(clicked(bool)), canvas, SLOT(zipToTempCalled(bool)));
     connect(clearSelectionButton,SIGNAL(clicked(bool)), canvas, SLOT(clearSelectionCalled(bool)));
+    connect(addTempToMasterButton, SIGNAL(clicked(bool)), canvas, SLOT(addTempToMasterCalled(bool)));
 }
 
 void ControlPanel::setupLayout()
