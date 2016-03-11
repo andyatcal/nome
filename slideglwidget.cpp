@@ -470,6 +470,7 @@ void SlideGLWidget::wholeBorderSelectionChecked(bool checked)
 void SlideGLWidget::addToTempCalled(bool)
 {
     mySelect.addSelectedToMesh(temp_mesh);
+    repaint();
 }
 
 void SlideGLWidget::zipToTempCalled(bool)
@@ -479,6 +480,7 @@ void SlideGLWidget::zipToTempCalled(bool)
         return;
     }
     temp_mesh = zipper->zip(&border1, &border2, 1.3);
+    repaint();
 }
 
 void SlideGLWidget::addTempToMaster()
