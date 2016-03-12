@@ -88,8 +88,8 @@ public:
     void computeNormals();
     // Return the list of edges on the boarders
     vector<Edge*> boundaryEdgeList();
-    // The color of this mesh
-    vec3 color;
+    /* The color of this mesh.*/
+    QColor color;
     /* Check if this mesh if empty. */
     bool isEmpty();
     /**

@@ -239,6 +239,7 @@ void Offset::makeFullOffset() {
             currEdge = nextEdge;
         } while (currEdge != firstEdge);
     }
+    offsetMesh.color = startMesh.color;
     offsetMesh.buildBoundary();
     offsetMesh.computeNormals();
 }

@@ -37,7 +37,7 @@ void SlideGLWidget::generalSetup()
     selection_mode = 1;
     object2world = mat4(1);
     foreColor = QColor(255,0,0);
-    backColor = QColor(0,0,0);
+    backColor = QColor(255,255,255);
     whole_border = true;
     resize(600, 480);
 }
@@ -54,8 +54,13 @@ void SlideGLWidget::makeSIFMesh(string name)
     //makeWithSIF(master_mesh,name);
     makeWithQuadSIF(master_mesh,name);
     master_mesh.computeNormals();
+    master_mesh.color = foreColor;
     view_mesh = &master_mesh;
     temp_mesh.clear();
+    vector<Mesh*> globalMeshList;
+    globalMeshList.push_back(&master_mesh);
+    globalMeshList.push_back(&temp_mesh);
+    createGlobalIndexList(globalMeshList);
 }
 
 void SlideGLWidget::makeSLFMesh(string name)
@@ -131,12 +136,12 @@ void SlideGLWidget::mouse_select(int x, int y) {
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
     //mySelect.list_hits(hits, buff);
     if(selection_mode == 1){
-        mySelect.selectVertex(*view_mesh, temp_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectVertex(global_name_index_list, hits,buff,posX, posY, posZ);
         (hits, buff, posX, posY, posZ);
     } else if(selection_mode == 2) {
-        mySelect.selectWholeBorder(*view_mesh, temp_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectWholeBorder(global_name_index_list, hits,buff,posX, posY, posZ);
     } else {
-        mySelect.selectPartialBorder(*view_mesh, temp_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectPartialBorder(global_name_index_list, hits,buff,posX, posY, posZ);
     }
     glMatrixMode(GL_MODELVIEW);
     repaint();
@@ -191,6 +196,51 @@ void SlideGLWidget::resizeGL(int w, int h)
     glLoadIdentity();
 }
 
+void SlideGLWidget::drawScene()
+{
+    if(view_mesh == &master_mesh) {
+        unordered_map<Mesh*, int>::iterator mIt;
+        for(mIt = global_name_index_list.begin(); mIt != global_name_index_list.end(); mIt++)
+        {
+            Mesh * currentMesh = mIt -> first;
+            QColor color = currentMesh -> color;
+            GLfloat fcolor[] = {1.0f * color.red() / 255,
+                                1.0f * color.green() / 255,
+                                1.0f * color.blue() / 255,
+                                1.0f * color.alpha() /255};
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
+            currentMesh -> drawMesh(mIt -> second, smoothshading);
+        }
+        GLfloat afcolor[] = {0.0f, 1.0f, 1.0f, 1.0f};
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, afcolor);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, afcolor);
+        for(mIt = global_name_index_list.begin(); mIt != global_name_index_list.end(); mIt++)
+        {
+            Mesh * currentMesh = mIt -> first;
+            currentMesh -> drawVertices();
+        }
+        if(!border1.isEmpty() || !border2.isEmpty())
+        {
+            glLineWidth(4.0);
+            border1.drawLine();
+            if(!border2.isEmpty()) {
+                border2.drawLine();
+            }
+            glLineWidth(1.0);
+        }
+    } else {
+        QColor color = view_mesh -> color;
+        GLfloat fcolor[] = {1.0f * color.red() / 255,
+                            1.0f * color.green() / 255,
+                            1.0f * color.blue() / 255,
+                            1.0f * color.alpha() /255};
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
+        view_mesh -> drawMesh(0, smoothshading);
+    }
+}
+
 void SlideGLWidget::paintGL()
 {
     glClearColor(1.0f * backColor.red() / 255,
@@ -201,34 +251,8 @@ void SlideGLWidget::paintGL()
     glLoadIdentity();
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
     glMultMatrixf(&object2world[0][0]);
-    GLfloat fcolor[] = {1.0f * foreColor.red() / 255,
-                        1.0f * foreColor.green() / 255,
-                        1.0f * foreColor.blue() / 255,
-                        1.0f * foreColor.alpha() /255};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
-    view_mesh->drawMesh(0, smoothshading);
-    GLfloat reversefcolor[] = {1.0f - 1.0f * foreColor.red() / 255,
-                                1.0f - 1.0f * foreColor.green() / 255,
-                                1.0f - 1.0f * foreColor.blue() / 255,
-                                1.0f - 1.0f * foreColor.alpha() /255};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, reversefcolor);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, reversefcolor);
-    view_mesh->drawVertices();
-    if(view_mesh == &master_mesh && !temp_mesh.isEmpty())
-    {
-        temp_mesh.drawMesh(master_mesh.vertList.size(), smoothshading);
-    }
-    if(!border1.isEmpty() || !border2.isEmpty())
-    {
-        //float line_width = glGet(GL_LINE_WIDTH);
-        glLineWidth(4.0);
-        border1.drawLine();
-        if(!border2.isEmpty()) {
-            border2.drawLine();
-        }
-        glLineWidth(1.0);
-    }
+
+    drawScene();
 }
 
 void SlideGLWidget::mousePressEvent(QMouseEvent* event)
@@ -633,14 +657,14 @@ void SlideGLWidget::clearSelectionCalled(bool)
     clearSelection();
 }
 
-void SlideGLWidget::createGlobalIndexList(vector<Mesh*> globalMeshList)
+void SlideGLWidget::createGlobalIndexList(vector<Mesh*> &globalMeshList)
 {
     int count = 0;
     vector<Mesh*>::iterator mIt;
     for(mIt = globalMeshList.begin(); mIt < globalMeshList.end(); mIt++)
     {
-        global_name_index_list.insert(mIt, count);
-        count += (mIt -> vertList).size();
+        global_name_index_list[*mIt] = count;
+        count += (*mIt) -> vertList.size();
     }
 }
 

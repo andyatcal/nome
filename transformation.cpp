@@ -100,5 +100,6 @@ Mesh meshCopy(Mesh & mesh) {
     }
     newMesh.buildBoundary();
     newMesh.computeNormals();
+    newMesh.color = mesh.color;
     return newMesh;
 }

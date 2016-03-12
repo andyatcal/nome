@@ -466,14 +466,14 @@ void Subdivision::compileNewMesh(vector<Face*> &newFaceList){
 }
 
 Mesh Subdivision::ccSubdivision(int level){
+    Mesh newMesh;
     for(int i = 0; i < level; i++) {
-        Mesh newMesh;
         makeFacePoints(newMesh.vertList);
         makeEdgePoints(newMesh.vertList);
         makeVertexPointsD(newMesh.vertList);
         compileNewMesh(newMesh.faceList);
-        currMesh = newMesh;
+        newMesh.color = currMesh.color;
     }
-    return currMesh;
+    return newMesh;
 }
 

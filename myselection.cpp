@@ -37,7 +37,7 @@ void MySelection::list_hits(GLint hits, GLuint *names)
         printf("\n");
 }
 
-void MySelection::selectFace(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names)
+void MySelection::selectFace(unordered_map<Mesh*, int> globalNameList, GLint hits, GLuint *names)
 {
     if(hits > 0) {
         int minimumDepth = INT_MAX;
@@ -49,12 +49,16 @@ void MySelection::selectFace(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, G
                 minimumDepthIndex = i;
             }
         }
-        int selectedID = names[minimumDepthIndex * 4 + 3];
+        int currentID = names[minimumDepthIndex * 4 + 3];
         Face * workFace;
-        if(selectedID < master_mesh.vertList.size()) {
-            workFace = master_mesh.faceList[selectedID];
-        } else {
-            workFace = temp_mesh.faceList[selectedID - master_mesh.vertList.size()];
+        unordered_map<Mesh*, int>::iterator mIt;
+        for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
+        {
+            Mesh *currMesh = mIt -> first;
+            if(currentID > mIt -> second) {
+                workFace = currMesh -> faceList[currentID - mIt -> second];
+                break;
+            }
         }
         if(!workFace->selected) {
             workFace->selected = true;
@@ -64,7 +68,7 @@ void MySelection::selectFace(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, G
     }
 }
 
-void MySelection::selectVertex(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names,
+void MySelection::selectVertex(unordered_map<Mesh*, int> globalNameList, GLint hits, GLuint *names,
                   GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
@@ -74,10 +78,14 @@ void MySelection::selectVertex(Mesh & master_mesh, Mesh & temp_mesh, GLint hits,
         for (int i = 0; i < hits; i++) {
             int currentID = names[i * 4 + 3];
             Face * workFace;
-            if(currentID < master_mesh.vertList.size()) {
-                workFace = master_mesh.faceList[currentID];
-            } else {
-                workFace = temp_mesh.faceList[currentID - master_mesh.vertList.size()];
+            unordered_map<Mesh*, int>::iterator mIt;
+            for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
+            {
+                Mesh * currMesh = mIt -> first;
+                if(currentID > mIt -> second) {
+                    workFace = currMesh -> faceList[currentID - mIt -> second];
+                    break;
+                }
             }
             Edge * firstEdge = workFace -> oneEdge;
             Edge * currEdge = firstEdge;
@@ -127,7 +135,7 @@ void MySelection::selectVertex(Mesh & master_mesh, Mesh & temp_mesh, GLint hits,
     }
 }
 
-void MySelection::selectWholeBorder(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names,
+void MySelection::selectWholeBorder(unordered_map<Mesh*, int> globalNameList, GLint hits, GLuint *names,
                        GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
@@ -137,10 +145,14 @@ void MySelection::selectWholeBorder(Mesh & master_mesh, Mesh & temp_mesh, GLint 
         for (int i = 0; i < hits; i++) {
             int currentID = names[i * 4 + 3];
             Face * workFace;
-            if(currentID < master_mesh.vertList.size()) {
-                workFace = master_mesh.faceList[currentID];
-            } else {
-                workFace = temp_mesh.faceList[currentID - master_mesh.vertList.size()];
+            unordered_map<Mesh*, int>::iterator mIt;
+            for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
+            {
+                Mesh * currMesh = mIt -> first;
+                if(currentID > mIt -> second) {
+                    workFace = currMesh -> faceList[currentID - mIt -> second];
+                    break;
+                }
             }
             Edge * firstEdge = workFace -> oneEdge;
             Edge * currEdge = firstEdge;
@@ -231,7 +243,7 @@ void MySelection::selectWholeBorder(Mesh & master_mesh, Mesh & temp_mesh, GLint 
     }
 }
 
-void MySelection::selectPartialBorder(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names,
+void MySelection::selectPartialBorder(unordered_map<Mesh*, int> globalNameList, GLint hits, GLuint *names,
                          GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
@@ -241,10 +253,14 @@ void MySelection::selectPartialBorder(Mesh & master_mesh, Mesh & temp_mesh, GLin
         for (int i = 0; i < hits; i++) {
             int currentID = names[i * 4 + 3];
             Face * workFace;
-            if(currentID < master_mesh.vertList.size()) {
-                workFace = master_mesh.faceList[currentID];
-            } else {
-                workFace = temp_mesh.faceList[currentID - master_mesh.vertList.size()];
+            unordered_map<Mesh*, int>::iterator mIt;
+            for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
+            {
+                Mesh * currMesh = mIt -> first;
+                if(currentID > mIt -> second) {
+                    workFace = currMesh -> faceList[currentID - mIt -> second];
+                    break;
+                }
             }
             Edge * firstEdge = workFace -> oneEdge;
             Edge * currEdge = firstEdge;

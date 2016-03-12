@@ -191,9 +191,11 @@ private:
     /* Map from mesh pointer to its previous accumulated mesh face numbers.*/
     unordered_map<Mesh*, int> global_name_index_list;
     /* Update the global name index list. */
-    void createGlobalIndexList(vector<Mesh*> globalMeshList);
+    void createGlobalIndexList(vector<Mesh*> &globalMeshList);
     /* Update the global name index list.*/
     void updateGlobalIndexList();
+    /* A wrapper class to draw the whole scene. */
+    void drawScene();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
