@@ -464,6 +464,7 @@ void SlideGLWidget::wheelEvent(QWheelEvent *event)
 void SlideGLWidget::setForeColor(QColor color)
 {
     foreColor = color;
+    master_mesh.color = foreColor;
     repaint();
 }
 
