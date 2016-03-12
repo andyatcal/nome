@@ -56,6 +56,7 @@ void SlideGLWidget::makeSIFMesh(string name)
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
     view_mesh = &master_mesh;
+    temp_mesh.color = Qt::yellow;
     temp_mesh.clear();
     vector<Mesh*> globalMeshList;
     globalMeshList.push_back(&master_mesh);
@@ -599,6 +600,7 @@ void SlideGLWidget::addTempToMaster()
         } while (currEdge != firstEdge);
         newMesh.addPolygonFace(vertices);
     }
+    newMesh.color = master_mesh.color;
     master_mesh = newMesh;
     master_mesh.buildBoundary();
     master_mesh.computeNormals();
