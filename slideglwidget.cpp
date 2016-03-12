@@ -336,6 +336,7 @@ void SlideGLWidget::subdivide(int level)
 {
     if(level == 0) {
         view_mesh = &master_mesh;
+        subdiv_mesh = master_mesh;
         repaint();
         return;
     }

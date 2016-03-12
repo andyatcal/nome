@@ -1264,9 +1264,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
     }
     string nextLine;
     regex vRegex(".*\(v .*\).*");
-
     regex tRegex(".*\(t .*\).*");
-
     regex lRegex(".*\(loop .*\).*");
     regex shRegex(".*shell.*");
     regex verticesRegex(".*\(vertices .*\).*");
@@ -1348,18 +1346,12 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             //cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
             mesh.addTriFace(va, vb, vc);
         } else if(regex_match(nextLine, shRegex)) {
-            //cout<<nextLine<<endl;
-            //cout<<"match shell."<<endl;
             shellNum += 1;
         } else if(regex_match(nextLine, verticesRegex)){
-            //cout<<nextLine<<endl;
-            //cout<<"match vertices."<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("));
-            //cout<<temp<<endl;
             temp = temp.substr(temp.find(" ") + 1);
             int numberOfVerticesInThisShell = stoi(temp);
-            //cout<<numberOfVerticesInThisShell<<endl;
             numberOfVerticesInShells.push_back(numberOfVerticesInThisShell);
         }
     }
@@ -1464,37 +1456,11 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
             }
             tCounter += 1;
             //cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
-        } else if(regex_match(nextLine, lRegex)){
-            vector<int> oneBoundary;
-            string temp;
-            int nextVert;
-            if(shellNum > 1) {
-                vector<int>::iterator vertNumIt;
-                IDplusBecauseOfShells = 0;
-                for(vertNumIt = numberOfVerticesInShells.begin();
-                 vertNumIt < numberOfVerticesInShells.end(); vertNumIt ++) {
-                    IDplusBecauseOfShells += *vertNumIt;
-                }
-            }
-            temp = nextLine.substr(nextLine.find("\("),
-             nextLine.find("\)") - nextLine.find("\("));
-            //cout<<temp<<endl;
-            temp = temp.substr(temp.find(" ") + 1);
-            while(temp.find(" ") != string::npos){
-                nextVert = stoi(temp.substr(0, temp.find(" ")));
-                oneBoundary.push_back(nextVert + IDplusBecauseOfShells);
-                temp = temp.substr(temp.find(" ") + 1);
-            }
-            nextVert = stoi(temp);
-            oneBoundary.push_back(nextVert + IDplusBecauseOfShells);
-            boundaries.push_back(oneBoundary);
-            //cout<<oneBoundary.size()<<endl;
         } else if(regex_match(nextLine, shRegex)) {
             shellNum += 1;
         } else if(regex_match(nextLine, verticesRegex)){
             string temp;
-            temp = nextLine.substr(nextLine.find("\("),
-             nextLine.find("\)") - nextLine.find("\("));
+            temp = nextLine.substr(nextLine.find("\("));
             temp = temp.substr(temp.find(" ") + 1);
             int numberOfVerticesInThisShell = stoi(temp);
             numberOfVerticesInShells.push_back(numberOfVerticesInThisShell);
