@@ -527,7 +527,9 @@ void SlideGLWidget::zipToTempCalled(bool)
         emit feedback_status_bar(tr("Please select two borders to zip!"), 0);
         return;
     }
-    temp_mesh = zipper->zip(&border1, &border2, 1.3);
+    Mesh new_temp_mesh = zipper->zip(&border1, &border2, 1.3);
+    new_temp_mesh.color = temp_mesh.color;
+    temp_mesh = new_temp_mesh;
     repaint();
 }
 
