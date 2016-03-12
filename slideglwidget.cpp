@@ -131,12 +131,12 @@ void SlideGLWidget::mouse_select(int x, int y) {
     cout<<posX<<" "<<posY<<" "<<posZ<<endl;
     //mySelect.list_hits(hits, buff);
     if(selection_mode == 1){
-        mySelect.selectVertex(*view_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectVertex(*view_mesh, temp_mesh, hits,buff,posX, posY, posZ);
         (hits, buff, posX, posY, posZ);
     } else if(selection_mode == 2) {
-        mySelect.selectWholeBorder(*view_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectWholeBorder(*view_mesh, temp_mesh, hits,buff,posX, posY, posZ);
     } else {
-        mySelect.selectPartialBorder(*view_mesh, hits,buff,posX, posY, posZ);
+        mySelect.selectPartialBorder(*view_mesh, temp_mesh, hits,buff,posX, posY, posZ);
     }
     glMatrixMode(GL_MODELVIEW);
     repaint();

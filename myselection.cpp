@@ -37,7 +37,7 @@ void MySelection::list_hits(GLint hits, GLuint *names)
         printf("\n");
 }
 
-void MySelection::selectFace(Mesh &mesh, GLint hits, GLuint *names)
+void MySelection::selectFace(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names)
 {
     if(hits > 0) {
         int minimumDepth = INT_MAX;
@@ -50,7 +50,12 @@ void MySelection::selectFace(Mesh &mesh, GLint hits, GLuint *names)
             }
         }
         int selectedID = names[minimumDepthIndex * 4 + 3];
-        Face * workFace = mesh.faceList[selectedID];
+        Face * workFace;
+        if(selectedID < master_mesh.vertList.size()) {
+            workFace = master_mesh.faceList[selectedID];
+        } else {
+            workFace = temp_mesh.faceList[selectedID - master_mesh.vertList.size()];
+        }
         if(!workFace->selected) {
             workFace->selected = true;
         } else {
@@ -59,7 +64,7 @@ void MySelection::selectFace(Mesh &mesh, GLint hits, GLuint *names)
     }
 }
 
-void MySelection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
+void MySelection::selectVertex(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names,
                   GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
@@ -122,7 +127,7 @@ void MySelection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
     }
 }
 
-void MySelection::selectWholeBorder(Mesh &mesh, GLint hits, GLuint *names,
+void MySelection::selectWholeBorder(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names,
                        GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {
@@ -226,7 +231,7 @@ void MySelection::selectWholeBorder(Mesh &mesh, GLint hits, GLuint *names,
     }
 }
 
-void MySelection::selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
+void MySelection::selectPartialBorder(Mesh & master_mesh, Mesh & temp_mesh, GLint hits, GLuint *names,
                          GLdouble posX, GLdouble posY, GLdouble posZ)
 {
     if(hits > 0) {

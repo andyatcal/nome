@@ -45,7 +45,7 @@ public:
      * Indicating objects hit by the clicking ray.
      * @param names: The user defined name buffer.
      */
-    void selectFace(Mesh & mesh, GLint hits, GLuint *names);
+    void selectFace(Mesh & mesh, Mesh &temp_mesh, GLint hits, GLuint *names);
     /**
      * @brief selectVertex: Select the nearest vertex.
      * @param mesh: the mesh that contains this face.
@@ -56,7 +56,7 @@ public:
      * @param posY: Y position from the actual hit point on polygon.
      * @param posZ: Z position from the actual hit point on polygon.
      */
-    void selectVertex(Mesh & mesh, GLint hits, GLuint *names,
+    void selectVertex(Mesh & mesh, Mesh &temp_mesh, GLint hits, GLuint *names,
                       GLdouble posX, GLdouble posY, GLdouble posZ);
     // Select all border vertices
 
@@ -71,7 +71,7 @@ public:
      * @param posY: Y position from the actual hit point on polygon.
      * @param posZ: Z position from the actual hit point on polygon.
      */
-    void selectWholeBorder(Mesh & mesh, GLint hits, GLuint *names,
+    void selectWholeBorder(Mesh & mesh, Mesh &temp_mesh, GLint hits, GLuint *names,
                            GLdouble posX, GLdouble posY, GLdouble posZ);
     /**
      * @brief selectPartialBorder: Select all vertices from a border.
@@ -84,7 +84,7 @@ public:
      * @param posY: Y position from the actual hit point on polygon.
      * @param posZ: Z position from the actual hit point on polygon.
      */
-    void selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
+    void selectPartialBorder(Mesh & mesh, Mesh &temp_mesh, GLint hits, GLuint *names,
                              GLdouble posX, GLdouble posY, GLdouble posZ);
     /**
      * @brief: clear the current selection
