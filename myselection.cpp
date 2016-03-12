@@ -68,10 +68,12 @@ void MySelection::selectVertex(Mesh & mesh, GLint hits, GLuint *names,
         Vertex * selectedVertex;
         for (int i = 0; i < hits; i++) {
             int currentID = names[i * 4 + 3];
-            if(currentID > mesh.faceList.size()) {
-                continue;
+            Face * workFace;
+            if(currentID < master_mesh.vertList.size()) {
+                workFace = master_mesh.faceList[currentID];
+            } else {
+                workFace = temp_mesh.faceList[currentID - master_mesh.vertList.size()];
             }
-            Face * workFace = mesh.faceList[currentID];
             Edge * firstEdge = workFace -> oneEdge;
             Edge * currEdge = firstEdge;
             Edge * nextEdge;
@@ -129,10 +131,12 @@ void MySelection::selectWholeBorder(Mesh &mesh, GLint hits, GLuint *names,
         Vertex * selectedVertex;
         for (int i = 0; i < hits; i++) {
             int currentID = names[i * 4 + 3];
-            if(currentID > mesh.faceList.size()) {
-                continue;
+            Face * workFace;
+            if(currentID < master_mesh.vertList.size()) {
+                workFace = master_mesh.faceList[currentID];
+            } else {
+                workFace = temp_mesh.faceList[currentID - master_mesh.vertList.size()];
             }
-            Face * workFace = mesh.faceList[currentID];
             Edge * firstEdge = workFace -> oneEdge;
             Edge * currEdge = firstEdge;
             Edge * nextEdge;
@@ -231,7 +235,12 @@ void MySelection::selectPartialBorder(Mesh & mesh, GLint hits, GLuint *names,
         Vertex * selectedVertex;
         for (int i = 0; i < hits; i++) {
             int currentID = names[i * 4 + 3];
-            Face * workFace = mesh.faceList[currentID];
+            Face * workFace;
+            if(currentID < master_mesh.vertList.size()) {
+                workFace = master_mesh.faceList[currentID];
+            } else {
+                workFace = temp_mesh.faceList[currentID - master_mesh.vertList.size()];
+            }
             Edge * firstEdge = workFace -> oneEdge;
             Edge * currEdge = firstEdge;
             Edge * nextEdge;
