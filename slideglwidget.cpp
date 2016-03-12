@@ -311,6 +311,7 @@ void SlideGLWidget::subdivide(int level)
 {
     if(level == 0) {
         view_mesh = &master_mesh;
+        repaint();
         return;
     }
     int cachedLevel = cache_subdivided_meshes.size();
@@ -630,4 +631,25 @@ void SlideGLWidget::clearSelection()
 void SlideGLWidget::clearSelectionCalled(bool)
 {
     clearSelection();
+}
+
+void SlideGLWidget::createGlobalIndexList(vector<Mesh*> globalMeshList)
+{
+    int count = 0;
+    for(mIt = globalMeshList.begin(); mIt < globalMeshList.end(); mIt++)
+    {
+        global_name_index_list.insert(mIt, count);
+        count += (mIt -> vertList).size();
+    }
+}
+
+void SlideGLWidget::updateGlobalIndexList()
+{
+    unordered_map<Mesh*, int>::iterator mIt;
+    int count = 0;
+    for(mIt = global_name_index_list.begin(); mIt != global_name_index_list.end(); mIt++)
+    {
+        mIt -> second = count;
+        count += (mIt -> first -> vertList).size();
+    }
 }

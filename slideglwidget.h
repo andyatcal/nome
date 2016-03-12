@@ -188,6 +188,12 @@ private:
      * @brief clearSelection: clear the selected items.
      */
     void clearSelection();
+    /* Map from mesh pointer to its previous accumulated mesh face numbers.*/
+    unordered_map<Mesh*, int> global_name_index_list;
+    /* Update the global name index list. */
+    void createGlobalIndexList(vector<Mesh*> globalMeshList)
+    /* Update the global name index list.*/
+    void updateGlobalIndexList();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
