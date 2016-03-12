@@ -33,7 +33,7 @@ void SlideGLWidget::generalSetup()
     last_mx = last_my = cur_mx = cur_my = 0;
     arcball_on = false;
     wireframe = false;
-    smoothshading = true;
+    smoothshading = false;
     selection_mode = 1;
     object2world = mat4(1);
     foreColor = QColor(255,0,0);
@@ -51,7 +51,8 @@ void SlideGLWidget::makeDefaultMesh()
 void SlideGLWidget::makeSIFMesh(string name)
 {
     /* Figure out the QuadSIF or SIF later.*/
-    makeWithSIF(master_mesh,name);
+    //makeWithSIF(master_mesh,name);
+    makeWithQuadSIF(master_mesh,name);
     master_mesh.computeNormals();
     view_mesh = &master_mesh;
     temp_mesh.clear();
@@ -155,16 +156,27 @@ void SlideGLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    //glEnable(GL_LIGHT1);
 
-    GLfloat light_ambient0[] = { 0.8, 0.8, 0.8, 10.0 };
-    GLfloat light_diffuse0[] = { 1.0, 1.0, 1.0, 10.0 };
-    GLfloat light_specular0[] = { 1.0, 1.0, 1.0, 10.0 };
+    GLfloat light_ambient0[] = { 0.3f, 0.3f, 0.3f, 0.0f };
+    GLfloat light_diffuse0[] = { 0.6f, 0.6f, 0.6f, 0.0f };
+    GLfloat light_specular0[] = { 0.0f, 0.0f, 0.0f, 0.0f };
     GLfloat light_position0[] = { 1, 1, 1, 0.0 };
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient0);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse0);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular0);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position0);
+
+    GLfloat light_ambient1[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    GLfloat light_diffuse1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    GLfloat light_specular1[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    GLfloat light_position1[] = { -1, -1, -1, 0.0 };
+
+    glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient1);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse1);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular1);
+    glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
 
     transforms[MODE_CAMERA] = lookAt(vec3(0.0,  0.0, 10.0), vec3(0.0,  0.0, 0.0), vec3(0.0,  1.0, 0.0));
 }
@@ -194,16 +206,18 @@ void SlideGLWidget::paintGL()
                         1.0f * foreColor.blue() / 255,
                         1.0f * foreColor.alpha() /255};
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
-    view_mesh->drawMesh(0);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
+    view_mesh->drawMesh(0, smoothshading);
     GLfloat reversefcolor[] = {1.0f - 1.0f * foreColor.red() / 255,
                                 1.0f - 1.0f * foreColor.green() / 255,
                                 1.0f - 1.0f * foreColor.blue() / 255,
                                 1.0f - 1.0f * foreColor.alpha() /255};
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, reversefcolor);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, reversefcolor);
     view_mesh->drawVertices();
     if(view_mesh == &master_mesh && !temp_mesh.isEmpty())
     {
-        temp_mesh.drawMesh(master_mesh.vertList.size());
+        temp_mesh.drawMesh(master_mesh.vertList.size(), smoothshading);
     }
     if(!border1.isEmpty() || !border2.isEmpty())
     {

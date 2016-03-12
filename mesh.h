@@ -77,8 +77,9 @@ public:
     /**
      * @brief drawMesh:  Draw a mesh in OpenGL
      * @param startIndex: The starting index of drawing polygon name.
+     * @param smoothShading: Indicate if we are in smooth shading or flat shading.
      */
-    void drawMesh(int startIndex);
+    void drawMesh(int startIndex, bool smoothShading);
     // Draw the selected vertices in OpenGL
     void drawVertices();
     // Build Boundary Pointers for Mesh.

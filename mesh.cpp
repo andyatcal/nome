@@ -412,7 +412,7 @@ void Mesh::computeNormals(){
 
 }
 
-void Mesh::drawMesh(int startIndex)
+void Mesh::drawMesh(int startIndex, bool smoothShading)
 {
     Face * tempFace;
     vector<Face*>::iterator fIt;
@@ -424,16 +424,16 @@ void Mesh::drawMesh(int startIndex)
         Edge * firstEdge = (*fIt) -> oneEdge;
         //cout<<"New Face: "<<endl;
         glLoadName(tempFace -> id + startIndex);
-        if(tempFace -> selected)
-        {
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, PURPLE);
-        }
         glBegin(GL_POLYGON);
         Edge * currEdge = firstEdge;
         Edge * nextEdge;
         //tempv = currEdge -> va;
         //cout<<"Hmm?"<<endl;
         //cout<<"Hello! I am on the "<<fIt - faceList.begin()<<" face."<<endl;
+        if(!smoothShading)
+        {
+            glNormal3f(fNormal[0], fNormal[1], fNormal[2]);
+        }
         do
         {
             if(tempFace == currEdge -> fa)
@@ -454,36 +454,38 @@ void Mesh::drawMesh(int startIndex)
                     nextEdge = currEdge -> nextVaFb;
                 }
             }
-            float normx;
-            float normy;
-            float normz;
-            if(tempv -> onMobius)
-            {
-                vec3 vNormal = tempv -> normal;
-                if(dot(vNormal, fNormal) >= 0)
+            if(smoothShading) {
+                float normx;
+                float normy;
+                float normz;
+                if(tempv -> onMobius)
+                {
+                    vec3 vNormal = tempv -> normal;
+                    if(dot(vNormal, fNormal) >= 0)
+                    {
+                        normx = tempv -> normal[0];
+                        normy = tempv -> normal[1];
+                        normz = tempv -> normal[2];
+                    }
+                    else
+                    {
+                        normx = - tempv -> normal[0];
+                        normy = - tempv -> normal[1];
+                        normz = - tempv -> normal[2];
+                    }
+                }
+                else
                 {
                     normx = tempv -> normal[0];
                     normy = tempv -> normal[1];
                     normz = tempv -> normal[2];
                 }
-                else
-                {
-                    normx = - tempv -> normal[0];
-                    normy = - tempv -> normal[1];
-                    normz = - tempv -> normal[2];
-                }
-            }
-            else
-            {
-                normx = tempv -> normal[0];
-                normy = tempv -> normal[1];
-                normz = tempv -> normal[2];
+                glNormal3f(normx, normy, normz);
             }
             //cout<<"normx: "<<normx<<" normy: "<<normy<<" normz: "<<normz<<endl;
             float x = tempv -> position[0];
             float y = tempv -> position[1];
             float z = tempv -> position[2];
-            glNormal3f(normx, normy, normz);
             //cout<<"x: "<<x<<" y: "<<y<<" z: "<<z<<endl;
             glVertex3f(x, y, z);
             currEdge = nextEdge;
