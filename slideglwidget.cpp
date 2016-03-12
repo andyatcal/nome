@@ -636,6 +636,7 @@ void SlideGLWidget::clearSelectionCalled(bool)
 void SlideGLWidget::createGlobalIndexList(vector<Mesh*> globalMeshList)
 {
     int count = 0;
+    vector<Mesh*>::iterator mIt;
     for(mIt = globalMeshList.begin(); mIt < globalMeshList.end(); mIt++)
     {
         global_name_index_list.insert(mIt, count);
