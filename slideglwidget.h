@@ -196,6 +196,8 @@ private:
     void updateGlobalIndexList();
     /* A wrapper class to draw the whole scene. */
     void drawScene();
+    /* The trianglePanelty for zipping function. */
+    float trianglePanelty;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -253,6 +255,8 @@ public slots:
     /* Receive the signal to clear all selections.
      * Including selected vertices and border. */
     void clearSelectionCalled(bool);
+    /* Reset the triangle panelty of zipping function. */
+    void resetTrianglePanelty(QString);
 signals:
     /* A feedback signal send back to control panel statusBar.*/
     void feedback_status_bar(QString, int);

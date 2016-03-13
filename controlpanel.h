@@ -62,6 +62,8 @@ private:
     QPushButton *zipButton;
     QCheckBox *autoCorrectCheck;
     QCheckBox *wholeBorderCheck;
+    QHBoxLayout *zipOptionsLayout;
+    QLineEdit *trianglePaneltyEdit;
     QHBoxLayout *addOrClearLayout;
     QPushButton *addTempToMasterButton;
     QPushButton *clearSelectionButton;

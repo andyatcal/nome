@@ -147,6 +147,7 @@ void SlideGLWidget::mouse_select(int x, int y) {
     glMatrixMode(GL_MODELVIEW);
     repaint();
 }
+
 SlideGLWidget::~SlideGLWidget()
 {
 
@@ -683,4 +684,9 @@ void SlideGLWidget::updateGlobalIndexList()
         mIt -> second = count;
         count += (mIt -> first -> vertList).size();
     }
+}
+
+void SlideGLWidget::resetTrianglePanelty(QString new_value)
+{
+    trianglePanelty = new_value.toFloat();
 }

@@ -47,6 +47,7 @@ void ControlPanel::buildConnection()
     connect(clearSelectionButton,SIGNAL(clicked(bool)), canvas, SLOT(clearSelectionCalled(bool)));
     connect(addTempToMasterButton, SIGNAL(clicked(bool)), canvas, SLOT(addTempToMasterCalled(bool)));
     connect(wholeBorderCheck,SIGNAL(clicked(bool)), canvas, SLOT(wholeBorderSelectionChecked(bool)));
+    connect(trianglePaneltyEdit, SIGNAL(textChanged(QString)), canvas, SLOT(resetTrianglePanelty(QString)));
 }
 
 void ControlPanel::setupLayout()
@@ -78,21 +79,23 @@ void ControlPanel::setupLayout()
     /* Mode layout.*/
     modeLayout -> addLayout(addLayout = new QHBoxLayout);
     modeLayout -> addLayout(zipLayout = new QHBoxLayout);
+    modeLayout -> addLayout(zipOptionsLayout = new QHBoxLayout);
     addLayout -> addWidget(addModeButton = new QRadioButton(tr("Add Mode")));
     addModeButton -> setChecked(true);
-    addLayout -> addWidget(addButton = new QPushButton(tr("Add")));
+    addLayout -> addWidget(addButton = new QPushButton(tr("Add Polygon")));
     zipLayout -> addWidget(zipModeButton = new QRadioButton(tr("Zip Mode")));
     zipLayout -> addWidget(addBorderButton = new QPushButton(tr("Add Border")));
-    zipLayout -> addWidget(zipButton = new QPushButton(tr("Zip")));
+    zipOptionsLayout -> addWidget(new QLabel(tr("Triangle Panelty")));
+    zipOptionsLayout -> addWidget(trianglePaneltyEdit = new QLineEdit(tr("1.3")));
+    zipOptionsLayout -> addWidget(zipButton = new QPushButton(tr("Zip Two Borders")));
     modeLayout -> addLayout(addOrClearLayout = new QHBoxLayout);
-    //modeLayout -> addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
     modeLayout-> addWidget(autoCorrectCheck = new QCheckBox(tr("Auto Correct Adding Face Oreinataion")));
     autoCorrectCheck -> setChecked(true);
     modeLayout-> addWidget(wholeBorderCheck = new QCheckBox(tr("Zip Whole Border Loop")));
     wholeBorderCheck -> setChecked(true);
     wholeBorderCheck -> setEnabled(false);
     addOrClearLayout->addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
-    addOrClearLayout->addWidget(clearSelectionButton = new QPushButton(tr("Clear Selection and Temp Mesh.")));
+    addOrClearLayout->addWidget(clearSelectionButton = new QPushButton(tr("Clear Selection")));
     modeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge All")));
     /* Subdivision layout. */
     subdivLayout -> addLayout(subdivLevelLayout = new QHBoxLayout);
