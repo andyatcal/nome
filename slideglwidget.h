@@ -188,10 +188,10 @@ private:
      * @brief clearSelection: clear the selected items.
      */
     void clearSelection();
-    /* Map from mesh pointer to its previous accumulated mesh face numbers.*/
-    unordered_map<Mesh*, int> global_name_index_list;
-    /* Update the global name index list. */
-    void createGlobalIndexList(vector<Mesh*> &globalMeshList);
+    /* A flattened view of meshes in the current scene. */
+    vector<Mesh*> global_mesh_list;
+    /* Index list of where the name buffer start for every mesh.*/
+    vector<int> global_name_index_list;
     /* Update the global name index list.*/
     void updateGlobalIndexList();
     /* A wrapper class to draw the whole scene. */
