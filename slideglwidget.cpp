@@ -37,7 +37,7 @@ void SlideGLWidget::generalSetup()
     selection_mode = 1;
     object2world = mat4(1);
     foreColor = QColor(255,0,0);
-    backColor = QColor(255,255,255);
+    backColor = QColor(0,0,0);
     whole_border = true;
     resize(600, 480);
 }
