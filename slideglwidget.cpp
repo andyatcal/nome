@@ -533,6 +533,7 @@ void SlideGLWidget::zipToTempCalled(bool)
     Mesh new_temp_mesh = zipper->zip(&border1, &border2, 1.3);
     new_temp_mesh.color = temp_mesh.color;
     temp_mesh = new_temp_mesh;
+    updateGlobalIndexList();
     repaint();
 }
 
@@ -620,6 +621,7 @@ void SlideGLWidget::addTempToMasterCalled(bool) {
     addTempToMaster();
     clearSubDivisionAndOffset();
     clearSelectionCalled(true);
+    updateGlobalIndexList();
     emit feedback_status_bar(tr("Joining temp mesh into initial mesh"), 0);
     repaint();
 }

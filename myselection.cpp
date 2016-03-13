@@ -55,7 +55,7 @@ void MySelection::selectFace(unordered_map<Mesh*, int> globalNameList, GLint hit
         for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
         {
             Mesh *currMesh = mIt -> first;
-            if(currentID > mIt -> second) {
+            if(currentID < mIt -> second + (mIt -> first -> vertList).size()) {
                 workFace = currMesh -> faceList[currentID - mIt -> second];
                 break;
             }
@@ -82,7 +82,9 @@ void MySelection::selectVertex(unordered_map<Mesh*, int> globalNameList, GLint h
             for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
             {
                 Mesh * currMesh = mIt -> first;
-                if(currentID > mIt -> second) {
+                std::cout<<(mIt -> first -> faceList).size();
+                std::cout<<(mIt -> first -> vertList).size();
+                if(currentID < mIt -> second + (mIt -> first -> faceList).size()) {
                     workFace = currMesh -> faceList[currentID - mIt -> second];
                     break;
                 }
@@ -149,7 +151,7 @@ void MySelection::selectWholeBorder(unordered_map<Mesh*, int> globalNameList, GL
             for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
             {
                 Mesh * currMesh = mIt -> first;
-                if(currentID > mIt -> second) {
+                if(currentID < mIt -> second + (mIt -> first -> vertList).size()) {
                     workFace = currMesh -> faceList[currentID - mIt -> second];
                     break;
                 }
@@ -257,7 +259,7 @@ void MySelection::selectPartialBorder(unordered_map<Mesh*, int> globalNameList, 
             for(mIt = globalNameList.begin(); mIt != globalNameList.end(); mIt ++)
             {
                 Mesh * currMesh = mIt -> first;
-                if(currentID > mIt -> second) {
+                if(currentID < mIt -> second + (mIt -> first -> vertList).size()) {
                     workFace = currMesh -> faceList[currentID - mIt -> second];
                     break;
                 }
