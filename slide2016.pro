@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     slideglwidget.cpp \
     controlpanel.cpp \
     mainwindow.cpp \
-    group.cpp
+    group.cpp \
+    makegroup.cpp
 
 HEADERS  += \
     edge.h \
@@ -50,7 +51,8 @@ HEADERS  += \
     slideglwidget.h \
     controlpanel.h \
     mainwindow.h \
-    group.h
+    group.h \
+    makegroup.h
 
 linux{
     LIBS += -lglut -lGLU

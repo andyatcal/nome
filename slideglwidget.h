@@ -31,6 +31,7 @@
 #include "makeMesh.h"
 #include "polyline.h"
 #include "group.h"
+#include "makegroup.h"
 #include "myselection.h"
 #include "subdivison.h"
 #include "stl.h"

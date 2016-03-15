@@ -19,9 +19,12 @@ SlideGLWidget::SlideGLWidget(string name, int i, QWidget *parent) :
 {
     generalSetup();
     if(i == 0) {
-        makeSIFMesh(name);
-    } else {
+        //makeSIFMesh(name);
+        makeDefaultMesh();
+    } else if(i == 1){
         makeSLFMesh(name);
+    } else {
+        makeDefaultMesh();
     }
     errorMsg = new QMessageBox();
 }
@@ -44,8 +47,17 @@ void SlideGLWidget::generalSetup()
 
 void SlideGLWidget::makeDefaultMesh()
 {
-    makeCube(master_mesh,0.5,0.5,0.5);
+    //makeCube(master_mesh,0.5,0.5,0.5);
+    makeGroupTest5(hirachicalScene);
+    master_mesh = hirachicalScene.merge();
     master_mesh.computeNormals();
+    master_mesh.color = foreColor;
+    view_mesh = &master_mesh;
+    temp_mesh.color = Qt::yellow;
+    temp_mesh.clear();
+    global_mesh_list.push_back(&master_mesh);
+    global_mesh_list.push_back(&temp_mesh);
+    updateGlobalIndexList();
 }
 
 void SlideGLWidget::makeSIFMesh(string name)
