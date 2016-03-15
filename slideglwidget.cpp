@@ -345,7 +345,6 @@ void SlideGLWidget::subdivide(int level)
     int cachedLevel = cache_subdivided_meshes.size();
     if(cachedLevel >= level) {
         subdiv_mesh = cache_subdivided_meshes[level - 1];
-        subdiv_mesh.color = view_mesh -> color;
         view_mesh = &subdiv_mesh;
     } else {
         if(cachedLevel == 0) {
@@ -363,6 +362,7 @@ void SlideGLWidget::subdivide(int level)
         }
         view_mesh = &subdiv_mesh;
     }
+    subdiv_mesh.color = master_mesh.color;
     /* Alternative.
      * subdivider = new Subdivision(m);
      * subdiv_mesh = subdivider->ccSubdivision(level);
