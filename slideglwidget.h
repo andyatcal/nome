@@ -30,6 +30,7 @@
 #include "mesh.h"
 #include "makeMesh.h"
 #include "polyline.h"
+#include "group.h"
 #include "myselection.h"
 #include "subdivison.h"
 #include "stl.h"
@@ -198,6 +199,8 @@ private:
     void drawScene();
     /* The trianglePanelty for zipping function. */
     float trianglePanelty;
+    /* The group to store the whole scene. */
+    Group hirachicalScene;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

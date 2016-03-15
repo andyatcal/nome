@@ -25,7 +25,15 @@ using namespace glm;
  * @param mesh: The mesh for transformation.
  * @param matrix: The matrix for transformation.
  */
-void transform(Mesh & mesh, mat4 matrix);
+void transform(Mesh &mesh, mat4 matrix);
+
+/**
+ * @brief transform: Create a new PolyLine given the
+ * transformation matrix.
+ * @param line: The line for transformation.
+ * @param matrix: The matrix for transformation.
+ */
+void transform(PolyLine &line, mat4 matrix);
 
 /**
 * @brief krotate: Rotate a current mesh.

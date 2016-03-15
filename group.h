@@ -76,6 +76,8 @@ public:
     void setTransformation(mat4 new_transformation);
     /* make a copy of this group.*/
     Group makeCopy();
+    /* Clear this group.*/
+    void clear();
 };
 
 #endif // GROUP_H

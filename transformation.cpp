@@ -6,10 +6,19 @@
  */
 
 #include "transformation.h"
-#include "mesh.h"
-void transform(Mesh & mesh, mat4 matrix) {
+
+void transform(Mesh & mesh, mat4 matrix)
+{
     vector<Vertex*>::iterator vIt;
     for(vIt = mesh.vertList.begin(); vIt < mesh.vertList.end(); vIt++) {
+        (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
+    }
+}
+
+void transform(PolyLine &line, mat4 matrix)
+{
+    vector<Vertex*>::iterator vIt;
+    for(vIt = line.vertices.begin(); vIt < line.vertices.end(); vIt++) {
         (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
     }
 }
