@@ -541,3 +541,8 @@ void Mesh::clear() {
     faceList.clear();
     edgeTable.clear();
 }
+
+void Mesh::setColor(QColor color)
+{
+    this -> color = color;
+}

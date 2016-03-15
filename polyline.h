@@ -21,6 +21,7 @@ class PolyLine {
 public:
     vector<Vertex*> vertices;
     bool isLoop;
+    QColor color;
     PolyLine();
     /**
      * @brief drawLine: Draw this polyline in OpenGL
@@ -41,6 +42,8 @@ public:
      * @return indicator of this polyline is empty.
      */
     bool isEmpty();
+    /* Set the color of this mesh. */
+    void setColor(QColor color);
 };
 
 #endif // __POLYLINE_H__

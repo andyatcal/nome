@@ -92,6 +92,8 @@ public:
     QColor color;
     /* Check if this mesh if empty. */
     bool isEmpty();
+    /* Set color of this mesh*/
+    void setColor(QColor color);
     /**
      * @brief clear: clear the current mesh.
      */
