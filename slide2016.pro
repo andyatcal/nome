@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     myselection.cpp \
     slideglwidget.cpp \
     controlpanel.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    group.cpp
 
 HEADERS  += \
     edge.h \
@@ -48,7 +49,8 @@ HEADERS  += \
     myselection.h \
     slideglwidget.h \
     controlpanel.h \
-    mainwindow.h
+    mainwindow.h \
+    group.h
 
 linux{
     LIBS += -lglut -lGLU
