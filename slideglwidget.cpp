@@ -468,6 +468,8 @@ void SlideGLWidget::setForeColor(QColor color)
 {
     foreColor = color;
     master_mesh.color = foreColor;
+    subdiv_mesh.color = foreColor;
+    offset_mesh.color = foreColor;
     repaint();
 }
 
