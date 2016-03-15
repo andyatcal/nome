@@ -48,7 +48,7 @@ void SlideGLWidget::generalSetup()
 void SlideGLWidget::makeDefaultMesh()
 {
     //makeCube(master_mesh,0.5,0.5,0.5);
-    makeGroupTest5(hirachicalScene);
+    makeGroupTest6(hirachicalScene);
     master_mesh = hirachicalScene.merge();
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
