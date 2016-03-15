@@ -12,6 +12,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include "mesh.h"
+#include "polyline.h"
 
 using namespace std;
 using namespace glm;
@@ -59,5 +60,12 @@ mat4 kmirror(vec4 mirror_plane);
  * @return The copied mesh.
  */
 Mesh meshCopy(Mesh & mesh);
+
+/**
+ * @brief polylineCopy: Make a copy of current line.
+ * @param line: The line to be copied.
+ * @return The copied line.
+ */
+PolyLine polylineCopy(PolyLine &line);
 
 #endif // TRANSFORMATION_H

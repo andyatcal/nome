@@ -28,10 +28,21 @@ bool vertexMatch(Vertex * v1, Vertex * v2);
 // Return a new mesh that contains the merged mesh.
 Mesh merge(Mesh & mesh1, Mesh & mesh2);
 
+// Merge any possible boundary edges that are close for two meshes.
+// @param mesh1, mesh2. The pointers to two meshes to be merged.
+// Return a new mesh that contains the merged mesh.
+Mesh merge(Mesh * mesh1, Mesh * mesh2);
+
 // Merge any possible boundary edges that are close for multiple meshes.
 // @param meshes. The list of meshes to be merged.
 // All facets and vertices of mesh2 will be added to mesh1.
 // Return a new mesh that contains the merged mesh.
 Mesh merge(vector<Mesh> &meshes);
+
+// Merge any possible boundary edges that are close for multiple meshes.
+// @param meshes. The pointers to list of meshes to be merged.
+// All facets and vertices of mesh2 will be added to mesh1.
+// Return a new mesh that contains the merged mesh.
+Mesh merge(vector<Mesh*> &meshes);
 
 #endif // __MESH_H__

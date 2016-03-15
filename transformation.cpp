@@ -58,9 +58,7 @@ mat4 kmirror(vec4 mirror_plane) {
 Mesh meshCopy(Mesh & mesh) {
     //cout<<"Creating a copy of the current map.\n";
     Mesh newMesh;
-    newMesh.vertList.clear();
-    newMesh.edgeTable.clear();
-    newMesh.faceList.clear();
+    newMesh.clear();
     vector<Vertex*>::iterator vIt;
     for(vIt = mesh.vertList.begin();
         vIt < mesh.vertList.end(); vIt ++) {
@@ -102,4 +100,19 @@ Mesh meshCopy(Mesh & mesh) {
     newMesh.computeNormals();
     newMesh.color = mesh.color;
     return newMesh;
+}
+
+PolyLine polylineCopy(PolyLine &line)
+{
+    PolyLine newPolyline;
+    newPolyline.clear();
+    vector<Vertex*>::iterator vIt;
+    for(vIt = line.vertices.begin();
+        vIt < line.vertices.end(); vIt ++) {
+        Vertex * vertCopy = new Vertex;
+        vertCopy -> ID = (*vIt) -> ID;
+        vertCopy -> position = (*vIt) -> position;
+        newPolyline.addVertex(vertCopy);
+    }
+    newPolyline.setColor(line.color);
 }

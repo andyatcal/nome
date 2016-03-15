@@ -98,6 +98,12 @@ public:
      * @brief clear: clear the current mesh.
      */
     void clear();
+    /* Indicator of whether user sets the color of this mesh.*/
+    bool user_set_color;
+    /* transformation matrix to go up one level.*/
+    mat4 transformUp;
+    /* Set the transformation of this mesh. */
+    void setTransformation(mat4 new_transformation);
 };
 
 // @param p1, p2, p3 are positions of three vertices,

@@ -20,57 +20,62 @@ class Group
 {
 public:
     Group();
-    /* A list of pointers to Group under this group. */
-    vector<Group*> subgroups;
-    /* A list of pointers to Mesh under this group. */
-    vector<Mesh*> myMeshes;
-    /* A list of pointers to Polyline under this group. */
-    vector<PolyLine*> myPolylines;
+    /* A list of subgroup under this group. */
+    vector<Group> subgroups;
+    /* A list of mesh under this group. */
+    vector<Mesh> myMeshes;
+    /* A list of polyline under this group. */
+    vector<PolyLine> myPolylines;
     /* The color of this group. */
     QColor color;
+    /* Indicator of whether user sets the color of this group.*/
+    bool user_set_color;
     /**
      * @brief addMesh: Add a mesh to this group.
      * @param mesh: The pointer to the added mesh.
      */
-    void addMesh(Mesh* mesh);
+    void addMesh(Mesh &mesh);
     /**
      * @brief addGroup: Add a group to this group.
      * @param group: The pointer to the added group.
      */
-    void addGroup(Group *group);
+    void addGroup(Group &group);
     /**
      * @brief addPolyline: Add a polyline to this group.
      * @param polyline: The pointer to the added polyline.
      */
-    void addPolyline(PolyLine *polyline);
-    /**
-     * @brief drawMeshes: Draw meshes under this group.
-     */
-    void drawMeshes();
-    /**
-     * @brief drawPolylines: Draw polylines under this group.
-     */
-    void drawPolylines();
+    void addPolyline(PolyLine &polyline);
     /**
      * @brief flattenedMeshes. Flatten this group of its meshes.
      * @return all meshes under this group as a list.
      */
-    vector<Mesh*> flattenedMeshes();
+    vector<Mesh> flattenedMeshes();
     /**
      * @brief flattenedPolylines: Flatten this group of its polylines.
      * @return all polylines under this group as a list.
      */
-    vector<Polyline*> flattenedPolylines();
+    vector<PolyLine> flattenedPolylines();
     /**
-     * @brief assignMeshColor. Top down assigning colors to all its meshes.
-     * If the mesh or subgroup has color, then skip them.
+     * @brief assignMeshColor. Top to bottom assigning my color
+     * to all sub meshes and polylines. If any mesh or subgroup
+     * has user set color, then skip them.
      */
-    void assignMeshColor();
+    void assignColor();
     /**
-     * @brief assignPolylineColor. Top down assigning colors to all its polylines.
-     * If the polyline or subgroup has color, then skip them.
+     * @brief merge: Merge this group into a single mesh.
+     * @return The merged mesh.
      */
-    void assignPolylineColor();
+    Mesh merge();
+    /**
+     * @brief setColor: Set the color of this group.
+     */
+    void setColor(QColor color);
+    /* The transformation to go up one level. */
+    mat4 transformUp;
+    /* Set the transformation of this group. */
+    void setTransformation(mat4 new_transformation);
+    /* make a copy of this group.*/
+    Group makeCopy();
 };
 
 #endif // GROUP_H

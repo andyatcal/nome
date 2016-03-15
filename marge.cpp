@@ -24,9 +24,6 @@ bool vertexMatch(Vertex * v1, Vertex * v2) {
     return false;
 }
 
-// Merge any possible boundary edges that are close for two meshes.
-// @param mesh1, mesh2. The two meshes to be merged.
-// Return a new mesh that contains the merged mesh.
 Mesh merge(Mesh & mesh1, Mesh & mesh2) {
     unordered_map<Vertex*, set<Vertex*> > map;
     unordered_map<Vertex*, set<Vertex*> > rmap;
@@ -138,12 +135,7 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
             }
             tempMap1[key] = values;
         }
-        //for(sIt = vertices.begin(); sIt != vertices.end(); sIt++) {
-        //    cout<<(*sIt) -> ID<<" ";
-        //}
-        //cout<<endl;
     }
-    // Reverse the map
     for(mIt = tempMap1.begin(); mIt != tempMap1.end(); mIt++) {
         for(sIt = (mIt -> second).begin(); sIt != (mIt -> second).end(); sIt++) {
             if((*sIt) != (mIt -> first)) {
@@ -152,9 +144,6 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
             }
         }
     }
-
-    // Create new vertices for the merged mesh and generate links.
-    //cout<<"I am here!"<<endl;
     Mesh mergedMesh;
     vector<Vertex*>::iterator vIt;
     vector<Face*>::iterator fIt;
@@ -243,15 +232,25 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
     return mergedMesh;
 }
 
-// Merge any possible boundary edges that are close for multiple meshes.
-// @param meshes. The list of meshes to be merged.
-// All facets and vertices of mesh2 will be added to mesh1.
-// Return a new mesh that contains the merged mesh.
+Mesh merge(Mesh *mesh1, Mesh *mesh2)
+{
+    return merge(*mesh1, *mesh2);
+}
+
 Mesh merge(vector<Mesh> &meshes) {
     Mesh mergedMesh;
     vector<Mesh>::iterator meshIt;
     for(meshIt = meshes.begin(); meshIt < meshes.end(); meshIt++) {
         mergedMesh = merge(mergedMesh, *meshIt);
+    }
+    return mergedMesh;
+}
+
+Mesh merge(vector<Mesh*> &meshes) {
+    Mesh mergedMesh;
+    vector<Mesh*>::iterator meshIt;
+    for(meshIt = meshes.begin(); meshIt < meshes.end(); meshIt++) {
+        mergedMesh = merge(mergedMesh, *(*meshIt));
     }
     return mergedMesh;
 }

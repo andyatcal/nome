@@ -11,6 +11,7 @@ PolyLine::PolyLine()
 {
     isLoop = false;
     vertices.clear();
+    user_set_color = false;
 }
 
 void PolyLine::drawLine()
@@ -35,6 +36,7 @@ void PolyLine::drawLine()
 void PolyLine::clear()
 {
     vertices.clear();
+    transformUp = mat4(1);
 }
 
 bool PolyLine::isEmpty()
@@ -66,4 +68,19 @@ vector<float> PolyLine::skewness()
         cout<<(*dIt)<<endl;
     }
     return distances;
+}
+
+void PolyLine::setColor(QColor color)
+{
+    this -> color = color;
+}
+
+void PolyLine::setTransformation(mat4 new_transformation)
+{
+    this -> transformUp = new_transformation;
+}
+
+void PolyLine::addVertex(Vertex *v)
+{
+    vertices.push_back(v);
 }

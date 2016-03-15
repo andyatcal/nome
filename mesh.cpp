@@ -9,7 +9,8 @@
 
 Mesh::Mesh()
 {
-
+    user_set_color = false;
+    transformUp = mat4(1);
 }
 
 void Mesh::addVertex(Vertex * v)
@@ -545,4 +546,9 @@ void Mesh::clear() {
 void Mesh::setColor(QColor color)
 {
     this -> color = color;
+}
+
+void Mesh::setTransformation(mat4 new_transformation)
+{
+    this -> transformUp = new_transformation;
 }

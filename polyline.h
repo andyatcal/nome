@@ -44,6 +44,14 @@ public:
     bool isEmpty();
     /* Set the color of this mesh. */
     void setColor(QColor color);
+    /* Indicator of whether user sets the color of this mesh.*/
+    bool user_set_color;
+    /* The transformation to go up one level. */
+    mat4 transformUp;
+    /* Set the transformation of this group. */
+    void setTransformation(mat4 new_transformation);
+    /* Add a vertex to the current polyline. */
+    void addVertex(Vertex *v);
 };
 
 #endif // __POLYLINE_H__
