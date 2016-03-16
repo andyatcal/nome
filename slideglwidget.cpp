@@ -19,8 +19,7 @@ SlideGLWidget::SlideGLWidget(string name, int i, QWidget *parent) :
 {
     generalSetup();
     if(i == 0) {
-        //makeSIFMesh(name);
-        makeDefaultMesh();
+        makeSIFMesh(name);
     } else if(i == 1){
         makeSLFMesh(name);
     } else {
@@ -47,11 +46,22 @@ void SlideGLWidget::generalSetup()
 
 void SlideGLWidget::makeDefaultMesh()
 {
-    //makeCube(master_mesh,0.5,0.5,0.5);
-    makeGroupTest6(hirachicalScene);
-    master_mesh = hirachicalScene.merge();
+    makeCube(master_mesh,0.5,0.5,0.5);
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
+    view_mesh = &master_mesh;
+    temp_mesh.color = Qt::yellow;
+    temp_mesh.clear();
+    global_mesh_list.push_back(&master_mesh);
+    global_mesh_list.push_back(&temp_mesh);
+    updateGlobalIndexList();
+}
+
+void SlideGLWidget::mergeAll(bool)
+{
+    master_mesh = merge(global_mesh_list);
+    master_mesh.color = foreColor;
+    global_mesh_list.clear();
     view_mesh = &master_mesh;
     temp_mesh.color = Qt::yellow;
     temp_mesh.clear();
@@ -78,9 +88,16 @@ void SlideGLWidget::makeSIFMesh(string name)
 void SlideGLWidget::makeSLFMesh(string name)
 {
     //Figure out the QuadSIF or SIF later/
-    //makeWithSIF(master_mesh,name);
+    makeGroupTest5(hirachicalScene);
+    global_mesh_list = hirachicalScene.flattenedMeshes();
+    //master_mesh = hirachicalScene.merge();
     //master_mesh.computeNormals();
-    cout<<"Coming Soon!"<<endl;
+    //master_mesh.color = foreColor;
+    //view_mesh = &master_mesh;
+    //temp_mesh.color = Qt::yellow;
+    //temp_mesh.clear();
+    //global_mesh_list.push_back(&master_mesh);
+    //global_mesh_list.push_back(&temp_mesh);
 }
 
 void SlideGLWidget::saveMesh(string name)
@@ -244,7 +261,7 @@ void SlideGLWidget::drawScene()
             }
             glLineWidth(1.0);
         }
-    } else {
+    } else if (view_mesh == &subdiv_mesh || view_mesh == &offset_mesh) {
         QColor color = view_mesh -> color;
         GLfloat fcolor[] = {1.0f * color.red() / 255,
                             1.0f * color.green() / 255,
@@ -253,6 +270,30 @@ void SlideGLWidget::drawScene()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
         view_mesh -> drawMesh(0, smoothshading);
+    } else {
+        vector<Mesh*>::iterator mIt;
+        vector<int>::iterator nIt;
+        for(mIt = global_mesh_list.begin(), nIt = global_name_index_list.begin();
+            nIt < global_name_index_list.end(); nIt++, mIt++)
+        {
+            Mesh * currentMesh = (*mIt);
+            QColor color = currentMesh -> color;
+            GLfloat fcolor[] = {1.0f * color.red() / 255,
+                                1.0f * color.green() / 255,
+                                1.0f * color.blue() / 255,
+                                1.0f * color.alpha() /255};
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
+            currentMesh -> drawMesh(*nIt, smoothshading);
+        }
+        GLfloat afcolor[] = {0.0f, 1.0f, 1.0f, 1.0f};
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, afcolor);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, afcolor);
+        for(mIt = global_mesh_list.begin(); mIt != global_mesh_list.end(); mIt++)
+        {
+            Mesh * currentMesh = (*mIt);
+            currentMesh -> drawVertices();
+        }
     }
 }
 

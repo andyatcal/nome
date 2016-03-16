@@ -29,24 +29,25 @@ void Group::addPolyline(PolyLine &polyline)
     myPolylines.push_back(polyline);
 }
 
-vector<Mesh> Group::flattenedMeshes()
+vector<Mesh*> Group::flattenedMeshes()
 {
-    vector<Mesh> result;
+    vector<Mesh*> result;
     vector<Mesh>::iterator mIt;
     for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
     {
         transform(*mIt, (*mIt).transformUp);
-        result.push_back(*mIt);
+        result.push_back(&(*mIt));
     }
     vector<Group>::iterator gIt;
     for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
     {
-        vector<Mesh> flattenedFromThisSubGroup = (*gIt).flattenedMeshes();
-        for(mIt = flattenedFromThisSubGroup.begin();
-            mIt < flattenedFromThisSubGroup.end(); mIt++)
+        vector<Mesh*> flattenedFromThisSubGroup = (*gIt).flattenedMeshes();
+        vector<Mesh*>::iterator mpIt;
+        for(mpIt = flattenedFromThisSubGroup.begin();
+            mpIt < flattenedFromThisSubGroup.end(); mpIt++)
         {
-            transform(*mIt, (*gIt).transformUp);
-            result.push_back(*mIt);
+            transform(*(*mpIt), (*gIt).transformUp);
+            result.push_back(*mpIt);
         }
     }
     return result;
@@ -108,7 +109,7 @@ void Group:: setColor(QColor color)
 
 Mesh Group::merge()
 {
-    vector<Mesh> flatten = this -> flattenedMeshes();
+    vector<Mesh*> flatten = this -> flattenedMeshes();
     return ::merge(flatten);
 }
 

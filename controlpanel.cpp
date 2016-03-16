@@ -25,7 +25,7 @@ void ControlPanel::buildConnection()
 {
     /* Build our connections. */
     connect(viewContent, SIGNAL(activated(int)), canvas, SLOT(viewContentChanged(int)));
-    connect(mergeButton, SIGNAL(clicked(bool)), this, SLOT(test(bool)));
+    connect(mergeButton, SIGNAL(clicked(bool)), canvas, SLOT(mergeAll(bool)));
     connect(subdivLevelSlider,SIGNAL(valueChanged(int)), canvas, SLOT(levelChanged(int)));
     connect(subdivLevelSlider, SIGNAL(valueChanged(int)), this, SLOT(viewContentSetToSubdiv(int)));
     connect(resetViewButton, SIGNAL(clicked(bool)), canvas, SLOT(resetViewDirection(bool)));

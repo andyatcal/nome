@@ -202,6 +202,8 @@ private:
     float trianglePanelty;
     /* The group to store the whole scene. */
     Group hirachicalScene;
+    /* The flattened view of this scene. */
+    vector<Mesh> flatten;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -261,6 +263,10 @@ public slots:
     void clearSelectionCalled(bool);
     /* Reset the triangle panelty of zipping function. */
     void resetTrianglePanelty(QString);
+    /**
+     * @brief mergeAll: Merge all meshes from global_mesh_list into master_mesh
+     */
+    void mergeAll(bool);
 signals:
     /* A feedback signal send back to control panel statusBar.*/
     void feedback_status_bar(QString, int);

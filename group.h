@@ -46,10 +46,10 @@ public:
      */
     void addPolyline(PolyLine &polyline);
     /**
-     * @brief flattenedMeshes. Flatten this group of its meshes.
+     * @brief flattenedMeshes. A flattened view of this group.
      * @return all meshes under this group as a list.
      */
-    vector<Mesh> flattenedMeshes();
+    vector<Mesh*> flattenedMeshes();
     /**
      * @brief flattenedPolylines: Flatten this group of its polylines.
      * @return all polylines under this group as a list.
