@@ -31,7 +31,11 @@ SOURCES += main.cpp\
     controlpanel.cpp \
     mainwindow.cpp \
     group.cpp \
-    makegroup.cpp
+    makegroup.cpp \
+    sliderpanel.cpp \
+    parameter.cpp \
+    myslider.cpp \
+    minislfparser.cpp
 
 HEADERS  += \
     edge.h \
@@ -52,7 +56,11 @@ HEADERS  += \
     controlpanel.h \
     mainwindow.h \
     group.h \
-    makegroup.h
+    makegroup.h \
+    sliderpanel.h \
+    parameter.h \
+    myslider.h \
+    minislfparser.h
 
 linux{
     LIBS += -lglut -lGLU
