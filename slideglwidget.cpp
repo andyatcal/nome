@@ -88,16 +88,9 @@ void SlideGLWidget::makeSIFMesh(string name)
 void SlideGLWidget::makeSLFMesh(string name)
 {
     //Figure out the QuadSIF or SIF later/
-    makeGroupTest5(hirachicalScene);
+    makeGroupTest3(hirachicalScene);
     global_mesh_list = hirachicalScene.flattenedMeshes();
-    //master_mesh = hirachicalScene.merge();
-    //master_mesh.computeNormals();
-    //master_mesh.color = foreColor;
-    //view_mesh = &master_mesh;
-    //temp_mesh.color = Qt::yellow;
-    //temp_mesh.clear();
-    //global_mesh_list.push_back(&master_mesh);
-    //global_mesh_list.push_back(&temp_mesh);
+    updateGlobalIndexList();
 }
 
 void SlideGLWidget::saveMesh(string name)
