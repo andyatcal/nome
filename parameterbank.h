@@ -8,7 +8,7 @@ class ParameterBank
 {
 public:
     ParameterBank();
-    vector<Parameter> bank;
+    vector<Parameter> parameters;
 };
 
 #endif // PARAMETERBANK_H

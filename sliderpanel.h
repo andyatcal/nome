@@ -6,14 +6,17 @@
 #include <QVBoxLayout>
 #include "myslider.h"
 #include "parameter.h"
+#include "parameterbank.h"
 class SliderPanel : public QWidget
 {
     Q_OBJECT
 
 public:
     SliderPanel();
-    void setParameters(vector<Parameter*>);
-    vector<Parameter*> parameters;
+    SliderPanel(ParameterBank *bank);
+    void setBank(ParameterBank *bank);
+    void generalSetUp();
+    ParameterBank *bank;
 };
 
 #endif // SLIDERPANEL_H
