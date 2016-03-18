@@ -14,6 +14,8 @@ class MySlider : public QWidget
 
 public:
     MySlider();
+    MySlider(Parameter *param);
+    void generalSetup();
     void setParameter(Parameter *param);
 private:
     Parameter *param;

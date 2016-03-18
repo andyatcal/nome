@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     sliderpanel.cpp \
     parameter.cpp \
     myslider.cpp \
-    minislfparser.cpp
+    minislfparser.cpp \
+    parameterbank.cpp
 
 HEADERS  += \
     edge.h \
@@ -60,7 +61,8 @@ HEADERS  += \
     sliderpanel.h \
     parameter.h \
     myslider.h \
-    minislfparser.h
+    minislfparser.h \
+    parameterbank.h
 
 linux{
     LIBS += -lglut -lGLU

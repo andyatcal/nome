@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <iostream>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
+#include "myslider.h"
 #include "parameter.h"
 class SliderPanel : public QWidget
 {
@@ -12,7 +12,8 @@ class SliderPanel : public QWidget
 
 public:
     SliderPanel();
-
+    void setParameters(vector<Parameter*>);
+    vector<Parameter*> parameters;
 };
 
 #endif // SLIDERPANEL_H

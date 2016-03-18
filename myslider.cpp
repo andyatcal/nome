@@ -2,6 +2,16 @@
 
 MySlider::MySlider()
 {
+}
+
+MySlider::MySlider(Parameter *param)
+{
+    setParameter(param);
+    generalSetup();
+}
+
+void MySlider::generalSetup()
+{
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(new QLabel(param -> name));
     QHBoxLayout *sliderLayout;
