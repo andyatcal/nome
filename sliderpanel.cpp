@@ -11,6 +11,8 @@ SliderPanel::SliderPanel(ParameterBank *bank)
     move(50, 900);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
+    std::cout<<"Hmm "<<(bank -> name).toStdString()<<std::endl;
+    mainLayout->addWidget(new QLabel(bank -> name));
     vector<Parameter>::iterator pIt;
     for(pIt = (bank -> parameters).begin(); pIt < (bank -> parameters).end(); pIt++)
     {

@@ -18,6 +18,7 @@ public:
     int stepsize;
     int value;
     float multiplier;
+    float getValue();
 };
 
 #endif // PARAMETER_H

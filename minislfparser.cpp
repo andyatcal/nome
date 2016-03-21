@@ -30,7 +30,10 @@ string warning(int type, int lineNumber)
                 + to_string(lineNumber) + " is not set because of insufficient parameters.";
     case 1:
         return "Warning: line " + to_string(lineNumber)
-                + "contains string that can't be parsed, skipping this line.";
+                + " contains string that can't be parsed, skipping this line.";
+    case 2:
+        return "Warning: parameter at line "
+                + to_string(lineNumber) + " has duplicated names of existing parameters.";
     }
 }
 
@@ -46,6 +49,9 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
     string nextLine;
     int lineNumber = 1;
     bool createBank = false;
+    unordered_map<string, Parameter> params;
+    unordered_map<string, Parameter>::iterator pIt;
+    string name = "";
     while(std::getline(file, nextLine))
     {
         cout<<"Line "<<lineNumber<<endl;
@@ -66,14 +72,17 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
             else if((*tIt) == "bank")
             {
                 ParameterBank newBank;
+                if((++tIt) < tokens.end()) {
+                    newBank.setName(QString::fromStdString(*tIt));
+                }
                 banks.push_back(newBank);
                 createBank = true;
-                cout<<"Find a bank!"<<endl;
+                goto newLineEnd;
             }
             else if((*tIt) == "endbank")
             {
                 createBank = false;
-                cout<<"Finish creating this bank."<<endl;
+                goto newLineEnd;
             }
             else if(createBank && (*tIt) == "set")
             {
@@ -93,6 +102,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     {
                     case 0:
                         newParameter.name = QString::fromStdString(nextToken);
+                        name = nextToken;
                         break;
                     case 1:
                         try
@@ -141,7 +151,6 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     case 5:
                         try
                         {
-                            cout<<"Hmm"<<endl;
                             newParameter.multiplier = std::stof(nextToken);
                             break;
                         }
@@ -153,6 +162,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     }
                     i++;
                 }
+                pIt = params.find(newParameter.name.toStdString());
+                if(pIt == params.end())
+                {
+                    params[name] = newParameter;
+                }
+                else
+                {
+                    cout<<warning(2, lineNumber)<<endl;
+                    goto newLineEnd;
+                }
                 banks[banks.size() - 1].addParameter(newParameter);
             }
             cout<<*tIt<<" ";
@@ -160,4 +179,9 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
         newLineEnd:
         lineNumber++;
     }
+    Mesh newMesh;
+    makeFunnel(newMesh, params["n"].getValue(), params["ro"].getValue(), params["ratio"].getValue(), params["h"].getValue());
+    newMesh.setColor(QColor(255, 0, 0));
+    newMesh.computeNormals();
+    group.addMesh(newMesh);
 }

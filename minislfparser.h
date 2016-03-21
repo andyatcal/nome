@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "parameterbank.h"
+#include "makeMesh.h"
 #include "group.h"
 #include <string>
 #include <iostream>

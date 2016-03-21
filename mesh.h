@@ -104,6 +104,8 @@ public:
     mat4 transformUp;
     /* Set the transformation of this mesh. */
     void setTransformation(mat4 new_transformation);
+    /* The name of this mesh. */
+    QString name;
 };
 
 // @param p1, p2, p3 are positions of three vertices,

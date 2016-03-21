@@ -68,6 +68,6 @@ void makeWithSIF(Mesh &mesh, string inputSIF);
 
 void makeWithQuadSIF(Mesh &mesh, string inputSIF);
 
-void makeFunnel(Mesh &mesh);
+void makeFunnel(Mesh &mesh, int n, float ro, float ratio, float height);
 
 #endif // __MAKEMESH_H__

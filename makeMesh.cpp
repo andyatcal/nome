@@ -1471,6 +1471,9 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
 
 void makeFunnel(Mesh &mesh, int n, float ro, float ratio, float height)
 {
+    if(n < 3) {
+        return;
+    }
     mesh.vertList.clear();
     mesh.edgeTable.clear();
     mesh.faceList.clear();
@@ -1485,7 +1488,7 @@ void makeFunnel(Mesh &mesh, int n, float ro, float ratio, float height)
         baseCircle.push_back(newVertex);
         mesh.addVertex(newVertex);
     }
-    float ri = ro * ratio;
+    float ri = ro * (1 + ratio);
     for(int i = 0; i < n; i++)
     {
         Vertex * newVertex = new Vertex;
