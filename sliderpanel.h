@@ -14,8 +14,6 @@ class SliderPanel : public QWidget
 public:
     SliderPanel();
     SliderPanel(ParameterBank *bank);
-    void setBank(ParameterBank *bank);
-    void generalSetUp();
     ParameterBank *bank;
 };
 

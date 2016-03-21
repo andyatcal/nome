@@ -14,17 +14,21 @@ SlideGLWidget::SlideGLWidget(QWidget *parent) :
     makeDefaultMesh();
 }
 
-SlideGLWidget::SlideGLWidget(string name, int i, QWidget *parent) :
+SlideGLWidget::SlideGLWidget(string name, QWidget *parent) :
     QGLWidget(parent)
 {
     generalSetup();
-    if(i == 0) {
-        makeSIFMesh(name);
-    } else if(i == 1){
-        makeSLFMesh(name);
-    } else {
-        makeDefaultMesh();
-    }
+    makeSIFMesh(name);
+    errorMsg = new QMessageBox();
+}
+
+SlideGLWidget::SlideGLWidget(Group &group, QWidget *parent) :
+    QGLWidget(parent)
+{
+    generalSetup();
+    hirachicalScene = group;
+    global_mesh_list = hirachicalScene.flattenedMeshes();
+    updateGlobalIndexList();
     errorMsg = new QMessageBox();
 }
 
@@ -82,14 +86,6 @@ void SlideGLWidget::makeSIFMesh(string name)
     temp_mesh.clear();
     global_mesh_list.push_back(&master_mesh);
     global_mesh_list.push_back(&temp_mesh);
-    updateGlobalIndexList();
-}
-
-void SlideGLWidget::makeSLFMesh(string name)
-{
-    //Figure out the QuadSIF or SIF later/
-    makeGroupTest3(hirachicalScene);
-    global_mesh_list = hirachicalScene.flattenedMeshes();
     updateGlobalIndexList();
 }
 

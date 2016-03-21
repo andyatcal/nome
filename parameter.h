@@ -17,7 +17,7 @@ public:
     int end;
     int stepsize;
     int value;
-    int multiplier;
+    float multiplier;
 };
 
 #endif // PARAMETER_H

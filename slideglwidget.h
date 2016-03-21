@@ -37,6 +37,10 @@
 #include "stl.h"
 #include "offset.h"
 #include "zipper.h"
+#include "parameter.h"
+#include "parameterbank.h"
+#include "sliderpanel.h"
+#include "minislfparser.h"
 #include <QMessageBox>
 #include <QColor>
 #include <QString>
@@ -46,11 +50,8 @@ class SlideGLWidget: public QGLWidget
 
 public:
     explicit SlideGLWidget(QWidget *parent = 0);
-    /**
-     * @param name the path of the file.
-     * @param i, i = 0 is the SIF file, i = 1 is the SLF file.
-     */
-    SlideGLWidget(string name, int i, QWidget *parent = 0);
+    SlideGLWidget(string name, QWidget *parent = 0);
+    SlideGLWidget(Group &group, QWidget *parent = 0);
     ~SlideGLWidget();
     /**
      * Save the current master_mesh in a STL file.
@@ -100,11 +101,6 @@ private:
      * @param name: The path to the input file.
      */
     void makeSIFMesh(string name);
-    /**
-     * @brief makeSLFMesh: Make a mesh by reading in a SLF file.
-     * @param name: The path to the input file.
-     */
-    void makeSLFMesh(string name);
     /*
      * The master mesh. As a result of SIF parser.
      * Or as a result of merging the scene.
@@ -204,6 +200,12 @@ private:
     Group hirachicalScene;
     /* The flattened view of this scene. */
     vector<Mesh> flatten;
+    /* The Mini SLF file parser. */
+    MiniSlfParser slfParser;
+    /* The parameter banks read from slfParser. */
+    vector<ParameterBank> parameterBanks;
+    /* The slider panels to show parameters.*/
+    vector<SliderPanel> sliderPanels;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

@@ -13,16 +13,17 @@ MySlider::MySlider(Parameter *param)
 void MySlider::generalSetup()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addWidget(new QLabel(param -> name));
+    setLayout(mainLayout);
+    mainLayout -> addWidget(new QLabel((param -> name) + QString(" : ") +QString::number((param -> value) * (param -> multiplier))));
     QHBoxLayout *sliderLayout;
     mainLayout -> addLayout(sliderLayout = new QHBoxLayout);
-    sliderLayout -> addWidget(new QLabel(QString::number(param -> start)));
+    sliderLayout -> addWidget(new QLabel(QString::number((param -> start) * (param -> multiplier))));
     QSlider *slider;
-    sliderLayout -> addWidget(slider = new QSlider());
+    sliderLayout -> addWidget(slider = new QSlider(Qt::Horizontal));
     slider -> setMinimum(param -> start);
     slider -> setMaximum(param -> end);
     slider -> setValue(param -> value);
-    sliderLayout -> addWidget(new QLabel(QString::number(param -> end)));
+    sliderLayout -> addWidget(new QLabel(QString::number((param -> end) * (param -> multiplier))));
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT(changeValue(int)));
 }
 

@@ -1468,3 +1468,37 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
     }
     mesh.buildBoundary();
 }
+
+void makeFunnel(Mesh &mesh, int n, float ro, float ratio, float height)
+{
+    mesh.vertList.clear();
+    mesh.edgeTable.clear();
+    mesh.faceList.clear();
+    vector<Vertex*> baseCircle;
+    vector<Vertex*> highCircle;
+    for(int i = 0; i < n; i++)
+    {
+        Vertex * newVertex = new Vertex;
+        newVertex->ID = i;
+        float currAngle = 2.0 * i / n * PI;
+        newVertex -> position = vec3(ro * glm::cos(currAngle), ro * glm::sin(currAngle), 0);
+        baseCircle.push_back(newVertex);
+        mesh.addVertex(newVertex);
+    }
+    float ri = ro * ratio;
+    for(int i = 0; i < n; i++)
+    {
+        Vertex * newVertex = new Vertex;
+        newVertex->ID = i + n;
+        float currAngle = 2.0 * i / n * PI;
+        newVertex -> position = vec3(ri * glm::cos(currAngle), ri * glm::sin(currAngle), height);
+        highCircle.push_back(newVertex);
+        mesh.addVertex(newVertex);
+    }
+    for(int i = 0; i < n - 1 ; i++)
+    {
+        mesh.addQuadFace(baseCircle[i], baseCircle[i + 1], highCircle[i + 1], highCircle[i]);
+    }
+    mesh.addQuadFace(baseCircle[n - 1], baseCircle[0], highCircle[0], highCircle[n - 1]);
+    mesh.buildBoundary();
+}

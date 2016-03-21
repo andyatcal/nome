@@ -7,21 +7,14 @@ SliderPanel::SliderPanel()
 
 SliderPanel::SliderPanel(ParameterBank *bank)
 {
-    setBank(bank);
-    generalSetUp();
-}
-
-void SliderPanel::setBank(ParameterBank *bank)
-{
-     bank = bank;
-}
-
-void SliderPanel::generalSetUp()
-{
+    this -> bank = bank;
+    move(50, 900);
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
     vector<Parameter>::iterator pIt;
     for(pIt = (bank -> parameters).begin(); pIt < (bank -> parameters).end(); pIt++)
     {
-        mainLayout -> addWidget(new MySlider(&(*pIt)));
+        Parameter param = (*pIt);
+        mainLayout -> addWidget(new MySlider(&param));
     }
 }

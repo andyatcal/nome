@@ -86,16 +86,32 @@ void MainWindow::createMenus()
 }
 void MainWindow::createCanvas(QString name)
 {
-    if(name.right(3).toLower() == "sif") {
-        canvas = new SlideGLWidget(name.toStdString(), 0);
-    } else if (name.right(3).toLower() == "slf"){
-        canvas = new SlideGLWidget(name.toStdString(), 1);
-    } else {
+    if(name.right(3).toLower() == "sif")
+    {
+        canvas = new SlideGLWidget(name.toStdString());
+    }
+    else if (name.right(3).toLower() == "slf")
+    {
+        slfParser->makeWithMiniSLF(banks, scene, name.toStdString());
+        createSliderPanel();
+        canvas = new SlideGLWidget(scene);
+    }
+    else
+    {
         cout<<"File not supported!";
     }
     canvas -> move(0, 50);
     canvas -> show();
     createControlPanel(canvas);
+}
+
+void MainWindow::createSliderPanel()
+{
+    for(int i = 0; i < banks.size(); i++)
+    {
+        SliderPanel *newPanel = new SliderPanel(&banks[i]);
+        newPanel -> show();
+    }
 }
 
 void MainWindow::createControlPanel(SlideGLWidget * canvas)

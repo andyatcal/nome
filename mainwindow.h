@@ -11,6 +11,7 @@
 #include <QMainWindow>
 #include "slideglwidget.h"
 #include "controlpanel.h"
+#include "minislfparser.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -30,6 +31,7 @@ private:
     void createMenus();
     void createCanvas(QString name);
     void createControlPanel(SlideGLWidget *canvas);
+    void createSliderPanel();
     QMenu *fileMenu;
     QAction *openAct;
     QAction *saveAct;
@@ -37,6 +39,10 @@ private:
     QAction *quitAct;
     SlideGLWidget *canvas;
     ControlPanel *controls;
+    MiniSlfParser *slfParser;
+    Group scene;
+    vector<ParameterBank> banks;
+    vector<SliderPanel> sliderPanels;
 private slots:
     void open();
     void save();

@@ -4,13 +4,16 @@
 #include <vector>
 #include "parameterbank.h"
 #include "group.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 class MiniSlfParser
 {
 public:
     MiniSlfParser();
-    vector<ParameterBank> banks;
-    vector<Group> groups;
-    void makeWithMiniSIF(vector<ParameterBank> &banks, vector<Group> &groups, string inputSIF);
+    void makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, string inputSIF);
 };
 
 #endif // MINISLFPARSER_H

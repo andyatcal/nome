@@ -12,6 +12,7 @@
 #include <fstream>
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtc/constants.hpp>
 #include "mesh.h"
 #include "merge.h"
 #include "transformation.h"
@@ -65,8 +66,8 @@ void makeCircleSweep(Mesh &mesh);
 
 void makeWithSIF(Mesh &mesh, string inputSIF);
 
-void makeWithSIFWithMerge(Mesh &mesh, string inputSIF);
-
 void makeWithQuadSIF(Mesh &mesh, string inputSIF);
+
+void makeFunnel(Mesh &mesh);
 
 #endif // __MAKEMESH_H__
