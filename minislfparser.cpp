@@ -192,4 +192,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
     newFunnel.setColor(QColor(0, 255, 0));
     newFunnel.computeNormals();
     group.addMesh(newFunnel);
+    cout<<evaluate_expression("$ro-2.0*$n", &params)<<endl;
+    cout<<evaluate_expression("-0.5 * $ratio", &params)<<endl;
+    cout<<evaluate_expression("1-0.5*(+$h)", &params)<<endl;
 }

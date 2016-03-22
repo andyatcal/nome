@@ -6,6 +6,7 @@
 #include "makeMesh.h"
 #include "funnel.h"
 #include "group.h"
+#include "utils.h"
 #include <string>
 #include <iostream>
 #include <fstream>
