@@ -2,6 +2,18 @@
 
 Funnel::Funnel()
 {
+    n = 0;
+    ro = 1.0f;
+    ratio = 0.0f;
+    h = 1.0f;
+    n_expr = "";
+    ro_expr = "";
+    ratio_expr = "";
+    h_expr = "";
+}
+
+void Funnel::setParameterValues(string input)
+{
 
 }
 

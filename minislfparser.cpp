@@ -51,6 +51,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
     bool createBank = false;
     unordered_map<string, Parameter> params;
     unordered_map<string, Parameter>::iterator pIt;
+    unordered_map<string, Mesh> meshes;
     string name = "";
     while(std::getline(file, nextLine))
     {
@@ -176,9 +177,14 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
             }
             else if((*tIt) == "funnel")
             {
-
+                Funnel newFunnel;
+                int i = 0;
+                while(++tIt < tokens.end())
+                {
+                    cout<<(*tIt)<<endl;
+                }
             }
-            cout<<*tIt<<" ";
+            //cout<<*tIt<<" ";
         }
         newLineEnd:
         lineNumber++;
