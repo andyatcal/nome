@@ -36,7 +36,9 @@ SOURCES += main.cpp\
     parameter.cpp \
     myslider.cpp \
     minislfparser.cpp \
-    parameterbank.cpp
+    parameterbank.cpp \
+    funnel.cpp \
+    utils.cpp
 
 HEADERS  += \
     edge.h \
@@ -62,7 +64,9 @@ HEADERS  += \
     parameter.h \
     myslider.h \
     minislfparser.h \
-    parameterbank.h
+    parameterbank.h \
+    funnel.h \
+    utils.h
 
 linux{
     LIBS += -lglut -lGLU

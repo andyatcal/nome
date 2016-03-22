@@ -552,3 +552,8 @@ void Mesh::setTransformation(mat4 new_transformation)
 {
     this -> transformUp = new_transformation;
 }
+
+void Mesh::setGlobalParameter(unordered_map<string, Parameter> *params)
+{
+    this -> params = params;
+}

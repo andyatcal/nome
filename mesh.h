@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-
+#include <string>
 #include <QMainWindow>
 #include <QtOpenGL>
 #if __linux__
@@ -31,6 +31,7 @@
 #endif
 
 #include "face.h"
+#include "parameter.h"
 
 using namespace std;
 using namespace glm;
@@ -51,6 +52,13 @@ public:
      * @param v, the vertex to be added in.
      */
     void addVertex(Vertex * v);
+    /**
+     * @brief addVertex: Add one vertex to this Mesh,
+     * the position of the vertex is made of an expression.
+     * @param v, the vertex to be added in.
+     * @param expr, the expresssions for the vertex.
+     */
+    void addVertex(Vertex * v, vector<string> &expr);
     /**
      * @brief Add one edge v1-v2 to this Mesh.
      * @param v1, v2: the two vertices of this edge.
@@ -106,6 +114,14 @@ public:
     void setTransformation(mat4 new_transformation);
     /* The name of this mesh. */
     QString name;
+    /* Update the value of all elements made by expression. */
+    void updateMesh();
+    /* A map of vertex ID to its position expression. */
+    unordered_map<int, vector<string> > idToExprs;
+    /* A pointer to the global parameter. */
+    unordered_map<string, Parameter> *params;
+    /* Set the global parameter pointer for this mesh. */
+    void setGlobalParameter(unordered_map<string, Parameter> *params);
 };
 
 // @param p1, p2, p3 are positions of three vertices,

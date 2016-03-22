@@ -4,6 +4,7 @@
 #include <vector>
 #include "parameterbank.h"
 #include "makeMesh.h"
+#include "funnel.h"
 #include "group.h"
 #include <string>
 #include <iostream>

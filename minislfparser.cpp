@@ -54,15 +54,12 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
     string name = "";
     while(std::getline(file, nextLine))
     {
-        cout<<"Line "<<lineNumber<<endl;
-        //std::cout<<nextLine<<endl;
         istringstream iss(nextLine);
         vector<string> tokens;
         copy(istream_iterator<string>(iss),
              istream_iterator<string>(),
              back_inserter(tokens));
         vector<string>::iterator tIt;
-        bool createParam = false;
         for(tIt = tokens.begin(); tIt < tokens.end(); tIt++)
         {
             if(testComments(*tIt))
@@ -73,7 +70,10 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
             {
                 ParameterBank newBank;
                 if((++tIt) < tokens.end()) {
-                    newBank.setName(QString::fromStdString(*tIt));
+                    if(!testComments(*tIt))
+                    {
+                        newBank.setName(QString::fromStdString(*tIt));
+                    }
                 }
                 banks.push_back(newBank);
                 createBank = true;
@@ -174,14 +174,22 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                 }
                 banks[banks.size() - 1].addParameter(newParameter);
             }
+            else if((*tIt) == "funnel")
+            {
+
+            }
             cout<<*tIt<<" ";
         }
         newLineEnd:
         lineNumber++;
     }
-    Mesh newMesh;
-    makeFunnel(newMesh, params["n"].getValue(), params["ro"].getValue(), params["ratio"].getValue(), params["h"].getValue());
-    newMesh.setColor(QColor(255, 0, 0));
-    newMesh.computeNormals();
-    group.addMesh(newMesh);
+    Funnel newFunnel;
+    newFunnel.n = params["n"].getValue();
+    newFunnel.ro = params["ro"].getValue();
+    newFunnel.ratio = params["ratio"].getValue();
+    newFunnel.h = params["h"].getValue();
+    newFunnel.makeFunnel();
+    newFunnel.setColor(QColor(0, 255, 0));
+    newFunnel.computeNormals();
+    group.addMesh(newFunnel);
 }
