@@ -2,6 +2,7 @@
 #define FUNNEL_H
 
 #include "mesh.h"
+#include "utils.h"
 #include <string>
 
 class Funnel : public Mesh
@@ -18,6 +19,9 @@ public:
     string h_expr;
     void makeFunnel();
     void updateFunnel();
+    void updateFunnel_n();
+    void updateFunnel_ro();
+    void updateFunnel_ratio_or_h();
     void setParameterValues(string);
 };
 

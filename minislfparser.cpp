@@ -178,27 +178,44 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
             else if((*tIt) == "funnel")
             {
                 Funnel newFunnel;
-                int i = 0;
+                newFunnel.setGlobalParameter(&params);
+                if(++tIt < tokens.end())
+                {
+                    newFunnel.name = (*tIt);
+                }
+                string funnel_expression;
+                bool expression_input = false;
                 while(++tIt < tokens.end())
                 {
-                    cout<<(*tIt)<<endl;
+                    for(char& c : (*tIt))
+                    {
+                        if(c == '(')
+                        {
+                            expression_input = true;
+                        }
+                        else if(c == ')')
+                        {
+                            expression_input = false;
+                        }
+                        else if(c == '#')
+                        {
+                            goto newLineEnd;
+                        }
+                        else if(expression_input)
+                        {
+                            funnel_expression.push_back(c);
+                        }
+                    }
+                    funnel_expression.push_back(' ');
                 }
+                newFunnel.setParameterValues(funnel_expression);
+                newFunnel.makeFunnel();
+                newFunnel.setColor(QColor(0, 255, 0));
+                group.addMesh(newFunnel);
+                newFunnel.computeNormals();
             }
-            //cout<<*tIt<<" ";
         }
         newLineEnd:
         lineNumber++;
     }
-    Funnel newFunnel;
-    newFunnel.n = params["n"].getValue();
-    newFunnel.ro = params["ro"].getValue();
-    newFunnel.ratio = params["ratio"].getValue();
-    newFunnel.h = params["h"].getValue();
-    newFunnel.makeFunnel();
-    newFunnel.setColor(QColor(0, 255, 0));
-    newFunnel.computeNormals();
-    group.addMesh(newFunnel);
-    cout<<evaluate_expression("$ro-2.0*$n", &params)<<endl;
-    cout<<evaluate_expression("-0.5 * $ratio", &params)<<endl;
-    cout<<evaluate_expression("1-0.5*(+$h)", &params)<<endl;
 }

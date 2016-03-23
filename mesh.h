@@ -113,7 +113,7 @@ public:
     /* Set the transformation of this mesh. */
     void setTransformation(mat4 new_transformation);
     /* The name of this mesh. */
-    QString name;
+    string name;
     /* Update the value of all elements made by expression. */
     void updateMesh();
     /* A map of vertex ID to its position expression. */
