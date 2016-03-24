@@ -46,10 +46,10 @@ public:
     void setColor(QColor color);
     /* Indicator of whether user sets the color of this mesh.*/
     bool user_set_color;
-    /* The transformation to go up one level. */
-    mat4 transformUp;
+    /* The transformations to go up one level. */
+    vector<mat4> transformations_up;
     /* Set the transformation of this group. */
-    void setTransformation(mat4 new_transformation);
+    void addTransformation(mat4 new_transform);
     /* Add a vertex to the current polyline. */
     void addVertex(Vertex *v);
 };

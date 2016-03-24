@@ -10,7 +10,7 @@
 Mesh::Mesh()
 {
     user_set_color = false;
-    transformUp = mat4(1);
+    transformations_up.clear();
 }
 
 void Mesh::addVertex(Vertex * v)
@@ -548,12 +548,17 @@ void Mesh::setColor(QColor color)
     this -> color = color;
 }
 
-void Mesh::setTransformation(mat4 new_transformation)
-{
-    this -> transformUp = new_transformation;
-}
-
 void Mesh::setGlobalParameter(unordered_map<string, Parameter> *params)
 {
     this -> params = params;
+}
+
+void Mesh::addTransformation(mat4 new_transform)
+{
+    transformations_up.push_back(new_transform);
+}
+
+void Mesh::setTransformation(vector<mat4> new_transforms)
+{
+    transformations_up = new_transforms;
 }

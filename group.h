@@ -46,15 +46,15 @@ public:
      */
     void addPolyline(PolyLine &polyline);
     /**
-     * @brief flattenedMeshes. A flattened view of this group.
+     * @brief flattenedMeshes. A flattened view of meshes in this group.
      * @return all meshes under this group as a list.
      */
     vector<Mesh*> flattenedMeshes();
     /**
-     * @brief flattenedPolylines: Flatten this group of its polylines.
+     * @brief flattenedPolylines: A flattened view of polylines in this group.
      * @return all polylines under this group as a list.
      */
-    vector<PolyLine> flattenedPolylines();
+    vector<PolyLine*> flattenedPolylines();
     /**
      * @brief assignMeshColor. Top to bottom assigning my color
      * to all sub meshes and polylines. If any mesh or subgroup
@@ -70,14 +70,19 @@ public:
      * @brief setColor: Set the color of this group.
      */
     void setColor(QColor color);
-    /* The transformation to go up one level. */
-    mat4 transformUp;
+    /* The transformations to go up one level. */
+    vector<mat4> transformations_up;
     /* Set the transformation of this group. */
-    void setTransformation(mat4 new_transformation);
+    void addTransformation(mat4 new_transform);
+    void setTransformation(vector<mat4> new_transforms);
     /* make a copy of this group.*/
     Group makeCopy();
     /* Clear this group.*/
     void clear();
+    /* name of this group. */
+    string name;
+    /* set name of this group. */
+    void setName(string);
 };
 
 #endif // GROUP_H

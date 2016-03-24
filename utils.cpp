@@ -172,3 +172,139 @@ int getPriority(char oper)
             return 0;
     }
 }
+
+vec3 getXYZ(string input)
+{
+    //cout<<input<<endl;
+    string number = "";
+    int i = 0;
+    float x;
+    float y;
+    float z;
+    for(char& c : input)
+    {
+        if((c >= '0' &&  c <= '9') || c == '.')
+        {
+            number.push_back(c);
+        }
+        else
+        {
+            if(number != "")
+            {
+                switch(i)
+                {
+                case 0:
+                    x = stof(number);
+                    break;
+                case 1:
+                    y = stof(number);
+                    break;
+                case 2:
+                    z = stof(number);
+                    break;
+                }
+                number = "";
+                i++;
+            }
+        }
+    }
+    if(number != "")
+    {
+        switch(i)
+        {
+        case 0:
+            x = stoi(number);
+            break;
+        case 1:
+            y = stof(number);
+            break;
+        case 2:
+            z = stof(number);
+            break;
+        }
+    }
+    return vec3(x, y, z);
+}
+
+float getOneValue(string input)
+{
+    //cout<<input<<endl;
+    string number = "";
+    for(char& c : input)
+    {
+        if((c >= '0' &&  c <= '9') || c == '.')
+        {
+            number.push_back(c);
+        }
+        else
+        {
+            if(number != "")
+            {
+                return stoi(number);
+            }
+        }
+    }
+    if(number != "")
+    {
+        return stof(number);
+    }
+    return 0.0f;
+}
+
+vec4 getXYZW(string input)
+{
+    cout<<input;
+    string number = "";
+    int i = 0;
+    float x;
+    float y;
+    float z;
+    float w;
+    for(char& c : input)
+    {
+        if((c >= '0' &&  c <= '9') || c == '.')
+        {
+            number.push_back(c);
+        }
+        else
+        {
+            if(number != "")
+            {
+                switch(i)
+                {
+                case 0:
+                    x = stoi(number);
+                    break;
+                case 1:
+                    y = stof(number);
+                    break;
+                case 2:
+                    z = stof(number);
+                    break;
+                case 3:
+                    w = stof(number);
+                }
+                number = "";
+                i++;
+            }
+        }
+    }
+    if(number != "")
+    {
+        switch(i)
+        {
+        case 0:
+            x = stoi(number);
+            break;
+        case 1:
+            y = stof(number);
+            break;
+        case 2:
+            z = stof(number);
+            break;
+        case 3:
+            w = stof(number);
+        }
+    }
+    return vec4(x, y, z, w);
+}

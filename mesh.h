@@ -109,9 +109,11 @@ public:
     /* Indicator of whether user sets the color of this mesh.*/
     bool user_set_color;
     /* transformation matrix to go up one level.*/
-    mat4 transformUp;
-    /* Set the transformation of this mesh. */
-    void setTransformation(mat4 new_transformation);
+    vector<mat4> transformations_up;
+    /* Add one transformation to this mesh of going up one level. */
+    void addTransformation(mat4 new_transform);
+    /* Reset the transformations to this mesh of going up one level. */
+    void setTransformation(vector<mat4>);
     /* The name of this mesh. */
     string name;
     /* Update the value of all elements made by expression. */

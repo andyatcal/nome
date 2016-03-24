@@ -12,6 +12,7 @@ PolyLine::PolyLine()
     isLoop = false;
     vertices.clear();
     user_set_color = false;
+    transformations_up.clear();
 }
 
 void PolyLine::drawLine()
@@ -36,7 +37,7 @@ void PolyLine::drawLine()
 void PolyLine::clear()
 {
     vertices.clear();
-    transformUp = mat4(1);
+    transformations_up.clear();
 }
 
 bool PolyLine::isEmpty()
@@ -75,9 +76,9 @@ void PolyLine::setColor(QColor color)
     this -> color = color;
 }
 
-void PolyLine::setTransformation(mat4 new_transformation)
+void PolyLine::addTransformation(mat4 new_transform)
 {
-    this -> transformUp = new_transformation;
+    transformations_up.push_back(new_transform);
 }
 
 void PolyLine::addVertex(Vertex *v)

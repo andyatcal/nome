@@ -26,7 +26,6 @@ void Funnel::setParameterValues(string input)
         }
         else if(c == '}')
         {
-            cout<<nextExpression<<endl;
             expressionMode = false;
             switch(i)
             {
@@ -80,6 +79,24 @@ void Funnel::setParameterValues(string input)
                 number = "";
                 i++;
             }
+        }
+    }
+    if(number != "")
+    {
+        switch(i)
+        {
+        case 0:
+            n = stoi(number);
+            break;
+        case 1:
+            ro = stof(number);
+            break;
+        case 2:
+            ratio = stof(number);
+            break;
+        case 3:
+            h = stof(number);
+            break;
         }
     }
 }
