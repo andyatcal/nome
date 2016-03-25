@@ -62,12 +62,6 @@ mat4 ktranslate(vec3 translation);
 * @return transformation matrix for this mirror operation.
 */
 mat4 kmirror(vec4 mirror_plane);
-/**
- * @brief meshCopy: Make a copy of current mesh.
- * @param mesh: The mesh to be copied.
- * @return The copied mesh.
- */
-Mesh meshCopy(Mesh & mesh);
 
 /**
  * @brief polylineCopy: Make a copy of current line.

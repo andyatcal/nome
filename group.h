@@ -83,6 +83,8 @@ public:
     string name;
     /* set name of this group. */
     void setName(string);
+    /* The parent of this group. */
+    Group* parent;
 };
 
 #endif // GROUP_H

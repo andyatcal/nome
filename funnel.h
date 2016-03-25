@@ -22,7 +22,11 @@ public:
     void updateFunnel_n();
     void updateFunnel_ro();
     void updateFunnel_ratio_or_h();
+    Funnel makeCopy();
     void setParameterValues(string);
+    vector<Parameter*> influencingParams;
+    /* Add a parameter that influence this funnel. */
+    void addParam(Parameter*);
 };
 
 #endif // FUNNEL_H

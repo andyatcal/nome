@@ -33,12 +33,15 @@
 #include "face.h"
 #include "parameter.h"
 
+class Group;
+
 using namespace std;
 using namespace glm;
 
 //////////////////////////////////////////////////////////////////////
 // Mesh Class -- A MESH is a collection of polygon facets
-class Mesh{
+class Mesh
+{
 public:
     /* A list of all vertices in this mesh. */
     vector<Vertex*> vertList;
@@ -87,6 +90,11 @@ public:
      * @param startIndex: The starting index of drawing polygon name.
      * @param smoothShading: Indicate if we are in smooth shading or flat shading.
      */
+    /**
+     * @brief makeCopy: Make a copy of current mesh.
+     * @return The copied mesh.
+     */
+    Mesh makeCopy();
     void drawMesh(int startIndex, bool smoothShading);
     // Draw the selected vertices in OpenGL
     void drawVertices();
@@ -124,6 +132,8 @@ public:
     unordered_map<string, Parameter> *params;
     /* Set the global parameter pointer for this mesh. */
     void setGlobalParameter(unordered_map<string, Parameter> *params);
+    /* The paraent group of this mesh. */
+    Group *parent;
 };
 
 // @param p1, p2, p3 are positions of three vertices,

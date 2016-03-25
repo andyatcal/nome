@@ -24,7 +24,7 @@ void makeGroupTest3(Group &group)
     mat4 oneTransform = ktranslate(vec3(1, 1, 1));
     oneMesh.setColor(Qt::green);
     mat4 secondTransform = ktranslate(vec3(-1, -1, -1));
-    Mesh secondMesh = meshCopy(oneMesh);
+    Mesh secondMesh = oneMesh.makeCopy();
     secondMesh.setColor(Qt::blue);
     secondMesh.computeNormals();
     oneMesh.addTransformation(oneTransform);
@@ -41,7 +41,7 @@ void makeGroupTest4(Group &group)
     mat4 oneTransform = ktranslate(vec3(1, 1, 1));
     mat4 secondTransform = ktranslate(vec3(-1, -1, -1));
     oneMesh.computeNormals();
-    Mesh secondMesh = meshCopy(oneMesh);
+    Mesh secondMesh = oneMesh.makeCopy();
     oneMesh.addTransformation(oneTransform);
     secondMesh.addTransformation(secondTransform);
     subGroup1.addMesh(oneMesh);
@@ -60,7 +60,7 @@ void makeGroupTest5(Group &group)
     oneMesh.computeNormals();
     mat4 oneTransform = ktranslate(vec3(0, 0, 0.5));
     mat4 secondTransform = ktranslate(vec3(0, 0, -0.5));
-    Mesh secondMesh = meshCopy(oneMesh);
+    Mesh secondMesh = oneMesh.makeCopy();
     oneMesh.addTransformation(oneTransform);
     secondMesh.addTransformation(secondTransform);
     subGroup1.addMesh(oneMesh);
@@ -80,7 +80,7 @@ void makeGroupTest6(Group &group)
     oneMesh.computeNormals();
     mat4 oneTransform = ktranslate(vec3(0, 0.5, 0.5));
     mat4 secondTransform = ktranslate(vec3(0, -0.5, -0.5));
-    Mesh secondMesh = meshCopy(oneMesh);
+    Mesh secondMesh = oneMesh.makeCopy();
     oneMesh.addTransformation(oneTransform);
     secondMesh.addTransformation(secondTransform);
     secondMesh.computeNormals();

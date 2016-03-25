@@ -562,3 +562,50 @@ void Mesh::setTransformation(vector<mat4> new_transforms)
 {
     transformations_up = new_transforms;
 }
+
+Mesh Mesh::makeCopy() {
+    //cout<<"Creating a copy of the current map.\n";
+    Mesh newMesh;
+    newMesh.clear();
+    vector<Vertex*>::iterator vIt;
+    for(vIt = vertList.begin();
+        vIt < vertList.end(); vIt ++) {
+        Vertex * vertCopy = new Vertex;
+        vertCopy -> ID = (*vIt) -> ID;
+        vertCopy -> position = (*vIt) -> position;
+        newMesh.addVertex(vertCopy);
+    }
+    vector<Face*>::iterator fIt;
+    vector<Vertex*> vertices;
+    for(fIt = faceList.begin();
+     fIt < faceList.end(); fIt ++) {
+        Face * tempFace = *fIt;
+        Edge * firstEdge = tempFace -> oneEdge;
+        Edge * currEdge = firstEdge;
+        Edge * nextEdge;
+        Vertex * tempv;
+        vertices.clear();
+        do {
+            if(tempFace == currEdge -> fa) {
+                tempv = currEdge -> vb;
+                nextEdge = currEdge -> nextVbFa;
+            } else {
+                if(currEdge -> mobius) {
+                    tempv = currEdge -> vb;
+                    nextEdge = currEdge -> nextVbFb;
+                } else {
+                    tempv = currEdge -> va;
+                    nextEdge = currEdge -> nextVaFb;
+                }
+            }
+            vertices.push_back(newMesh.vertList[tempv -> ID]);
+            currEdge = nextEdge;
+        } while (currEdge != firstEdge);
+        newMesh.addPolygonFace(vertices);
+    }
+    newMesh.buildBoundary();
+    newMesh.computeNormals();
+    newMesh.color = color;
+    newMesh.params = params;
+    return newMesh;
+}

@@ -151,7 +151,7 @@ Mesh mergeTwoMeshes2() {
     mesh1.addPolygonFace(topFace, true);
     mesh1.buildBoundary();
 
-    mesh2 = meshCopy(mesh1);
+    mesh2 = mesh1.makeCopy();
     mat4 rot = krotate(vec3(0, 1, 1), PI);
     //mat4 translate = ktranslate(vec3(0, -1, 0));
     //transform(mesh2, translate);
@@ -189,7 +189,7 @@ Mesh mergeTwoMeshes3() {
     mesh1.addPolygonFace(topFace, true);
     mesh1.buildBoundary();
 
-    mesh2 = meshCopy(mesh1);
+    mesh2 = mesh1.makeCopy();
     mat4 rot = krotate(vec3(0, 0, 1), PI/3);
     transform(mesh2, rot);
 
@@ -229,17 +229,17 @@ Mesh mergeTwoMeshes8() {
     mat4 rot1 = krotate(vec3(0,0,1), PI / 3);
     mat4 rot2 = krotate(vec3(0,0,1), PI * 2 / 3);
     mat4 rot3 = krotate(vec3(0,0,1), PI);
-    mesh2 = meshCopy(mesh1);
-    mesh3 = meshCopy(mesh1);
+    mesh2 = mesh1.makeCopy();
+    mesh3 = mesh1.makeCopy();
     mat4 mirror = kmirror(vec4(0, 1, 0, 0));
     transform(mesh2, rot1);
     transform(mesh3, mirror);
     Mesh merged = merge(mesh1, mesh2);
     //merged = merge(merged, mesh3);
-    Mesh mesh5 = meshCopy(mesh3);
+    Mesh mesh5 = mesh3.makeCopy();
     transform(mesh5, rot3);
     Mesh merged2 = merge(mesh3, mesh5);
-    Mesh mesh4 = meshCopy(merged);
+    Mesh mesh4 = merged.makeCopy();
     transform(mesh4, rot3);
     merged = merge(merged, mesh4);
     merged = merge(merged, merged2);
@@ -278,8 +278,8 @@ Mesh mergeTwoMeshes4() {
     mat4 rot1 = krotate(vec3(0,0,1), PI / 3);
     mat4 rot2 = krotate(vec3(0,0,1), PI * 2 / 3);
     mat4 rot3 = krotate(vec3(0,0,1), PI);
-    mesh2 = meshCopy(mesh1);
-    mesh3 = meshCopy(mesh1);
+    mesh2 = mesh1.makeCopy();
+    mesh3 = mesh1.makeCopy();
     mat4 mirror = kmirror(vec4(0, 1, 0, 0));
     transform(mesh2, rot1);
     transform(mesh3, mirror);
@@ -331,8 +331,8 @@ Mesh mergeTwoMeshes7() {
     mat4 rot1 = krotate(vec3(0,0,1), PI * 2 / 3);
     mat4 rot2 = krotate(vec3(0,0,1), - PI * 2 / 3);
     mat4 translation = ktranslate(vec3(-0.5, 0.866, 0));
-    mesh2 = meshCopy(mesh1);
-    mesh3 = meshCopy(mesh1);
+    mesh2 = mesh1.makeCopy();
+    mesh3 = mesh1.makeCopy();
 
     transform(mesh2, rot1);
     transform(mesh3, translation);
@@ -341,7 +341,7 @@ Mesh mergeTwoMeshes7() {
     merged = merge(merged, mesh3);
 
     mat4 rot3 = krotate(vec3(0,0,1), PI /3);
-    Mesh mesh4 = meshCopy(mesh1);
+    Mesh mesh4 = mesh1.makeCopy();
     transform(mesh4, rot3);
     merged = merge(merged, mesh4);
     return merged;
@@ -520,14 +520,14 @@ Mesh mergeTwoMeshes5() {
     mesh1.addPolygonFace(topFace, true);
     mesh1.buildBoundary();
 
-    mesh2 = meshCopy(mesh1);
+    mesh2 = mesh1.makeCopy();
     mat4 rot = krotate(vec3(0, 0, 1), PI/3);
     transform(mesh2, rot);
 
     Mesh merged = merge(mesh1, mesh2);
     mat4 rot2 = krotate(vec3(0, 0, 1), PI * 2 / 3);
-    Mesh mesh3 = meshCopy(merged);
-    Mesh mesh4 = meshCopy(merged);
+    Mesh mesh3 = merged.makeCopy();
+    Mesh mesh4 = merged.makeCopy();
     transform(mesh3, rot2);
     transform(mesh4, rot2);
     transform(mesh4, rot2);
@@ -575,7 +575,7 @@ Mesh mirrorTest() {
     //cout<<mirror[1][0]<<" "<<mirror[1][1]<<" "<<mirror[1][2]<<" "<<mirror[1][3]<<endl;
     //cout<<mirror[2][0]<<" "<<mirror[2][1]<<" "<<mirror[2][2]<<" "<<mirror[2][3]<<endl;
     //cout<<mirror[3][0]<<" "<<mirror[3][1]<<" "<<mirror[3][2]<<" "<<mirror[3][3]<<endl;
-    mesh2 = meshCopy(mesh1);
+    mesh2 = mesh1.makeCopy();
     transform(mesh2, mirror);
 
     Mesh merged = merge(mesh1, mesh2);

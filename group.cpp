@@ -154,7 +154,7 @@ Group Group::makeCopy()
     vector<PolyLine>::iterator pIt;
     for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
     {
-        Mesh newMesh = meshCopy(*mIt);
+        Mesh newMesh = (*mIt).makeCopy();
         newMesh.transformations_up = (*mIt).transformations_up;
         newGroup.addMesh(newMesh);
     }

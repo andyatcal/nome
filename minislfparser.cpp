@@ -260,7 +260,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                 meshIt = meshes.find(instanceName);
                 if(meshIt != meshes.end())
                 {
-                    newMesh = meshCopy(meshIt -> second);
+                    newMesh = (meshIt -> second).makeCopy();
                     findMesh = true;
                 }
                 else

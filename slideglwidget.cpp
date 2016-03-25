@@ -395,7 +395,7 @@ void SlideGLWidget::subdivide(int level)
             subdiv_mesh = cache_subdivided_meshes[cachedLevel - 1];
         }
         while(cachedLevel <= level) {
-            subdiv_mesh = meshCopy(subdiv_mesh);
+            subdiv_mesh = subdiv_mesh.makeCopy();
             subdivider = new Subdivision(subdiv_mesh);
             subdiv_mesh = subdivider->ccSubdivision(1);
             subdiv_mesh.computeNormals();

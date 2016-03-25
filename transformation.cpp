@@ -64,54 +64,6 @@ mat4 kmirror(vec4 mirror_plane) {
     return result;
 }
 
-Mesh meshCopy(Mesh & mesh) {
-    //cout<<"Creating a copy of the current map.\n";
-    Mesh newMesh;
-    newMesh.clear();
-    vector<Vertex*>::iterator vIt;
-    for(vIt = mesh.vertList.begin();
-        vIt < mesh.vertList.end(); vIt ++) {
-        Vertex * vertCopy = new Vertex;
-        vertCopy -> ID = (*vIt) -> ID;
-        vertCopy -> position = (*vIt) -> position;
-        newMesh.addVertex(vertCopy);
-    }
-    vector<Face*>::iterator fIt;
-    vector<Vertex*> vertices;
-    for(fIt = mesh.faceList.begin();
-     fIt < mesh.faceList.end(); fIt ++) {
-        Face * tempFace = *fIt;
-        Edge * firstEdge = tempFace -> oneEdge;
-        Edge * currEdge = firstEdge;
-        Edge * nextEdge;
-        Vertex * tempv;
-        vertices.clear();
-        do {
-            if(tempFace == currEdge -> fa) {
-                tempv = currEdge -> vb;
-                nextEdge = currEdge -> nextVbFa;
-            } else {
-                if(currEdge -> mobius) {
-                    tempv = currEdge -> vb;
-                    nextEdge = currEdge -> nextVbFb;
-                } else {
-                    tempv = currEdge -> va;
-                    nextEdge = currEdge -> nextVaFb;
-                }
-            }
-            vertices.push_back(newMesh.vertList[tempv -> ID]);
-            currEdge = nextEdge;
-        } while (currEdge != firstEdge);
-        vector<Vertex*>::iterator vtIt;
-        newMesh.addPolygonFace(vertices);
-    }
-    newMesh.buildBoundary();
-    newMesh.computeNormals();
-    newMesh.color = mesh.color;
-    newMesh.params = mesh.params;
-    return newMesh;
-}
-
 PolyLine polylineCopy(PolyLine &line)
 {
     PolyLine newPolyline;
