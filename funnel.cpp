@@ -53,7 +53,7 @@ void Funnel::setParameterValues(string input)
         {
             nextExpression.push_back(c);
         }
-        else if(!expressionMode && ((c >= '0' &&  c <= '9') || c == '.'))
+        else if(!expressionMode && ((c >= '0' &&  c <= '9') || c == '.' || c == '-' || c == '+'))
         {
             number.push_back(c);
         }

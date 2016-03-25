@@ -7,5 +7,5 @@ Parameter::Parameter()
 
 float Parameter::getValue()
 {
-    return this -> value * this -> multiplier;
+    return value;
 }

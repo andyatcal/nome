@@ -13,11 +13,10 @@ class Parameter
 public:
     Parameter();
     QString name;
-    int start;
-    int end;
-    int stepsize;
-    int value;
-    float multiplier;
+    float start;
+    float end;
+    float stepsize;
+    float value;
     float getValue();
 };
 

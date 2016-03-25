@@ -2,6 +2,7 @@
 
 float evaluate_expression(string expr, unordered_map<string, Parameter> *params)
 {
+    //cout<<expr<<endl;
     vector<string> tokens;
     stack<string> numberStack;
     string number = "";
@@ -101,7 +102,7 @@ float evaluate_expression(string expr, unordered_map<string, Parameter> *params)
     for(tIt = tokens.begin(); tIt < tokens.end(); tIt++)
     {
         string token = (*tIt);
-        if(isOperator(token[0]))
+        if(token.size() == 1 && isOperator(token[0]))
         {
             float y = operands.top();
             operands.pop();
@@ -232,7 +233,7 @@ float getOneValue(string input)
     string number = "";
     for(char& c : input)
     {
-        if((c >= '0' &&  c <= '9') || c == '.')
+        if((c >= '0' &&  c <= '9') || c == '.' || c == '-' || c == '+')
         {
             number.push_back(c);
         }
@@ -262,7 +263,7 @@ vec4 getXYZW(string input)
     float w;
     for(char& c : input)
     {
-        if((c >= '0' &&  c <= '9') || c == '.')
+        if((c >= '0' &&  c <= '9') || c == '.' || c == '-' || c == '+')
         {
             number.push_back(c);
         }

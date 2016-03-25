@@ -103,7 +103,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
             {
                 Parameter newParameter;
                 int i = 0;
-                while(i < 6) {
+                while(i < 5) {
                     if(tIt >= tokens.end() - 1) {
                         cout<<warning(0, lineNumber)<<endl;
                         goto newLineEnd;
@@ -116,13 +116,13 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     switch(i)
                     {
                     case 0:
-                        newParameter.name = QString::fromStdString(nextToken);
+                        newParameter.name = banks[banks.size() - 1].name + QString::fromStdString("_" + nextToken);
                         name = nextToken;
                         break;
                     case 1:
                         try
                         {
-                            newParameter.start = std::stoi(nextToken);
+                            newParameter.value = std::stof(nextToken);
                             break;
                         }
                         catch (std::exception e)
@@ -133,7 +133,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     case 2:
                         try
                         {
-                            newParameter.end = std::stoi(nextToken);
+                            newParameter.start = std::stof(nextToken);
                             break;
                         }
                         catch (std::exception e)
@@ -144,7 +144,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     case 3:
                         try
                         {
-                            newParameter.value = std::stoi(nextToken);
+                            newParameter.end = std::stof(nextToken);
                             break;
                         }
                         catch (std::exception e)
@@ -155,18 +155,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     case 4:
                         try
                         {
-                            newParameter.stepsize = std::stoi(nextToken);
-                            break;
-                        }
-                        catch (std::exception e)
-                        {
-                            cout<<warning(1, lineNumber)<<endl;
-                            goto newLineEnd;
-                        }
-                    case 5:
-                        try
-                        {
-                            newParameter.multiplier = std::stof(nextToken);
+                            newParameter.stepsize = std::stof(nextToken);
                             break;
                         }
                         catch (std::exception e)
@@ -180,7 +169,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                 pIt = params.find(newParameter.name.toStdString());
                 if(pIt == params.end())
                 {
-                    params[name] = newParameter;
+                    params[banks[banks.size() - 1].name.toStdString() + "_" + name] = newParameter;
                 }
                 else
                 {
@@ -442,10 +431,12 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                 {
                     if(findMesh)
                     {
+                        newMesh.setTransformation(transformations_up);
                         group.addMesh(newMesh);
                     }
                     else
                     {
+                        newGroup.setTransformation(transformations_up);
                         group.addGroup(newGroup);
                     }
                 }
