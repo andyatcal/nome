@@ -9,3 +9,8 @@ float Parameter::getValue()
 {
     return value;
 }
+
+void Parameter::update()
+{
+
+}

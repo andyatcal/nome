@@ -76,12 +76,42 @@ void PolyLine::setColor(QColor color)
     this -> color = color;
 }
 
-void PolyLine::addTransformation(mat4 new_transform)
+void PolyLine::addTransformation(Transformation new_transform)
 {
     transformations_up.push_back(new_transform);
+}
+
+void PolyLine::setTransformation(vector<Transformation> new_transform)
+{
+    transformations_up = new_transform;
 }
 
 void PolyLine::addVertex(Vertex *v)
 {
     vertices.push_back(v);
+}
+
+PolyLine PolyLine::makeCopy()
+{
+    PolyLine newPolyline;
+    newPolyline.clear();
+    vector<Vertex*>::iterator vIt;
+    for(vIt = vertices.begin();
+        vIt < vertices.end(); vIt ++) {
+        Vertex * vertCopy = new Vertex;
+        vertCopy -> ID = (*vIt) -> ID;
+        vertCopy -> position = (*vIt) -> position;
+        newPolyline.addVertex(vertCopy);
+    }
+    newPolyline.setColor(color);
+    return newPolyline;
+}
+
+void PolyLine::transform(Transformation *t)
+{
+    mat4 matrix = t -> getMatrix();
+    vector<Vertex*>::iterator vIt;
+    for(vIt = vertices.begin(); vIt < vertices.end(); vIt++) {
+        (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
+    }
 }

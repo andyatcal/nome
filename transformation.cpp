@@ -7,74 +7,116 @@
 
 #include "transformation.h"
 
-void transform(Mesh & mesh, mat4 matrix)
+Transformation::Transformation()
 {
-    vector<Vertex*>::iterator vIt;
-    for(vIt = mesh.vertList.begin(); vIt < mesh.vertList.end(); vIt++) {
-        (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
-    }
+    int type = 0;
+    matrix = mat4(1);
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
+    w = 0.0f;
+    isParametric = false;
+    x_expr = "";
+    y_expr = "";
+    z_expr = "";
+    w_expr = "";
 }
 
-void transform(PolyLine &line, mat4 matrix)
+Transformation::Transformation(int type, float x, float y, float z)
 {
-    vector<Vertex*>::iterator vIt;
-    for(vIt = line.vertices.begin(); vIt < line.vertices.end(); vIt++) {
-        (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
-    }
+    this -> type = type;
+    this -> x = x;
+    this -> y = y;
+    this -> z = z;
+    isParametric = false;
+    x_expr = "";
+    y_expr = "";
+    z_expr = "";
+    w_expr = "";
+    update();
 }
 
-mat4 krotate(vec3 rot_axis, float radian) {
-    return glm::rotate(radian, rot_axis);
+Transformation::Transformation(int type, float x, float y, float z, float w)
+{
+    this -> type = type;
+    this -> x = x;
+    this -> y = y;
+    this -> z = z;
+    this -> w = w;
+    isParametric = false;
+    x_expr = "";
+    y_expr = "";
+    z_expr = "";
+    w_expr = "";
+    update();
 }
 
-mat4 kscale(vec3 scales) {
-    return scale(scales);
+Transformation::Transformation(string input)
+{
+
 }
 
-mat4 ktranslate(vec3 translation) {
-    return translate(translation);
+void Transformation::rotate()
+{
+    matrix = glm::rotate(w, vec3(x, y, z));
 }
 
-mat4 kmirror(vec4 mirror_plane) {
-    mat4 result;
-    float d = mirror_plane[3];
-    vec3 plane_normal = vec3(mirror_plane);
+void Transformation::scale()
+{
+    matrix = glm::scale(vec3(x, y, z));
+}
+
+void Transformation::translate()
+{
+    matrix = glm::translate(vec3(x, y, z));
+}
+
+void Transformation::mirror()
+{
+    float d = w;
+    vec3 plane_normal = vec3(x, y, z);
     float k = - d / length(plane_normal);
-    //cout<<k<<endl;
     plane_normal = normalize(plane_normal);
     float a = plane_normal[0];
     float b = plane_normal[1];
     float c = plane_normal[2];
-    result[0][0] = 1 - 2 * a * a;
-    result[0][1] = - 2 * a * b;
-    result[0][2] = - 2 * a * c;
-    result[0][3] = 0;
-    result[1][0] = - 2 * a * b;
-    result[1][1] = 1 - 2 * b * b;
-    result[1][2] = - 2 * b * c;
-    result[1][3] = 0;
-    result[2][0] = - 2 * a * c;
-    result[2][1] = - 2 * b * c;
-    result[2][2] = 1 - 2 * c * c;
-    result[2][3] = 0;
-    result[3][0] = 2 * a * k;
-    result[3][1] = 2 * b * k;
-    result[3][2] = 2 * c * k;
-    result[3][3] = 1;
-    return result;
+    matrix[0][0] = 1 - 2 * a * a;
+    matrix[0][1] = - 2 * a * b;
+    matrix[0][2] = - 2 * a * c;
+    matrix[0][3] = 0;
+    matrix[1][0] = - 2 * a * b;
+    matrix[1][1] = 1 - 2 * b * b;
+    matrix[1][2] = - 2 * b * c;
+    matrix[1][3] = 0;
+    matrix[2][0] = - 2 * a * c;
+    matrix[2][1] = - 2 * b * c;
+    matrix[2][2] = 1 - 2 * c * c;
+    matrix[2][3] = 0;
+    matrix[3][0] = 2 * a * k;
+    matrix[3][1] = 2 * b * k;
+    matrix[3][2] = 2 * c * k;
+    matrix[3][3] = 1;
 }
 
-PolyLine polylineCopy(PolyLine &line)
+mat4 Transformation::getMatrix()
 {
-    PolyLine newPolyline;
-    newPolyline.clear();
-    vector<Vertex*>::iterator vIt;
-    for(vIt = line.vertices.begin();
-        vIt < line.vertices.end(); vIt ++) {
-        Vertex * vertCopy = new Vertex;
-        vertCopy -> ID = (*vIt) -> ID;
-        vertCopy -> position = (*vIt) -> position;
-        newPolyline.addVertex(vertCopy);
+    return matrix;
+}
+
+void Transformation::update()
+{
+    switch (type) {
+    case 1:
+        rotate();
+        break;
+    case 2:
+        scale();
+        break;
+    case 3:
+        translate();
+        break;
+    case 4:
+        mirror();
+        break;
     }
-    newPolyline.setColor(line.color);
 }

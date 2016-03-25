@@ -2,6 +2,9 @@
 #define PARAMETER_H
 
 #include <QString>
+#include <vector>
+class Funnel;
+class Vertex;
 using namespace std;
 
 /**
@@ -18,6 +21,10 @@ public:
     float stepsize;
     float value;
     float getValue();
+    /* A list of objects to update when changing value of this parameter. */
+    vector<Vertex*> influenceVertices;
+    vector<Funnel*> influenceFunnels;
+    void update();
 };
 
 #endif // PARAMETER_H

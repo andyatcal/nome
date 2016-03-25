@@ -107,7 +107,7 @@ void MainWindow::createCanvas(QString name)
 
 void MainWindow::createSliderPanel()
 {
-    for(int i = 0; i < banks.size(); i++)
+    for(size_t i = 0; i < banks.size(); i++)
     {
         SliderPanel *newPanel = new SliderPanel(&banks[i]);
         newPanel -> show();

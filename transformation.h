@@ -9,65 +9,102 @@
 #define __TRANSFORMATION_H__
 
 #include <vector>
+#include <string>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
-#include "mesh.h"
-#include "polyline.h"
 
 using namespace std;
 using namespace glm;
 
 //////////////////////////////////////////////////////////////////////
 // Transformation Class -- A class to create a new mesh by transformation.
-/**
- * @brief transform: Create a new Mesh given the
- * transformation matrix.
- * @param mesh: The mesh for transformation.
- * @param matrix: The matrix for transformation.
- */
-void transform(Mesh &mesh, mat4 matrix);
+class Transformation
+{
+public:
+    Transformation();
+    Transformation(int type, float x, float y, float z);
+    Transformation(int type, float x, float y, float z, float w);
+    Transformation(string input);
+    /**
+     * @brief type: The type of this transformation.
+     * 0: Nothing, matrix is an identity matrix.
+     * 1: Rotation
+     * 2: Scaling
+     * 3: Translation
+     * 4: Mirroring
+     */
+    int type;
+    /**
+     * @brief x: The first parameter of this transformation.
+     * Roation: the x for rotation axis
+     * Scale: scaling factor in x direction.
+     * Translation: translation in x direction.
+     * Mirroring: the constant for x of mirroring plane.
+     */
+    float x;
+    /**
+     * @brief y: The second parameter of this transformation.
+     * Roation: the y for rotation axis
+     * Scale: scaling factor in y direction.
+     * Translation: translation in y direction.
+     * Mirroring: the constant for y of mirroring plane.
+     */
+    float y;
+    /**
+     * @brief z: The third parameter of this transformation.
+     * Roation: the z for rotation axis
+     * Scale: scaling factor in z direction.
+     * Translation: translation in z direction.
+     * Mirroring: the constant for z of mirroring plane.
+     */
+    float z;
+    /**
+     * @brief x: The first parameter of this transformation.
+     * Roation: angle for rotation axis
+     * Scale: don't have this parameter.
+     * Translation: don't have this parameter
+     * Mirroring: the constant of intercept of mirroring plane.
+     */
+    float w;
+    /* Show if this transformation is parametric. */
+    bool isParametric;
+    /* The string expression of parameter x. */
+    string x_expr;
+    /* The string expression of parameter y. */
+    string y_expr;
+    /* The string expression of parameter z. */
+    string z_expr;
+    /* The string expression of parameter w. */
+    string w_expr;
+    /* The stored transformation matrix.*/
+    mat4 matrix;
+    /**
+    * @brief rotate: Create the rotation matrix based on parameters.
+    */
+    void rotate();
 
-/**
- * @brief transform: Create a new PolyLine given the
- * transformation matrix.
- * @param line: The line for transformation.
- * @param matrix: The matrix for transformation.
- */
-void transform(PolyLine &line, mat4 matrix);
+    /**
+    * @brief scale: Create the scaling matrix based on parameters.
+    */
+    void scale();
 
-/**
-* @brief krotate: Rotate a current mesh.
-* @param rot_axis: The rotation axis as a 3D vector
-* @param radian: The rotation angle, in radius
-* @return transformation matrix for this rotation.
-*/
-mat4 krotate(vec3 rot_axis, float radian);
-
-/**
-* @brief kscale: Scale a current mesh.
-* @param scales: The scaling factor as a 3D vector.
-* @return transformation matrix for this scaling.
-*/
-mat4 kscale(vec3 scales);
-
-/**
-* @brief ktranslate: Translate a current mesh.
-* @param translation: The translation as a 3D vector.
-* @return transformation matrix for this translation.
-*/
-mat4 ktranslate(vec3 translation);
-/**
-* @brief mirror: Mirror a current mesh.
-* @param mirror_plane: The mirror plane as a 4D vector.
-* @return transformation matrix for this mirror operation.
-*/
-mat4 kmirror(vec4 mirror_plane);
-
-/**
- * @brief polylineCopy: Make a copy of current line.
- * @param line: The line to be copied.
- * @return The copied line.
- */
-PolyLine polylineCopy(PolyLine &line);
+    /**
+    * @brief translate: Create the translation matrix based on parameters.
+    */
+    void translate();
+    /**
+    * @brief mirror: Create the mirror matrix based on parameters.
+    */
+    void mirror();
+    /**
+     * @brief getMatrix: Get a 4X4 matrix for this transformation.
+     * @return the transformation matrix.
+     */
+    mat4 getMatrix();
+    /**
+     * @brief update: Update this transformation.
+     */
+    void update();
+};
 
 #endif // TRANSFORMATION_H

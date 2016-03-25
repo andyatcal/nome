@@ -32,6 +32,8 @@
 
 #include "face.h"
 #include "parameter.h"
+#include "transformation.h"
+#include "utils.h"
 
 class Group;
 
@@ -49,7 +51,7 @@ public:
     vector<Face*> faceList;
     /* This is an auxillary table to build a mesh, matching edge to vertex.*/
     unordered_map<Vertex*, vector<Edge*> > edgeTable;
-    Mesh();
+    Mesh(int type = 0);
     /**
      * @brief addVertex: Add one vertex to this Mesh.
      * @param v, the vertex to be added in.
@@ -94,7 +96,12 @@ public:
      * @brief makeCopy: Make a copy of current mesh.
      * @return The copied mesh.
      */
-    Mesh makeCopy();
+    virtual Mesh makeCopy();
+    /**
+     * @brief transform: Transform this mesh.
+     * @param t: The transformation for this mesh.
+     */
+    void transform(Transformation* t);
     void drawMesh(int startIndex, bool smoothShading);
     // Draw the selected vertices in OpenGL
     void drawVertices();
@@ -117,11 +124,11 @@ public:
     /* Indicator of whether user sets the color of this mesh.*/
     bool user_set_color;
     /* transformation matrix to go up one level.*/
-    vector<mat4> transformations_up;
+    vector<Transformation> transformations_up;
     /* Add one transformation to this mesh of going up one level. */
-    void addTransformation(mat4 new_transform);
+    void addTransformation(Transformation new_transform);
     /* Reset the transformations to this mesh of going up one level. */
-    void setTransformation(vector<mat4>);
+    void setTransformation(vector<Transformation>);
     /* The name of this mesh. */
     string name;
     /* Update the value of all elements made by expression. */
@@ -134,6 +141,30 @@ public:
     void setGlobalParameter(unordered_map<string, Parameter> *params);
     /* The paraent group of this mesh. */
     Group *parent;
+    /**
+     * Type of this mesh.
+     * 0: A general mesh.
+     * 1: A Funnel.
+     */
+    int type;
+    /* Parameters used by funnel. */
+    int n;
+    float ro;
+    float ratio;
+    float h;
+    string n_expr;
+    string ro_expr;
+    string ratio_expr;
+    string h_expr;
+    void makeFunnel();
+    void updateFunnel();
+    void updateFunnel_n();
+    void updateFunnel_ro();
+    void updateFunnel_ratio_or_h();
+    void setFunnelParameterValues(string);
+    vector<Parameter*> influencingParams;
+    /* Add a parameter that influence this funnel. */
+    void addParam(Parameter*);
 };
 
 // @param p1, p2, p3 are positions of three vertices,

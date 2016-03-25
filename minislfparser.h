@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "parameterbank.h"
-#include "makeMesh.h"
 #include "funnel.h"
 #include "group.h"
 #include "utils.h"
@@ -11,7 +10,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <algorithm>
 class MiniSlfParser
 {
 public:

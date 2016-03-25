@@ -180,7 +180,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
             }
             else if((*tIt) == "funnel")
             {
-                Funnel newFunnel;
+                Mesh newFunnel(1);
                 newFunnel.setGlobalParameter(&params);
                 if(++tIt < tokens.end())
                 {
@@ -211,7 +211,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     }
                     funnel_expression.push_back(' ');
                 }
-                newFunnel.setParameterValues(funnel_expression);
+                newFunnel.setFunnelParameterValues(funnel_expression);
                 newFunnel.makeFunnel();
                 if(meshes.find(newFunnel.name) == meshes.end())
                 {
@@ -222,6 +222,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     cout<<warning(3, lineNumber)<<endl;
                 }
                 newFunnel.computeNormals();
+                //group.addMesh(newFunnel);
             }
             else if((*tIt) == "group")
             {
@@ -276,7 +277,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                         cout<<warning(5, lineNumber);
                     }
                 }
-                vector<mat4> transformations_up;
+                vector<Transformation> transformations_up;
                 while(++tIt < tokens.end() && (*tIt) != "endinstance")
                 {
                     if(testComments(*tIt))
@@ -338,7 +339,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                                 angle.push_back(' ');
                             }
                         }
-                        transformations_up.push_back(krotate(axis, radian));
+                        Transformation t(1, axis[0], axis[1], axis[2], radian);
+                        transformations_up.push_back(t);
                     }
                     else if(*tIt == "translate" || *tIt == "scale")
                     {
@@ -376,11 +378,13 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                         endWhile2:
                         if(isTranslate)
                         {
-                            transformations_up.push_back(ktranslate(v));
+                            Transformation t(3, v[0], v[1], v[2]);
+                            transformations_up.push_back(t);
                         }
                         else
                         {
-                            transformations_up.push_back(kscale(v));
+                            Transformation t(2, v[0], v[1], v[2]);
+                            transformations_up.push_back(t);
                         }
                     }
                     else if(*tIt == "mirror")
@@ -412,7 +416,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                             }
                         }
                         endWhile3:
-                        transformations_up.push_back(kmirror(v));
+                        Transformation t(4, v[0], v[1], v[2], v[3]);
+                        transformations_up.push_back(t);
                     }
                 }
                 if(currentGroup != "")
@@ -421,6 +426,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     {
                         newMesh.setTransformation(transformations_up);
                         groups[currentGroup].addMesh(newMesh);
+
                     } else if(findGroup)
                     {
                         newGroup.setTransformation(transformations_up);
@@ -447,4 +453,5 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
     }
     group.setColor(QColor(0, 255, 0));
     group.assignColor();
+
 }

@@ -71,10 +71,10 @@ public:
      */
     void setColor(QColor color);
     /* The transformations to go up one level. */
-    vector<mat4> transformations_up;
+    vector<Transformation> transformations_up;
     /* Set the transformation of this group. */
-    void addTransformation(mat4 new_transform);
-    void setTransformation(vector<mat4> new_transforms);
+    void addTransformation(Transformation new_transform);
+    void setTransformation(vector<Transformation> new_transforms);
     /* make a copy of this group.*/
     Group makeCopy();
     /* Clear this group.*/

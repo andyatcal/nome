@@ -35,5 +35,6 @@ void MySlider::setParameter(Parameter *param)
 void MySlider::changeValue(int newValue)
 {
     param -> value = newValue * (param -> stepsize) + param -> start;
+    param -> update();
 }
 

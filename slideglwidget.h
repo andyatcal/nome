@@ -198,8 +198,10 @@ private:
     float trianglePanelty;
     /* The group to store the whole scene. */
     Group hirachicalScene;
-    /* The flattened view of this scene. */
-    vector<Mesh> flatten;
+    /* Store all meshes in this scene. */
+    vector<Mesh> mesehs;
+    /* Store all funnels in this scene. */
+    vector<Funnel> funnels;
     /* The Mini SLF file parser. */
     MiniSlfParser slfParser;
     /* The parameter banks read from slfParser. */

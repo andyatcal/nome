@@ -11,10 +11,11 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "mesh.h"
-
+#include "transformation.h"
 using namespace std;
 using namespace glm;
 
+class Group;
 //////////////////////////////////////////////////////////////////////
 // Polyline Class -- A Polyline is a list of vertices
 class PolyLine {
@@ -41,17 +42,31 @@ public:
      * @brief isEmpty: Find if this line is empty.
      * @return indicator of this polyline is empty.
      */
+    /**
+     * @brief makeCopy: Make a copy of this PolyLine
+     * @return the copied polyline
+     */
+    PolyLine makeCopy();
+    /**
+     * @brief transform: Transform this polyline.
+     * @param t: The transformation for this polyline.
+     */
+    void transform(Transformation* t);
     bool isEmpty();
     /* Set the color of this mesh. */
     void setColor(QColor color);
     /* Indicator of whether user sets the color of this mesh.*/
     bool user_set_color;
     /* The transformations to go up one level. */
-    vector<mat4> transformations_up;
-    /* Set the transformation of this group. */
-    void addTransformation(mat4 new_transform);
+    vector<Transformation> transformations_up;
+    /* Set the transformation of this polyline. */
+    void addTransformation(Transformation new_transform);
+    /* Reset the transformations to this polyline of going up one level. */
+    void setTransformation(vector<Transformation>);
     /* Add a vertex to the current polyline. */
     void addVertex(Vertex *v);
+    /* parent group */
+    Group *parent;
 };
 
 #endif // __POLYLINE_H__

@@ -13,16 +13,19 @@ Group::Group()
     myPolylines.clear();
     user_set_color = false;
     transformations_up.clear();
+    parent = NULL;
 }
 
 void Group::addMesh(Mesh &mesh)
 {
     myMeshes.push_back(mesh);
+    mesh.parent = this;
 }
 
 void Group::addGroup(Group &group)
 {
     subgroups.push_back(group);
+    group.parent = this;
 }
 
 void Group::addPolyline(PolyLine &polyline)
@@ -36,9 +39,9 @@ vector<Mesh*> Group::flattenedMeshes()
     vector<Mesh>::iterator mIt;
     for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
     {
-        for(mat4& transformUp : (*mIt).transformations_up)
+        for(Transformation& transformUp : (*mIt).transformations_up)
         {
-            transform(*mIt, transformUp);
+            (*mIt).transform(&transformUp);
         }
         result.push_back(&(*mIt));
     }
@@ -50,9 +53,9 @@ vector<Mesh*> Group::flattenedMeshes()
         for(mpIt = flattenedFromThisSubGroup.begin();
             mpIt < flattenedFromThisSubGroup.end(); mpIt++)
         {
-            for(mat4& transformUp : (*gIt).transformations_up)
+            for(Transformation& transformUp : (*gIt).transformations_up)
             {
-                transform(*(*mpIt), transformUp);
+                (**mpIt).transform(&transformUp);
             }
             result.push_back(*mpIt);
         }
@@ -66,9 +69,9 @@ vector<PolyLine*> Group::flattenedPolylines()
     vector<PolyLine>::iterator pIt;
     for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
     {
-        for(mat4& transformUp : (*pIt).transformations_up)
+        for(Transformation& transformUp : (*pIt).transformations_up)
         {
-            transform(*pIt, transformUp);
+            (*pIt).transform(&transformUp);
             result.push_back(&(*pIt));
         }
     }
@@ -80,9 +83,9 @@ vector<PolyLine*> Group::flattenedPolylines()
         for(ppIt = flattenedFromThisSubGroup.begin();
             ppIt < flattenedFromThisSubGroup.end(); ppIt++)
         {
-            for(mat4& transformUp : (*gIt).transformations_up)
+            for(Transformation& transformUp : (*gIt).transformations_up)
             {
-                transform(*(*ppIt), transformUp);
+               (*(*ppIt)).transform(&transformUp);
             }
             result.push_back(*ppIt);
         }
@@ -127,12 +130,12 @@ Mesh Group::merge()
     return ::merge(flatten);
 }
 
-void Group::addTransformation(mat4 new_transform)
+void Group::addTransformation(Transformation new_transform)
 {
     transformations_up.push_back(new_transform);
 }
 
-void Group::setTransformation(vector<mat4> new_transforms)
+void Group::setTransformation(vector<Transformation> new_transforms)
 {
     transformations_up = new_transforms;
 }
@@ -160,7 +163,7 @@ Group Group::makeCopy()
     }
     for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
     {
-        PolyLine newPolyline = polylineCopy(*pIt);
+        PolyLine newPolyline = (*pIt).makeCopy();
         newPolyline.transformations_up = (*pIt).transformations_up;
         newGroup.addPolyline(newPolyline);
     }

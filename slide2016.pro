@@ -18,7 +18,7 @@ SOURCES += main.cpp\
     face.cpp \
     mesh.cpp \
     polyline.cpp \
-    marge.cpp \
+    merge.cpp \
     transformation.cpp \
     makeMesh.cpp \
     subdivision.cpp \
@@ -37,7 +37,6 @@ SOURCES += main.cpp\
     myslider.cpp \
     minislfparser.cpp \
     parameterbank.cpp \
-    funnel.cpp \
     utils.cpp
 
 HEADERS  += \
@@ -65,7 +64,6 @@ HEADERS  += \
     myslider.h \
     minislfparser.h \
     parameterbank.h \
-    funnel.h \
     utils.h
 
 linux{

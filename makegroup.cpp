@@ -11,7 +11,7 @@ void makeGroupTest2(Group &group)
     makeCube(oneMesh,0.5,0.5,0.5);
     oneMesh.setColor(QColor(255, 255, 0));
     oneMesh.computeNormals();
-    mat4 oneTransform = krotate(vec3(1, 1, 1), PI/2);
+    Transformation oneTransform(1, 1, 1, 1, PI/2);
     oneMesh.addTransformation(oneTransform);
     group.addMesh(oneMesh);
 }
@@ -21,9 +21,9 @@ void makeGroupTest3(Group &group)
     Mesh oneMesh;
     makeCube(oneMesh,0.5,0.5,0.5);
     oneMesh.computeNormals();
-    mat4 oneTransform = ktranslate(vec3(1, 1, 1));
+    Transformation oneTransform(3, 1, 1, 1);
+    Transformation secondTransform(3, -1, -1, -1);
     oneMesh.setColor(Qt::green);
-    mat4 secondTransform = ktranslate(vec3(-1, -1, -1));
     Mesh secondMesh = oneMesh.makeCopy();
     secondMesh.setColor(Qt::blue);
     secondMesh.computeNormals();
@@ -38,8 +38,8 @@ void makeGroupTest4(Group &group)
     Mesh oneMesh;
     Group subGroup1;
     makeCube(oneMesh,0.5,0.5,0.5);
-    mat4 oneTransform = ktranslate(vec3(1, 1, 1));
-    mat4 secondTransform = ktranslate(vec3(-1, -1, -1));
+    Transformation oneTransform(3, 1, 1, 1);
+    Transformation secondTransform(3, -1, -1, -1);
     oneMesh.computeNormals();
     Mesh secondMesh = oneMesh.makeCopy();
     oneMesh.addTransformation(oneTransform);
@@ -58,8 +58,8 @@ void makeGroupTest5(Group &group)
     Group subGroup2;
     makeCube(oneMesh,0.5,0.5,0.5);
     oneMesh.computeNormals();
-    mat4 oneTransform = ktranslate(vec3(0, 0, 0.5));
-    mat4 secondTransform = ktranslate(vec3(0, 0, -0.5));
+    Transformation oneTransform(3, 0, 0, 0.5);
+    Transformation secondTransform(3, 0, 0, -0.5);
     Mesh secondMesh = oneMesh.makeCopy();
     oneMesh.addTransformation(oneTransform);
     secondMesh.addTransformation(secondTransform);
@@ -78,8 +78,8 @@ void makeGroupTest6(Group &group)
     Group subGroup1_1;
     makeCube(oneMesh,0.5,0.5,0.5);
     oneMesh.computeNormals();
-    mat4 oneTransform = ktranslate(vec3(0, 0.5, 0.5));
-    mat4 secondTransform = ktranslate(vec3(0, -0.5, -0.5));
+    Transformation oneTransform(3, 0, 0, 0.5);
+    Transformation secondTransform(3, 0, 0, -0.5);
     Mesh secondMesh = oneMesh.makeCopy();
     oneMesh.addTransformation(oneTransform);
     secondMesh.addTransformation(secondTransform);
