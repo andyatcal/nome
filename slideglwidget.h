@@ -89,6 +89,8 @@ private:
     mat4 object2world;
     /* control of the wireframe mode. */
     bool wireframe;
+    /* control of the backface illuminiation. */
+    bool backface;
     /* control of the shading mode. */
     bool smoothshading;
     /**

@@ -39,6 +39,7 @@ void SlideGLWidget::generalSetup()
     last_mx = last_my = cur_mx = cur_my = 0;
     arcball_on = false;
     wireframe = false;
+    backface = true;
     smoothshading = false;
     selection_mode = 1;
     object2world = mat4(1);
@@ -296,7 +297,6 @@ void SlideGLWidget::paintGL()
     glLoadIdentity();
     gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
     glMultMatrixf(&object2world[0][0]);
-
     drawScene();
 }
 
@@ -343,17 +343,32 @@ void SlideGLWidget::timerEvent(QTimerEvent *event) {
 }
 void SlideGLWidget::keyPressEvent(QKeyEvent* event)
 {
-    switch(event->key()) {
+    switch(event->key())
+    {
     case Qt::Key_Escape:
         mySelect.clearSelection();
         break;
     case Qt::Key_W:
-        if (wireframe) {
-            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-        } else {
+        wireframe = !wireframe;
+        if (wireframe)
+        {
             glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         }
-        wireframe = !wireframe;
+        else
+        {
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        }
+        break;
+    case Qt::Key_X:
+        backface = !backface;
+        if (backface)
+        {
+            glPolygonMode( GL_BACK, GL_FILL );
+        }
+        else
+        {
+            glPolygonMode( GL_BACK, GL_LINE );
+        }
         break;
     case Qt::Key_I:
         zoom_in();
@@ -362,9 +377,12 @@ void SlideGLWidget::keyPressEvent(QKeyEvent* event)
         zoom_out();
         break;
     case Qt::Key_S:
-        if (smoothshading) {
+        if (smoothshading)
+        {
             glShadeModel(GL_FLAT);
-        } else {
+        }
+        else
+        {
             glShadeModel(GL_SMOOTH);
         }
         smoothshading = !smoothshading;
