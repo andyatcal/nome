@@ -31,10 +31,9 @@
 #endif
 
 #include "face.h"
-#include "parameter.h"
 #include "transformation.h"
 #include "utils.h"
-
+class Parameter;
 class Group;
 
 using namespace std;
@@ -96,12 +95,14 @@ public:
      * @brief makeCopy: Make a copy of current mesh.
      * @return The copied mesh.
      */
-    virtual Mesh makeCopy();
+    Mesh makeCopy();
     /**
      * @brief transform: Transform this mesh.
      * @param t: The transformation for this mesh.
      */
     void transform(Transformation* t);
+    void transform(mat4 matrix);
+    mat4 transformToTop();
     void drawMesh(int startIndex, bool smoothShading);
     // Draw the selected vertices in OpenGL
     void drawVertices();
@@ -159,8 +160,7 @@ public:
     void makeFunnel();
     void updateFunnel();
     void updateFunnel_n();
-    void updateFunnel_ro();
-    void updateFunnel_ratio_or_h();
+    void updateFunnel_ro_ratio_or_h();
     void setFunnelParameterValues(string);
     vector<Parameter*> influencingParams;
     /* Add a parameter that influence this funnel. */

@@ -19,8 +19,11 @@ public:
     void setParameter(Parameter *param);
 private:
     Parameter *param;
+    QLabel *currValue;
 public slots:
     void changeValue(int);
+signals:
+    void paramValueChanged(float);
 };
 
 #endif // MYSLIDER_H

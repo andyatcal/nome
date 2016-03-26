@@ -49,6 +49,8 @@ public:
     Vertex * negOffset;
     /* Indicator of whether this vertex is selected.*/
     bool selected;
+    /* Indicator of whether this vertex is parametric. */
+    bool isParametric;
 };
 
 #endif // __VERTEX_H__

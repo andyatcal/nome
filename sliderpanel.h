@@ -7,13 +7,14 @@
 #include "myslider.h"
 #include "parameter.h"
 #include "parameterbank.h"
+#include "slideglwidget.h"
 class SliderPanel : public QWidget
 {
     Q_OBJECT
 
 public:
     SliderPanel();
-    SliderPanel(ParameterBank *bank);
+    SliderPanel(ParameterBank *bank, SlideGLWidget * canvas);
     ParameterBank *bank;
 };
 

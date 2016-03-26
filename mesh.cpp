@@ -6,12 +6,14 @@
  */
 
 #include "mesh.h"
-
+#include "parameter.h"
+#include "group.h"
 Mesh::Mesh(int type)
 {
     user_set_color = false;
     transformations_up.clear();
     parent = NULL;
+    this -> type = type;
     if(type == 1)
     {
         n = 0;
@@ -531,7 +533,6 @@ void Mesh::drawVertices() {
     vector<Vertex*>::iterator vIt;
     glPointSize(10);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
-    int counter = 0;
     for(vIt = vertList.begin(); vIt < vertList.end(); vIt++) {
         if((*vIt) -> selected) {
             glBegin(GL_POINTS);
@@ -624,6 +625,7 @@ Mesh Mesh::makeCopy() {
         newMesh.n = n;
         newMesh.ro = ro;
         newMesh.ratio = ratio;
+        newMesh.h = h;
         newMesh.n_expr = n_expr;
         newMesh.ro_expr = ro_expr;
         newMesh.ratio_expr = ratio_expr;
@@ -641,6 +643,34 @@ void Mesh::transform(Transformation* t)
     {
         (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
     }
+}
+
+void Mesh::transform(mat4 matrix)
+{
+    vector<Vertex*>::iterator vIt;
+    for(vIt = vertList.begin(); vIt < vertList.end(); vIt++)
+    {
+        (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
+    }
+}
+
+mat4 Mesh::transformToTop()
+{
+    mat4 result = mat4(1);
+    for(Transformation& t: transformations_up)
+    {
+        result = t.getMatrix() * result;
+    }
+    Group *p = this -> parent;
+    while(p != NULL)
+    {
+        for(Transformation& t : p -> transformations_up)
+        {
+            result = t.getMatrix() * result;
+        }
+        p = p -> parent;
+    }
+    return result;
 }
 
 void Mesh::setFunnelParameterValues(string input)
@@ -662,19 +692,19 @@ void Mesh::setFunnelParameterValues(string input)
             {
             case 0:
                 n_expr = nextExpression.substr(5);
-                n = int(evaluate_expression(n_expr, params) + 0.5);
+                n = int(evaluate_mesh_expression(n_expr, params, this) + 0.5);
                 break;
             case 1:
                 ro_expr = nextExpression.substr(5);
-                ro = evaluate_expression(ro_expr, params);
+                ro = evaluate_mesh_expression(ro_expr, params, this);
                 break;
             case 2:
                 ratio_expr = nextExpression.substr(5);
-                ratio = evaluate_expression(ratio_expr, params);
+                ratio = evaluate_mesh_expression(ratio_expr, params, this);
                 break;
             case 3:
                 h_expr = nextExpression.substr(5);
-                h = evaluate_expression(h_expr, params);
+                h = evaluate_mesh_expression(h_expr, params, this);
                 break;
             }
             nextExpression = "";
@@ -749,7 +779,7 @@ void Mesh::updateFunnel()
         if(new_ro != ro)
         {
             ro = new_ro;
-            updateFunnel_ro();
+            updateFunnel_ro_ratio_or_h();
         }
     }
     if(ratio_expr != "")
@@ -758,7 +788,7 @@ void Mesh::updateFunnel()
         if(new_ratio != ratio)
         {
             ratio = new_ratio;
-            updateFunnel_ratio_or_h();
+            updateFunnel_ro_ratio_or_h();
         }
     }
     if(h_expr != "")
@@ -767,7 +797,7 @@ void Mesh::updateFunnel()
         if(new_h != h)
         {
             h = new_h;
-            updateFunnel_ratio_or_h();
+            updateFunnel_ro_ratio_or_h();
         }
     }
 }
@@ -775,9 +805,11 @@ void Mesh::updateFunnel()
 void Mesh::updateFunnel_n()
 {
     makeFunnel();
+    computeNormals();
+    transform(transformToTop());
 }
 
-void Mesh::updateFunnel_ro()
+void Mesh::updateFunnel_ro_ratio_or_h()
 {
     for(int i = 0; i < n; i++)
     {
@@ -785,11 +817,6 @@ void Mesh::updateFunnel_ro()
         float currAngle = 2.0 * i / n * PI;
         newVertex -> position = vec3(ro * glm::cos(currAngle), ro * glm::sin(currAngle), 0);
     }
-    updateFunnel_ratio_or_h();
-}
-
-void Mesh::updateFunnel_ratio_or_h()
-{
     float ri = ro * (1 + ratio);
     for(int i = 0; i < n; i++)
     {
@@ -797,6 +824,8 @@ void Mesh::updateFunnel_ratio_or_h()
         float currAngle = 2.0 * i / n * PI;
         newVertex -> position = vec3(ri * glm::cos(currAngle), ri * glm::sin(currAngle), h);
     }
+    computeNormals();
+    transform(transformToTop());
 }
 
 void Mesh::makeFunnel()

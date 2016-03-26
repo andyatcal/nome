@@ -14,7 +14,7 @@ void MySlider::generalSetup()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
-    mainLayout -> addWidget(new QLabel((param -> name) + QString(" : ") +QString::number(param -> value)));
+    mainLayout -> addWidget(currValue = new QLabel((param -> name) + QString(" : ") +QString::number(param -> value)));
     QHBoxLayout *sliderLayout;
     mainLayout -> addLayout(sliderLayout = new QHBoxLayout);
     sliderLayout -> addWidget(new QLabel(QString::number(param -> start)));
@@ -36,5 +36,7 @@ void MySlider::changeValue(int newValue)
 {
     param -> value = newValue * (param -> stepsize) + param -> start;
     param -> update();
+    currValue-> setText((param -> name) + QString(" : ") +QString::number(param -> value));
+    emit paramValueChanged(param -> value);
 }
 

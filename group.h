@@ -85,6 +85,10 @@ public:
     void setName(string);
     /* The parent of this group. */
     Group* parent;
+    /**
+     * Build maps from parameters to the leaves of this group.
+     */
+    void mapFromParameters();
 };
 
 #endif // GROUP_H

@@ -92,9 +92,9 @@ void MainWindow::createCanvas(QString name)
     }
     else if (name.right(3).toLower() == "slf")
     {
-        slfParser->makeWithMiniSLF(banks, scene, name.toStdString());
-        createSliderPanel();
+        slfParser->makeWithMiniSLF(banks, params, scene, name.toStdString());
         canvas = new SlideGLWidget(scene);
+        createSliderPanel(canvas);
     }
     else
     {
@@ -105,11 +105,11 @@ void MainWindow::createCanvas(QString name)
     createControlPanel(canvas);
 }
 
-void MainWindow::createSliderPanel()
+void MainWindow::createSliderPanel(SlideGLWidget * canvas)
 {
     for(size_t i = 0; i < banks.size(); i++)
     {
-        SliderPanel *newPanel = new SliderPanel(&banks[i]);
+        SliderPanel *newPanel = new SliderPanel(&banks[i], canvas);
         newPanel -> show();
     }
 }

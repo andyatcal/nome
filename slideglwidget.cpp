@@ -26,8 +26,8 @@ SlideGLWidget::SlideGLWidget(Group &group, QWidget *parent) :
     QGLWidget(parent)
 {
     generalSetup();
-    hirachicalScene = group;
-    global_mesh_list = hirachicalScene.flattenedMeshes();
+    hirachicalScene = &group;
+    global_mesh_list = hirachicalScene -> flattenedMeshes();
     updateGlobalIndexList();
     errorMsg = new QMessageBox();
 }
@@ -727,4 +727,9 @@ void SlideGLWidget::updateGlobalIndexList()
 void SlideGLWidget::resetTrianglePanelty(QString new_value)
 {
     trianglePanelty = new_value.toFloat();
+}
+
+void SlideGLWidget::paramValueChanged(float)
+{
+    repaint();
 }

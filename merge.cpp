@@ -98,8 +98,6 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
             }
         }
     }
-
-    int counter = 0;
     set<Vertex*>::iterator sIt;
     set<Vertex*>::iterator siIt;
     set<Vertex*> vertices;

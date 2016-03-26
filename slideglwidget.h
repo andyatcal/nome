@@ -39,7 +39,6 @@
 #include "zipper.h"
 #include "parameter.h"
 #include "parameterbank.h"
-#include "sliderpanel.h"
 #include "minislfparser.h"
 #include <QMessageBox>
 #include <QColor>
@@ -197,17 +196,7 @@ private:
     /* The trianglePanelty for zipping function. */
     float trianglePanelty;
     /* The group to store the whole scene. */
-    Group hirachicalScene;
-    /* Store all meshes in this scene. */
-    vector<Mesh> mesehs;
-    /* Store all funnels in this scene. */
-    vector<Funnel> funnels;
-    /* The Mini SLF file parser. */
-    MiniSlfParser slfParser;
-    /* The parameter banks read from slfParser. */
-    vector<ParameterBank> parameterBanks;
-    /* The slider panels to show parameters.*/
-    vector<SliderPanel> sliderPanels;
+    Group *hirachicalScene;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -271,6 +260,8 @@ public slots:
      * @brief mergeAll: Merge all meshes from global_mesh_list into master_mesh
      */
     void mergeAll(bool);
+    /* Slider value changed.*/
+    void paramValueChanged(float);
 signals:
     /* A feedback signal send back to control panel statusBar.*/
     void feedback_status_bar(QString, int);

@@ -13,7 +13,11 @@ using namespace glm;
 
 float evaluate_expression(string expr, unordered_map<string, Parameter> *params);
 
+float evaluate_mesh_expression(string expr, unordered_map<string, Parameter> *params, Mesh * mesh);
+
 float getParameterValue(string name, unordered_map<string, Parameter> *params);
+
+float getMeshParameterValue(string name, unordered_map<string, Parameter> *params, Mesh * mesh);
 
 bool isOperator(char token);
 

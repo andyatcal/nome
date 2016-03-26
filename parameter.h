@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <vector>
-class Funnel;
+class Mesh;
 class Vertex;
 using namespace std;
 
@@ -23,8 +23,10 @@ public:
     float getValue();
     /* A list of objects to update when changing value of this parameter. */
     vector<Vertex*> influenceVertices;
-    vector<Funnel*> influenceFunnels;
+    vector<Mesh*> influenceMeshes;
     void update();
+    void addInfluenceMesh(Mesh * mesh);
+    void addInfluenceVertex(Vertex * vertex);
 };
 
 #endif // PARAMETER_H

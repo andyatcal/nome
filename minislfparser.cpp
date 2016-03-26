@@ -47,12 +47,15 @@ string warning(int type, int lineNumber)
     return "";
 }
 
-void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, string inputSIF)
+void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
+                                    unordered_map<string, Parameter> &params,
+                                    Group &group, string inputSIF)
 {
     banks.clear();
     group.clear();
     ifstream file(inputSIF);
-    if (!file.good()) {
+    if (!file.good())
+    {
         cout<<"THE PATH OF MINI SIF FILE IS NOT VAILD.";
         exit(1);
     }
@@ -60,7 +63,6 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
     int lineNumber = 1;
     bool createBank = false;
     string currentGroup = "";
-    unordered_map<string, Parameter> params;
     unordered_map<string, Parameter>::iterator pIt;
     unordered_map<string, Mesh> meshes;
     unordered_map<string, Mesh>::iterator meshIt;
@@ -176,7 +178,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
                     cout<<warning(2, lineNumber)<<endl;
                     goto newLineEnd;
                 }
-                banks[banks.size() - 1].addParameter(newParameter);
+                banks[banks.size() - 1].addParameter(&params[banks[banks.size() - 1].name.toStdString() + "_" + name]);
             }
             else if((*tIt) == "funnel")
             {
@@ -453,5 +455,5 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks, Group &group, 
     }
     group.setColor(QColor(0, 255, 0));
     group.assignColor();
-
+    group.mapFromParameters();
 }

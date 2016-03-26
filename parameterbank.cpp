@@ -5,7 +5,7 @@ ParameterBank::ParameterBank()
     parameters.clear();
 }
 
-void ParameterBank::addParameter(Parameter param)
+void ParameterBank::addParameter(Parameter *param)
 {
     parameters.push_back(param);
 }

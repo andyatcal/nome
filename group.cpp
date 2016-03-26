@@ -180,3 +180,21 @@ void Group::setName(string name)
 {
     this -> name = name;
 }
+
+void Group::mapFromParameters()
+{
+    vector<Mesh>::iterator mIt;
+    for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
+    {
+        vector<Parameter*> params = (*mIt).influencingParams;
+        for(Parameter*& p : params)
+        {
+            p->addInfluenceMesh(&(*mIt));
+        }
+    }
+    vector<Group>::iterator gIt;
+    for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
+    {
+        (*gIt).mapFromParameters();
+    }
+}
