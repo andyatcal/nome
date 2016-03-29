@@ -26,7 +26,7 @@ public:
     Transformation();
     Transformation(int type, float x, float y, float z);
     Transformation(int type, float x, float y, float z, float w);
-    Transformation(int type, string input1, string input2 = "");
+    Transformation(int type, unordered_map<string, Parameter> *params, string input1, string input2 = "");
     /**
      * @brief type: The type of this transformation.
      * 0: Nothing, matrix is an identity matrix.
@@ -107,6 +107,14 @@ public:
      * @return the transformation matrix.
      */
     mat4 getMatrix();
+    /**
+     * @brief updateParameter: Update the parameters of this transformation.
+     */
+    void updateParameter();
+    /**
+     * @brief updateMatrix: Update the matrix.
+     */
+    void updateMatrix();
     /**
      * @brief update: Update this transformation.
      */

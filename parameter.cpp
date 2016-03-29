@@ -22,11 +22,20 @@ void Parameter::update()
             m -> updateFunnel();
         }
     }
+    for(Transformation*& t : influenceTransformations)
+    {
+        t -> update();
+    }
 }
 
 void Parameter::addInfluenceMesh(Mesh * mesh)
 {
     influenceMeshes.push_back(mesh);
+}
+
+void Parameter::addInfluenceTransformation(Transformation * t)
+{
+    influenceTransformations.push_back(t);
 }
 
 void Parameter::addInfluenceVertex(Vertex * vertex)

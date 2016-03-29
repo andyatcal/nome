@@ -33,7 +33,7 @@ Transformation::Transformation(int type, float x, float y, float z)
     y_expr = "";
     z_expr = "";
     w_expr = "";
-    update();
+    updateMatrix();
 }
 
 Transformation::Transformation(int type, float x, float y, float z, float w)
@@ -48,12 +48,16 @@ Transformation::Transformation(int type, float x, float y, float z, float w)
     y_expr = "";
     z_expr = "";
     w_expr = "";
-    update();
+    updateMatrix();
 }
 
-Transformation::Transformation(int type, string input1, string input2)
+Transformation::Transformation(int type,
+                               unordered_map<string, Parameter> *params,
+                               string input1,
+                               string input2)
 {
     this -> type = type;
+    this -> params = params;
     string nextExpression = "";
     bool expressionMode = false;
     string number = "";
@@ -139,7 +143,11 @@ Transformation::Transformation(int type, string input1, string input2)
             break;
         }
     }
-    update();
+    isParametric = (x_expr != "" ||
+                    y_expr != "" ||
+                    z_expr != "" ||
+                    w_expr != "");
+    updateMatrix();
 }
 
 void Transformation::rotate()
@@ -189,7 +197,7 @@ mat4 Transformation::getMatrix()
     return matrix;
 }
 
-void Transformation::update()
+void Transformation::updateMatrix()
 {
     switch (type) {
     case 1:
@@ -205,6 +213,35 @@ void Transformation::update()
         mirror();
         break;
     }
+}
+
+void Transformation::updateParameter()
+{
+    if(isParametric)
+    {
+        if(x_expr != "")
+        {
+            x = evaluate_expression(x_expr, params);
+        }
+        if(y_expr != "")
+        {
+            y = evaluate_expression(y_expr, params);
+        }
+        if(z_expr != "")
+        {
+            z = evaluate_expression(z_expr, params);
+        }
+        if(w_expr != "")
+        {
+            w = evaluate_expression(w_expr, params);
+        }
+    }
+}
+
+void Transformation::update()
+{
+    updateParameter();
+    updateMatrix();
 }
 
 void Transformation::setGlobalParameter(unordered_map<string, Parameter> *params)

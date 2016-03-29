@@ -5,7 +5,7 @@
 #include <vector>
 class Mesh;
 class Vertex;
-class Tranformation;
+class Transformation;
 using namespace std;
 
 /**
@@ -25,8 +25,10 @@ public:
     /* A list of objects to update when changing value of this parameter. */
     vector<Vertex*> influenceVertices;
     vector<Mesh*> influenceMeshes;
+    vector<Transformation*> influenceTransformations;
     void update();
     void addInfluenceMesh(Mesh * mesh);
+    void addInfluenceTransformation(Transformation *t);
     void addInfluenceVertex(Vertex * vertex);
 };
 

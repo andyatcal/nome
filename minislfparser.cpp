@@ -339,8 +339,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                 angle.push_back(' ');
                             }
                         }
-                        Transformation t(1, xyz, angle);
-                        t.setGlobalParameter(&params);
+                        Transformation t(1, &params, xyz, angle);
                         transformations_up.push_back(t);
                     }
                     else if(*tIt == "translate" || *tIt == "scale")
@@ -378,14 +377,12 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         endWhile2:
                         if(isTranslate)
                         {
-                            Transformation t(3, xyz);
-                            t.setGlobalParameter(&params);
+                            Transformation t(3,&params, xyz);
                             transformations_up.push_back(t);
                         }
                         else
                         {
-                            Transformation t(2, xyz);
-                            t.setGlobalParameter(&params);
+                            Transformation t(2, &params, xyz);
                             transformations_up.push_back(t);
                         }
                     }
@@ -417,8 +414,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                             }
                         }
                         endWhile3:
-                        Transformation t(4, xyzw);
-                        t.setGlobalParameter(&params);
+                        Transformation t(4, &params, xyzw);
                         transformations_up.push_back(t);
                     }
                 }

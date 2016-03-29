@@ -183,6 +183,14 @@ void Group::setName(string name)
 
 void Group::mapFromParameters()
 {
+    for(Transformation& t : transformations_up)
+    {
+        vector<Parameter*> params = t.influencingParams;
+        for(Parameter*& p : params)
+        {
+            p->addInfluenceTransformation(&t);
+        }
+    }
     vector<Mesh>::iterator mIt;
     for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
     {
@@ -190,6 +198,14 @@ void Group::mapFromParameters()
         for(Parameter*& p : params)
         {
             p->addInfluenceMesh(&(*mIt));
+        }
+        for(Transformation& t : (*mIt).transformations_up)
+        {
+            vector<Parameter*> params = t.influencingParams;
+            for(Parameter*& p : params)
+            {
+                p->addInfluenceTransformation(&t);
+            }
         }
     }
     vector<Group>::iterator gIt;
