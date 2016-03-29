@@ -6,7 +6,7 @@
  */
 
 #include "transformation.h"
-
+#include "utils.h"
 Transformation::Transformation()
 {
     int type = 0;
@@ -51,14 +51,100 @@ Transformation::Transformation(int type, float x, float y, float z, float w)
     update();
 }
 
-Transformation::Transformation(string input)
+Transformation::Transformation(int type, string input1, string input2)
 {
-
+    this -> type = type;
+    string nextExpression = "";
+    bool expressionMode = false;
+    string number = "";
+    int i = 0;
+    for(char& c : (input1 + " " + input2))
+    {
+        if(c == '{')
+        {
+            expressionMode = true;
+        }
+        else if(c == '}')
+        {
+            expressionMode = false;
+            switch(i)
+            {
+            case 0:
+                x_expr = nextExpression.substr(5);
+                x = evaluate_transformation_expression(x_expr, params, this);
+                break;
+            case 1:
+                y_expr = nextExpression.substr(5);
+                y = evaluate_transformation_expression(y_expr, params, this);
+                break;
+            case 2:
+                z_expr = nextExpression.substr(5);
+                z = evaluate_transformation_expression(z_expr, params, this);
+                break;
+            case 3:
+                w_expr = nextExpression.substr(5);
+                w = evaluate_transformation_expression(w_expr, params, this);
+                break;
+            }
+            nextExpression = "";
+            i++;
+        }
+        else if(expressionMode)
+        {
+            nextExpression.push_back(c);
+        }
+        else if(!expressionMode && ((c >= '0' &&  c <= '9') || c == '.' || c == '-' || c == '+'))
+        {
+            number.push_back(c);
+        }
+        else
+        {
+            if(number != "")
+            {
+                switch(i)
+                {
+                case 0:
+                    x = stof(number);
+                    break;
+                case 1:
+                    y = stof(number);
+                    break;
+                case 2:
+                    z = stof(number);
+                    break;
+                case 3:
+                    w = stof(number);
+                    break;
+                }
+                number = "";
+                i++;
+            }
+        }
+    }
+    if(number != "")
+    {
+        switch(i)
+        {
+        case 0:
+            x = stof(number);
+            break;
+        case 1:
+            y = stof(number);
+            break;
+        case 2:
+            z = stof(number);
+            break;
+        case 3:
+            w = stof(number);
+            break;
+        }
+    }
+    update();
 }
 
 void Transformation::rotate()
 {
-    matrix = glm::rotate(w, vec3(x, y, z));
+    matrix = glm::rotate( w / 180 * glm::pi<float>(), vec3(x, y, z));
 }
 
 void Transformation::scale()
@@ -119,4 +205,14 @@ void Transformation::update()
         mirror();
         break;
     }
+}
+
+void Transformation::setGlobalParameter(unordered_map<string, Parameter> *params)
+{
+    this -> params = params;
+}
+
+void Transformation::addParam(Parameter* param)
+{
+    influencingParams.push_back(param);
 }

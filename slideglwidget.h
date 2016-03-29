@@ -102,22 +102,23 @@ private:
      * @param name: The path to the input file.
      */
     void makeSIFMesh(string name);
-    /*
-     * The master mesh. As a result of SIF parser.
-     * Or as a result of merging the scene.
+    /**
+     * @brief makeSLFMesh: Make a mesh by the output of SLF file parser.
      */
+    void makeSLFMesh();
+    /* The master mesh. As a result of SIF parser. */
     Mesh master_mesh;
-    /*
-     * The working mesh that the user modified.
-     * Can be merged into the master mesh.
-     */
+    /* The mesh that contains temporary added meshes.*/
     Mesh temp_mesh;
+    /* The merged result of all meshes in the scene and temp mesh. */
+    Mesh merged_mesh;
+    /* The current subdivided mesh. */
+    Mesh subdiv_mesh;
     /* A subdivider to handle subdivision.*/
     Subdivision *subdivider;
     /* An offseter to handle offsetting.*/
     Offset *offseter;
-    /* A pointer to the subdivided mesh. */
-    Mesh subdiv_mesh;
+
     /**
      * The cache of mesh that has been subdivided.
      * The index in this vector = subdivision level - 1.
@@ -127,9 +128,10 @@ private:
     Mesh offset_mesh;
     /* A pointer to the subdivided offset mesh. */
     Mesh subdiv_offset_mesh;
-    /* A pointer to the current view mesh. */
-    Mesh *view_mesh;
-    /* Selection object to handle mouse selection.*/
+    /*
+     * Selection object to handle mouse selection.
+     * Only works for interactive editing mode.
+     */
     MySelection mySelect;
     /**
      * Get a normalized vector from the center of the virtual ball O to a
@@ -160,13 +162,17 @@ private:
     /* Zoom out in the current view. */
     void zoom_out();
     /*
-     * The default foreground color.
+     * The foreground color.
      */
     QColor foreColor;
     /*
-     * The default background color.
+     * The background color.
      */
     QColor backColor;
+    /*
+     * The temp mesh color.
+     */
+    QColor tempColor;
     /* Auto check if the newly added face can have
      * same orientation with master_mesh. */
     bool auto_check;
@@ -193,12 +199,34 @@ private:
     vector<int> global_name_index_list;
     /* Update the global name index list.*/
     void updateGlobalIndexList();
-    /* A wrapper class to draw the whole scene. */
-    void drawScene();
+    /* A wrapper class to draw the whole scene.
+     * The drawing result depends on the viewer_mode.
+     */
+    void draw_scene();
     /* The trianglePanelty for zipping function. */
     float trianglePanelty;
-    /* The group to store the whole scene. */
-    Group *hirachicalScene;
+    /* The pointer to the whole scene. */
+    Group *hierarchical_scene;
+    /* A copy of the hierarchical_scene, with all meshes transformed. */
+    Group hierarchical_scene_transformed;
+    /* Create the hierarchical_scene_transformed. */
+    void transform_meshes_in_scene();
+    /* The current mode of view.
+     * 1: Hierarchical Scene.
+     * SLF will read in the scene with parameters set up.
+     * SIF will read in just one mesh.
+     * This is the interactive editing mode.
+     * 2: Merged Modified Mesh
+     * This is the merged result of the modified mesh. It is a perfect
+     * 2-manifold to serve as the input of the subdivision.
+     * 3: Subdivied Mesh
+     * 4: Offseted Mesh
+     */
+    int viewer_mode;
+    /* A wrapper function to draw the viewed mesh. */
+    void draw_mesh(int start_index, Mesh *mesh);
+    /* Current work phase. */
+    int work_phase;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -220,14 +248,9 @@ protected:
 public slots:
     /**
      * @brief viewContentChanged: Change the current view mesh.
-     * @param view_content:
-     * 0 for hirachical scene
-     * 1 for master mesh
-     * 2 for subdivision mesh
-     * 3 for offset mesh
-     * 4 for subdivision on offset mesh
+     * @param viewer_mode, the mode for the viewer.
      */
-    void viewContentChanged(int);
+    void viewContentChanged(int viewer_mode);
     /* Receive the signal from control panel to do subdivision.*/
     void levelChanged(int);
     /* Receive the signal to reset the viewing direction. */

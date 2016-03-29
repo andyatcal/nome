@@ -57,9 +57,9 @@ void ControlPanel::setupLayout()
     setLayout(mainLayout = new QVBoxLayout);
     mainLayout -> setMargin(10);
     mainLayout->setSpacing(5);
-    mainLayout -> addWidget(new QLabel("VIEW"));
+    mainLayout -> addWidget(new QLabel("VIEWER MODE"));
     mainLayout -> addLayout(viewLayout = new QVBoxLayout);
-    mainLayout -> addWidget(new QLabel("MODE"));
+    mainLayout -> addWidget(new QLabel("EDITER MODE"));
     mainLayout -> addLayout(modeLayout = new QVBoxLayout);
     mainLayout -> addWidget(new QLabel("SUBDIVISION"));
     mainLayout -> addLayout(subdivLayout = new QVBoxLayout);
@@ -70,7 +70,7 @@ void ControlPanel::setupLayout()
     /* View layout. */
     viewLayout -> addWidget(viewContent = new QComboBox);
     viewContent -> addItem("Hirachical Scene");
-    viewContent -> addItem("Initial Mesh");
+    viewContent -> addItem("Merged Mesh");
     viewContent -> addItem("Subdivision Mesh");
     viewContent -> addItem("Offset Mesh");
     viewContent -> addItem("Subdivision on Offset Mesh");

@@ -5,6 +5,7 @@
 #include <vector>
 class Mesh;
 class Vertex;
+class Tranformation;
 using namespace std;
 
 /**

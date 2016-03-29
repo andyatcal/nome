@@ -290,33 +290,31 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     {
                         string xyz;
                         string angle;
-                        vec3 axis;
-                        float radian;
                         bool makingXYZ = false;
                         bool makingAngle = false;
+                        bool doneXYZ = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
                             for(char& c : (*tIt))
                             {
                                 if(c == '(')
                                 {
-                                    if(!makingXYZ)
+                                    if(!doneXYZ)
                                     {
                                         makingXYZ = true;
                                     }
-                                    else if(!makingAngle)
+                                    else
                                     {
                                         makingAngle = true;
-                                        makingXYZ = false;
                                     }
                                 }
                                 else if(c == ')' && makingXYZ)
                                 {
-                                    axis = getXYZ(xyz);
+                                    doneXYZ = true;
                                 }
                                 else if(c == ')' && makingAngle)
                                 {
-                                    radian = getOneValue(angle) / 180 * PI;
+                                    makingAngle = false;
                                     goto endWhile1;
                                 }
                                 else
@@ -341,7 +339,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                 angle.push_back(' ');
                             }
                         }
-                        Transformation t(1, axis[0], axis[1], axis[2], radian);
+                        Transformation t(1, xyz, angle);
+                        t.setGlobalParameter(&params);
                         transformations_up.push_back(t);
                     }
                     else if(*tIt == "translate" || *tIt == "scale")
@@ -352,7 +351,6 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                             isTranslate = true;
                         }
                         string xyz = "";
-                        vec3 v;
                         bool makingXYZ = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
@@ -364,7 +362,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                 }
                                 else if(c == ')')
                                 {
-                                    v = getXYZ(xyz);
+                                    makingXYZ = false;
                                     goto endWhile2;
                                 }
                                 else if(makingXYZ)
@@ -380,19 +378,20 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         endWhile2:
                         if(isTranslate)
                         {
-                            Transformation t(3, v[0], v[1], v[2]);
+                            Transformation t(3, xyz);
+                            t.setGlobalParameter(&params);
                             transformations_up.push_back(t);
                         }
                         else
                         {
-                            Transformation t(2, v[0], v[1], v[2]);
+                            Transformation t(2, xyz);
+                            t.setGlobalParameter(&params);
                             transformations_up.push_back(t);
                         }
                     }
                     else if(*tIt == "mirror")
                     {
                         string xyzw = "";
-                        vec4 v;
                         bool makingXYZW = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
@@ -404,7 +403,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                 }
                                 else if(c == ')')
                                 {
-                                    v = getXYZW(xyzw);
+                                    makingXYZW = false;
                                     goto endWhile3;
                                 }
                                 else if(makingXYZW)
@@ -418,7 +417,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                             }
                         }
                         endWhile3:
-                        Transformation t(4, v[0], v[1], v[2], v[3]);
+                        Transformation t(4, xyzw);
+                        t.setGlobalParameter(&params);
                         transformations_up.push_back(t);
                     }
                 }
@@ -453,7 +453,5 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
         newLineEnd:
         lineNumber++;
     }
-    group.setColor(QColor(0, 255, 0));
-    group.assignColor();
     group.mapFromParameters();
 }

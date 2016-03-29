@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include "utils.h"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 
@@ -24,7 +26,7 @@ public:
     Transformation();
     Transformation(int type, float x, float y, float z);
     Transformation(int type, float x, float y, float z, float w);
-    Transformation(string input);
+    Transformation(int type, string input1, string input2 = "");
     /**
      * @brief type: The type of this transformation.
      * 0: Nothing, matrix is an identity matrix.
@@ -66,7 +68,7 @@ public:
      * Mirroring: the constant of intercept of mirroring plane.
      */
     float w;
-    /* Show if this transformation is parametric. */
+    /* Indicate if this transformation is parametric. */
     bool isParametric;
     /* The string expression of parameter x. */
     string x_expr;
@@ -76,6 +78,10 @@ public:
     string z_expr;
     /* The string expression of parameter w. */
     string w_expr;
+    /* A pointer to the global parameter. */
+    unordered_map<string, Parameter> *params;
+    /* Set the global parameter pointer for this mesh. */
+    void setGlobalParameter(unordered_map<string, Parameter> *params);
     /* The stored transformation matrix.*/
     mat4 matrix;
     /**
@@ -105,6 +111,10 @@ public:
      * @brief update: Update this transformation.
      */
     void update();
+    /* A list of parameters influencing this transformation.*/
+    vector<Parameter*> influencingParams;
+    /* Add a parameter that influence this transformation. */
+    void addParam(Parameter*);
 };
 
 #endif // TRANSFORMATION_H

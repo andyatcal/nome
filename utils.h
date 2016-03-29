@@ -9,15 +9,30 @@
 #include <stack>
 #include <vector>
 
+class Transformation;
 using namespace glm;
 
-float evaluate_expression(string expr, unordered_map<string, Parameter> *params);
+float evaluate_expression(string expr,
+                          unordered_map<string, Parameter> *params);
 
-float evaluate_mesh_expression(string expr, unordered_map<string, Parameter> *params, Mesh * mesh);
+float evaluate_mesh_expression(string expr,
+                               unordered_map<string, Parameter> *params,
+                               Mesh * mesh);
 
-float getParameterValue(string name, unordered_map<string, Parameter> *params);
+float evaluate_transformation_expression(string expr,
+                               unordered_map<string, Parameter> *params,
+                               Transformation * t);
 
-float getMeshParameterValue(string name, unordered_map<string, Parameter> *params, Mesh * mesh);
+float getParameterValue(string name,
+                        unordered_map<string, Parameter> *params);
+
+float getMeshParameterValue(string name,
+                            unordered_map<string, Parameter> *params,
+                            Mesh * mesh);
+
+float getTransformationParameterValue(string name,
+                                      unordered_map<string, Parameter> *params,
+                                      Transformation *t);
 
 bool isOperator(char token);
 

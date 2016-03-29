@@ -806,7 +806,7 @@ void Mesh::updateFunnel_n()
 {
     makeFunnel();
     computeNormals();
-    transform(transformToTop());
+    //transform(transformToTop());
 }
 
 void Mesh::updateFunnel_ro_ratio_or_h()
@@ -825,7 +825,7 @@ void Mesh::updateFunnel_ro_ratio_or_h()
         newVertex -> position = vec3(ri * glm::cos(currAngle), ri * glm::sin(currAngle), h);
     }
     computeNormals();
-    transform(transformToTop());
+    //transform(transformToTop());
 }
 
 void Mesh::makeFunnel()

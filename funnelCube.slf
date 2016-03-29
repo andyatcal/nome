@@ -3,18 +3,20 @@ bank fp
     set     ro      0.4     0.1     1.0     0.1
     set     ratio   -0.2    -0.5    0.5     0.1
     set     h       0.2     0.1     1.5     0.1
+    #set     z       -0.5     -0.1  -1.0     0.1
 endbank
 
 funnel fun ({expr $fp_n} {expr $fp_ro} {expr $fp_ratio} {expr $fp_h}) endfunnel
 #funnel fun ({expr $fp_n} 0.4 -0.2 0.2) endfunnel
 
 group cubeMadeByFunnel
-    instance fun translate (0 0 -0.5) endinstance
-    instance fun translate (0 0 -0.5) rotate (1 0 0) (180) endinstance
-    instance fun translate (0 0 -0.5) rotate (1 0 0) (90) endinstance
-    instance fun translate (0 0 -0.5) rotate (1 0 0) (-90) endinstance
-    instance fun translate (0 0 -0.5) rotate (0 1 0) (90) endinstance
-    instance fun translate (0 0 -0.5) rotate (0 1 0) (-90) endinstance
+    #instance fun endinstance
+    instance fun translate (0 0 0.5) endinstance
+    instance fun translate (0 0 0.5) rotate (1 0 0) (180) endinstance
+    instance fun translate (0 0 0.5) rotate (1 0 0) (90) endinstance
+    instance fun translate (0 0 0.5) rotate (1 0 0) (-90) endinstance
+    instance fun translate (0 0 0.5) rotate (0 1 0) (90) endinstance
+    instance fun translate (0 0 0.5) rotate (0 1 0) (-90) endinstance
 endgroup
 
 instance cubeMadeByFunnel endinstance

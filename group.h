@@ -74,6 +74,7 @@ public:
     vector<Transformation> transformations_up;
     /* Set the transformation of this group. */
     void addTransformation(Transformation new_transform);
+    /* Set the transformation of this group. */
     void setTransformation(vector<Transformation> new_transforms);
     /* make a copy of this group.*/
     Group makeCopy();
