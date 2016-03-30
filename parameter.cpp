@@ -17,9 +17,14 @@ void Parameter::update()
 {
     for(Mesh*& m : influenceMeshes)
     {
-        if(m -> type == 1)
+        switch(m -> type)
         {
+        case 1:
             m -> updateFunnel();
+            break;
+        case 2:
+            m -> updateTunnel();
+            break;
         }
     }
     for(Transformation*& t : influenceTransformations)

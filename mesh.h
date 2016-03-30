@@ -158,10 +158,15 @@ public:
     string ratio_expr;
     string h_expr;
     void makeFunnel();
+    void makeTunnel();
     void updateFunnel();
+    void updateTunnel();
     void updateFunnel_n();
+    void updateTunnel_n();
     void updateFunnel_ro_ratio_or_h();
+    void updateTunnel_ro_ratio_or_h();
     void setFunnelParameterValues(string);
+    void setTunnelParameterValues(string);
     vector<Parameter*> influencingParams;
     /* Add a parameter that influence this funnel. */
     void addParam(Parameter*);

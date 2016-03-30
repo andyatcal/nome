@@ -226,6 +226,51 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 newFunnel.computeNormals();
                 //group.addMesh(newFunnel);
             }
+            else if((*tIt) == "tunnel")
+            {
+                Mesh newTunnel(2);
+                newTunnel.setGlobalParameter(&params);
+                if(++tIt < tokens.end())
+                {
+                    newTunnel.name = (*tIt);
+                }
+                string tunnel_expression;
+                bool expression_input = false;
+                while(++tIt < tokens.end())
+                {
+                    for(char& c : (*tIt))
+                    {
+                        if(c == '(')
+                        {
+                            expression_input = true;
+                        }
+                        else if(c == ')')
+                        {
+                            expression_input = false;
+                        }
+                        else if(c == '#')
+                        {
+                            goto newLineEnd;
+                        }
+                        else if(expression_input)
+                        {
+                            tunnel_expression.push_back(c);
+                        }
+                    }
+                    tunnel_expression.push_back(' ');
+                }
+                newTunnel.setTunnelParameterValues(tunnel_expression);
+                newTunnel.makeTunnel();
+                if(meshes.find(newTunnel.name) == meshes.end())
+                {
+                    meshes[newTunnel.name] = newTunnel;
+                }
+                else
+                {
+                    cout<<warning(3, lineNumber)<<endl;
+                }
+                newTunnel.computeNormals();
+            }
             else if((*tIt) == "group")
             {
                 Group newGroup;
