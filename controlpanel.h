@@ -107,6 +107,7 @@ public slots:
     void resetBackColor(bool);
     void addModeChecked(bool);
     void zipModeChecked(bool);
+    void pushMerge(bool);
 signals:
     void makeOffsetMesh(float);
 };
