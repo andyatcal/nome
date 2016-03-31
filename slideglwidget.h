@@ -230,6 +230,8 @@ private:
     int subdiv_level;
     /* The current offset value. */
     float offset_value;
+    /* Merge all meshes from global_mesh_list into master_mesh.*/
+    void mergeAll();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -284,10 +286,8 @@ public slots:
     void clearSelectionCalled(bool);
     /* Reset the triangle panelty of zipping function. */
     void resetTrianglePanelty(QString);
-    /**
-     * @brief mergeAll: Merge all meshes from global_mesh_list into master_mesh
-     */
-    void mergeAll(bool);
+    /* @brief mergeCalled: Recieve the signal from control panel to merge. */
+    void mergeCalled(bool);
     /* Slider value changed.*/
     void paramValueChanged(float);
 signals:

@@ -90,13 +90,18 @@ void SlideGLWidget::transform_meshes_in_scene()
     global_mesh_list.push_back(&temp_mesh);
 }
 
-void SlideGLWidget::mergeAll(bool)
+void SlideGLWidget::mergeAll()
 {
-    viewer_mode = 1;
     work_phase = glm::max(work_phase, 1);
     merged_mesh = merge(global_mesh_list);
     merged_mesh.color = foreColor;
     merged_mesh.computeNormals();
+}
+
+void SlideGLWidget::mergeCalled(bool)
+{
+    viewer_mode = 1;
+    mergeAll();
     repaint();
 }
 
@@ -287,21 +292,25 @@ void SlideGLWidget::paintGL()
     /* When we are at editing mode. */
     case 0:
         draw_scene();
+        break;
     case 1:
         if(work_phase > 0)
         {
             draw_mesh(0, &merged_mesh);
         }
+        break;
     case 2:
         if(work_phase > 1)
         {
             draw_mesh(0, &subdiv_mesh);
         }
+        break;
     case 3:
         if(work_phase > 2)
         {
             draw_mesh(0, &offset_mesh);
         }
+        break;
     }
 }
 
@@ -401,44 +410,43 @@ void SlideGLWidget::keyPressEvent(QKeyEvent* event)
 
 void SlideGLWidget::subdivide(int level)
 {
-    viewer_mode = 2;
-    work_phase = glm::max(work_phase, 2);
-    if(level == 0) {
+    if(level <= 0) {
         subdiv_mesh = merged_mesh;
         return;
     }
-    int cachedLevel = cache_subdivided_meshes.size();
-    if(cachedLevel >= level)
-    {
-        subdiv_mesh = cache_subdivided_meshes[level - 1];
-    }
-    else
-    {
-        if(cachedLevel == 0)
-        {
-            subdiv_mesh = merged_mesh;
-        }
-        else
-        {
-            subdiv_mesh = cache_subdivided_meshes[cachedLevel - 1];
-        }
-        while(cachedLevel <= level)
-        {
-            subdiv_mesh = subdiv_mesh.makeCopy();
-            subdivider = new Subdivision(subdiv_mesh);
-            subdiv_mesh = subdivider->ccSubdivision(1);
-            subdiv_mesh.computeNormals();
-            cache_subdivided_meshes.push_back(subdiv_mesh);
-            cachedLevel++;
-        }
-    }
+    //int cachedLevel = cache_subdivided_meshes.size();
+    //if(cachedLevel >= level)
+    //{
+    //    subdiv_mesh = cache_subdivided_meshes[level - 1];
+    //}
+    //else
+    //{
+    //    if(cachedLevel == 0)
+    //    {
+    //        subdiv_mesh = merged_mesh;
+    //    }
+    //    else
+    //    {
+    //        subdiv_mesh = cache_subdivided_meshes[cachedLevel - 1];
+    //    }
+    //    while(cachedLevel <= level)
+    //    {
+    //        subdiv_mesh = subdiv_mesh.makeCopy();
+    //        subdivider = new Subdivision(subdiv_mesh);
+    //        subdiv_mesh = subdivider->ccSubdivision(1);
+    //        subdiv_mesh.computeNormals();
+    //        cache_subdivided_meshes.push_back(subdiv_mesh);
+    //        cachedLevel++;
+    //    }
+    //}
+    subdivider = new Subdivision(merged_mesh.makeCopy());
+    subdiv_mesh = subdivider->ccSubdivision(level);
+    subdiv_mesh.computeNormals();
     subdiv_mesh.color = foreColor;
-    repaint();
 }
 
 void SlideGLWidget::offset(float value)
 {
-    viewer_mode = 3;
     work_phase = glm::max(work_phase, 3);
     if(value == 0)
     {
@@ -455,7 +463,6 @@ void SlideGLWidget::offset(float value)
     }
     offseter -> makeFullOffset();
     offset_mesh = offseter->offsetMesh;
-    repaint();
 }
 
 void SlideGLWidget::viewContentChanged(int viewer_mode)
@@ -466,9 +473,12 @@ void SlideGLWidget::viewContentChanged(int viewer_mode)
 
 void SlideGLWidget::levelChanged(int new_level)
 {
+    work_phase = glm::max(work_phase, 2);
+    subdiv_level = new_level;
     subdivide(new_level);
     offset_mesh.clear();
     subdiv_offset_mesh.clear();
+    viewer_mode = 2;
     repaint();
     //emit feedback_status_bar(tr("Subdivision Finished. Level: ")
     //                         + QString::number(new_level), 0);
@@ -476,8 +486,11 @@ void SlideGLWidget::levelChanged(int new_level)
 
 void SlideGLWidget::offsetValueChanged(float new_offset_value)
 {
+    viewer_mode = 3;
+    offset_value = new_offset_value;
     offset(new_offset_value);
     subdiv_offset_mesh.clear();
+    repaint();
 }
 
 void SlideGLWidget::resetViewDirection(bool)
@@ -488,14 +501,16 @@ void SlideGLWidget::resetViewDirection(bool)
 
 void SlideGLWidget::zoom_in()
 {
-    if(cameraDistance > 0.1) {
+    if(cameraDistance > 0.1)
+    {
         cameraDistance *= 0.9;
     }
 }
 
 void SlideGLWidget::zoom_out()
 {
-    if(cameraDistance < 200) {
+    if(cameraDistance < 200)
+    {
         cameraDistance *= 1.1;
     }
 }
@@ -748,10 +763,11 @@ void SlideGLWidget::paramValueChanged(float)
     updateGlobalIndexList();
     if(work_phase >= 1)
     {
-        mergeAll(true);
+        mergeAll();
     }
     if(work_phase >= 2)
     {
+        //cache_subdivided_meshes.clear();
         subdivide(subdiv_level);
     }
     if(work_phase >= 3)

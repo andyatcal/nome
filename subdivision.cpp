@@ -8,7 +8,7 @@
 
 #include "subdivison.h"
 
-Subdivision::Subdivision(Mesh & mesh){
+Subdivision::Subdivision(Mesh mesh){
     currMesh = mesh;
 }
 
@@ -472,8 +472,9 @@ Mesh Subdivision::ccSubdivision(int level){
         makeEdgePoints(newMesh.vertList);
         makeVertexPointsD(newMesh.vertList);
         compileNewMesh(newMesh.faceList);
-        newMesh.color = currMesh.color;
+        currMesh = newMesh;
+        newMesh.clear();
     }
-    return newMesh;
+    return currMesh;
 }
 

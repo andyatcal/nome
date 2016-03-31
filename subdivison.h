@@ -25,7 +25,7 @@ public:
     Subdivision(){};
     // Constructor.
     // @param mesh: the reference of given mesh.
-    Subdivision(Mesh &mesh);
+    Subdivision(Mesh mesh);
     // The integration of subdivision.
     // @param level: level of Catmull-Clark subdivision.
     Mesh ccSubdivision(int level);
