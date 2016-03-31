@@ -118,7 +118,6 @@ private:
     Subdivision *subdivider;
     /* An offseter to handle offsetting.*/
     Offset *offseter;
-
     /**
      * The cache of mesh that has been subdivided.
      * The index in this vector = subdivision level - 1.
@@ -227,6 +226,10 @@ private:
     void draw_mesh(int start_index, Mesh *mesh);
     /* Current work phase. */
     int work_phase;
+    /* The current subdivision level.*/
+    int subdiv_level;
+    /* The current offset value. */
+    float offset_value;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

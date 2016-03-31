@@ -78,6 +78,10 @@ public:
     void setTransformation(vector<Transformation> new_transforms);
     /* make a copy of this group.*/
     Group makeCopy();
+    /* make a copy of this group for future transformation. */
+    Group makeCopyForTransform();
+    /* Update me based on what I copied from .*/
+    void updateCopyForTransform();
     /* Clear this group.*/
     void clear();
     /* name of this group. */
@@ -90,6 +94,8 @@ public:
      * Build maps from parameters to the leaves of this group.
      */
     void mapFromParameters();
+    /* A pointer to the original group before transformation. */
+    Group * before_transform_group;
 };
 
 #endif // GROUP_H

@@ -74,7 +74,7 @@ void ControlPanel::setupLayout()
     viewContent -> addItem("Subdivision Mesh");
     viewContent -> addItem("Offset Mesh");
     viewContent -> addItem("Subdivision on Offset Mesh");
-    viewContent -> setCurrentIndex(1);
+    viewContent -> setCurrentIndex(0);
     viewLayout -> addWidget(resetViewButton = new QPushButton(tr("Reset View")));
     /* Mode layout.*/
     modeLayout -> addLayout(addLayout = new QHBoxLayout);

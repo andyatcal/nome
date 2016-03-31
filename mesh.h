@@ -97,6 +97,13 @@ public:
      */
     Mesh makeCopy();
     /**
+     * @brief makeCopyForTransform: Make a copy of current mesh.
+     * It is used for future transformation.
+     * @return The copied mesh in order to transform.
+     */
+    Mesh makeCopyForTransform();
+    void updateCopyForTransform();
+    /**
      * @brief transform: Transform this mesh.
      * @param t: The transformation for this mesh.
      */
@@ -170,6 +177,8 @@ public:
     vector<Parameter*> influencingParams;
     /* Add a parameter that influence this funnel. */
     void addParam(Parameter*);
+    /* The pointer to the copied mesh before transformation. */
+    Mesh * before_transform_mesh;
 };
 
 // @param p1, p2, p3 are positions of three vertices,

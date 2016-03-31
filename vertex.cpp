@@ -13,6 +13,7 @@ Vertex::Vertex(){
     oneEdge = NULL;
     ID = 0;
     selected = false;
+    before_transform_vertex = NULL;
 }
 
 Vertex::Vertex(float x, float y, float z, unsigned long ID) {
@@ -21,4 +22,5 @@ Vertex::Vertex(float x, float y, float z, unsigned long ID) {
     oneEdge = NULL;
     ID = ID;
     selected = false;
+    before_transform_vertex = NULL;
 }

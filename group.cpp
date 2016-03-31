@@ -176,6 +176,49 @@ Group Group::makeCopy()
     return newGroup;
 }
 
+Group Group::makeCopyForTransform()
+{
+    Group newGroup;
+    newGroup.before_transform_group = this;
+    newGroup.clear();
+    vector<Mesh>::iterator mIt;
+    vector<Group>::iterator gIt;
+    vector<PolyLine>::iterator pIt;
+    for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
+    {
+        Mesh newMesh = (*mIt).makeCopyForTransform();
+        newMesh.transformations_up = (*mIt).transformations_up;
+        newGroup.addMesh(newMesh);
+    }
+    for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
+    {
+        PolyLine newPolyline = (*pIt).makeCopy();
+        newPolyline.transformations_up = (*pIt).transformations_up;
+        newGroup.addPolyline(newPolyline);
+    }
+    for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
+    {
+        Group copyGroup = (*gIt).makeCopyForTransform();
+        copyGroup.transformations_up = (*gIt).transformations_up;
+        newGroup.addGroup(copyGroup);
+    }
+    return newGroup;
+}
+
+void Group::updateCopyForTransform()
+{
+    transformations_up = before_transform_group -> transformations_up;
+    vector<Mesh>::iterator mIt;
+    vector<Group>::iterator gIt;
+    for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
+    {
+        (*mIt).updateCopyForTransform();
+    }
+    for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
+    {
+        (*gIt).updateCopyForTransform();
+    }
+}
 void Group::setName(string name)
 {
     this -> name = name;

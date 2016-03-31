@@ -77,6 +77,7 @@ void SlideGLWidget::makeSIFMesh(string name)
 
 void SlideGLWidget::makeSLFMesh()
 {
+    hierarchical_scene_transformed = hierarchical_scene->makeCopyForTransform();
     transform_meshes_in_scene();
     hierarchical_scene_transformed.setColor(foreColor);
     hierarchical_scene_transformed.assignColor();
@@ -84,7 +85,7 @@ void SlideGLWidget::makeSLFMesh()
 
 void SlideGLWidget::transform_meshes_in_scene()
 {
-    hierarchical_scene_transformed = hierarchical_scene->makeCopy();
+    hierarchical_scene_transformed.updateCopyForTransform();
     global_mesh_list = hierarchical_scene_transformed.flattenedMeshes();
     global_mesh_list.push_back(&temp_mesh);
 }
@@ -95,6 +96,7 @@ void SlideGLWidget::mergeAll(bool)
     work_phase = glm::max(work_phase, 1);
     merged_mesh = merge(global_mesh_list);
     merged_mesh.color = foreColor;
+    merged_mesh.computeNormals();
     repaint();
 }
 
@@ -430,7 +432,7 @@ void SlideGLWidget::subdivide(int level)
             cachedLevel++;
         }
     }
-    subdiv_mesh.color = master_mesh.color;
+    subdiv_mesh.color = foreColor;
     repaint();
 }
 
@@ -743,8 +745,18 @@ void SlideGLWidget::resetTrianglePanelty(QString new_value)
 void SlideGLWidget::paramValueChanged(float)
 {
     transform_meshes_in_scene();
-    hierarchical_scene_transformed.setColor(foreColor);
-    hierarchical_scene_transformed.assignColor();
     updateGlobalIndexList();
+    if(work_phase >= 1)
+    {
+        mergeAll(true);
+    }
+    if(work_phase >= 2)
+    {
+        subdivide(subdiv_level);
+    }
+    if(work_phase >= 3)
+    {
+        offset(offset_value);
+    }
     repaint();
 }

@@ -9,7 +9,7 @@
 #define __VERTEX_H__
 
 #include <glm/glm.hpp>
-
+#include <string>
 using namespace glm;
 using namespace std;
 
@@ -47,10 +47,19 @@ public:
     Vertex * posOffset;
     /* A pointer to the negative offset vertex in offsetting. */
     Vertex * negOffset;
+    /* A pointer to its original vertex before transformation.
+     * This is only used for a transformed mesh. */
+    Vertex * before_transform_vertex;
     /* Indicator of whether this vertex is selected.*/
     bool selected;
     /* Indicator of whether this vertex is parametric. */
     bool isParametric;
+    /* The string expression of its position x. */
+    string x_expr;
+    /* The string expression of its position y. */
+    string y_expr;
+    /* The string expression of its position z. */
+    string z_expr;
 };
 
 #endif // __VERTEX_H__
