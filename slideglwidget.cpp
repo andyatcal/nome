@@ -606,7 +606,7 @@ void SlideGLWidget::zipToTempCalled(bool)
     }
     Mesh new_temp_mesh = zipper->zip(&border1, &border2, 1.3);
     new_temp_mesh.color = temp_mesh.color;
-    temp_mesh = new_temp_mesh;
+    temp_mesh = merge(temp_mesh, new_temp_mesh);
     updateGlobalIndexList();
     repaint();
 }

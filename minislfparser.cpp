@@ -353,14 +353,17 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                         makingAngle = true;
                                     }
                                 }
-                                else if(c == ')' && makingXYZ)
+                                else if(c == ')')
                                 {
-                                    doneXYZ = true;
-                                }
-                                else if(c == ')' && makingAngle)
-                                {
-                                    makingAngle = false;
-                                    goto endWhile1;
+                                    if(makingXYZ)
+                                    {
+                                        doneXYZ = true;
+                                        makingXYZ = false;
+                                    } else if(makingAngle)
+                                    {
+                                        makingAngle = false;
+                                        goto endWhile1;
+                                    }
                                 }
                                 else
                                 {
@@ -374,7 +377,6 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                     }
                                 }
                             }
-                            endWhile1:
                             if(makingXYZ && xyz != "")
                             {
                                 xyz.push_back(' ');
@@ -384,6 +386,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                 angle.push_back(' ');
                             }
                         }
+                        endWhile1:
                         Transformation t(1, &params, xyz, angle);
                         transformations_up.push_back(t);
                     }

@@ -47,7 +47,7 @@ tunnel tun5 ({expr $tp5_n} {expr $tp5_ro} {expr $tp5_ratio} {expr $tp5_h}) endfu
 group kleinbottle
 	instance tun1 endinstance
 	instance tun2 translate (-3 0 5) endinstance
-	instance tun3 translate (-10 0 -2) rotate (0 1 0) (90) endinstance
+	instance tun3 rotate (0 1 0) (90) translate (-2 0 10) endinstance
 	instance tun4 translate (2 0 5) endinstance
 	instance tun5 endinstance
 endgroup
