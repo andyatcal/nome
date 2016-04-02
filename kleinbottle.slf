@@ -45,11 +45,11 @@ tunnel tun4 ({expr $tp4_n} {expr $tp4_ro} {expr $tp4_ratio} {expr $tp4_h}) endfu
 tunnel tun5 ({expr $tp5_n} {expr $tp5_ro} {expr $tp5_ratio} {expr $tp5_h}) endfunnel
 
 group kleinbottle
-	instance tun1 endinstance
-	instance tun2 translate (-3 0 5) endinstance
-	instance tun3 rotate (0 1 0) (90) translate (-2 0 10) endinstance
-	instance tun4 translate (2 0 5) endinstance
-	instance tun5 endinstance
+	instance tun1 t1 endinstance
+	instance tun2 t2 translate (-3 0 5) endinstance
+	instance tun3 t3 rotate (0 1 0) (90) translate (-2 0 10) endinstance
+	instance tun4 t4 translate (2 0 5) endinstance
+	instance tun5 t5 endinstance
 endgroup
 
 instance kleinbottle endinstance

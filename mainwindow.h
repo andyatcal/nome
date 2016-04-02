@@ -9,6 +9,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <string>
 #include "slideglwidget.h"
 #include "controlpanel.h"
 #include "minislfparser.h"
@@ -32,6 +33,7 @@ private:
     void createCanvas(QString name);
     void createControlPanel(SlideGLWidget *canvas);
     void createSliderPanel(SlideGLWidget * canvas);
+    void save_current_status(string out_put_file);
     QMenu *fileMenu;
     QAction *openAct;
     QAction *saveAct;

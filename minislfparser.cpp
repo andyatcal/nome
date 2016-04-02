@@ -43,6 +43,9 @@ string warning(int type, int lineNumber)
     case 5:
         return "Warninng: instance at line "
                 + to_string(lineNumber) + " has not been created yet.";
+    case 6:
+        return "Warning: new instance at line"
+                + to_string(lineNumber) + " does not have a name.";
     }
     return "";
 }
@@ -295,6 +298,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 string instanceName;
                 Mesh newMesh;
                 Group newGroup;
+                string newInstanceName;
                 bool findMesh = false;
                 bool findGroup = false;
                 if((++tIt) < tokens.end()) {
@@ -305,10 +309,18 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 } else {
                     cout<<warning(5, lineNumber);
                 }
+                if((++tIt) < tokens.end()) {
+                    if(!testComments(*tIt))
+                    {
+                        newInstanceName = *tIt;
+                    }
+                } else {
+                    cout<<warning(6, lineNumber);
+                }
                 meshIt = meshes.find(instanceName);
                 if(meshIt != meshes.end())
                 {
-                    newMesh = (meshIt -> second).makeCopy();
+                    newMesh = (meshIt -> second).makeCopy(newInstanceName);
                     findMesh = true;
                 }
                 else
@@ -316,7 +328,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     groupIt = groups.find(instanceName);
                     if(groupIt != groups.end())
                     {
-                        newGroup = (groupIt -> second).makeCopy();
+                        newGroup = (groupIt -> second).makeCopy(newInstanceName);
                         findGroup = true;
                     }
                     else

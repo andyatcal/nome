@@ -76,6 +76,14 @@ public:
      * @param color, the color to be set.
      */
     void setBackColor(QColor color);
+    /* The master mesh. As a result of SIF parser. */
+    Mesh master_mesh;
+    /* The mesh that contains temporary added meshes.*/
+    Mesh temp_mesh;
+    /* The merged result of all meshes in the scene and temp mesh. */
+    Mesh merged_mesh;
+    /* The current subdivided mesh. */
+    Mesh subdiv_mesh;
 private:
     /* Viewer variables.*/
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
@@ -106,14 +114,6 @@ private:
      * @brief makeSLFMesh: Make a mesh by the output of SLF file parser.
      */
     void makeSLFMesh();
-    /* The master mesh. As a result of SIF parser. */
-    Mesh master_mesh;
-    /* The mesh that contains temporary added meshes.*/
-    Mesh temp_mesh;
-    /* The merged result of all meshes in the scene and temp mesh. */
-    Mesh merged_mesh;
-    /* The current subdivided mesh. */
-    Mesh subdiv_mesh;
     /* A subdivider to handle subdivision.*/
     Subdivision *subdivider;
     /* An offseter to handle offsetting.*/

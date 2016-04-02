@@ -60,6 +60,8 @@ public:
     string y_expr;
     /* The string expression of its position z. */
     string z_expr;
+    /* The name of this vertex.*/
+    string name;
 };
 
 #endif // __VERTEX_H__

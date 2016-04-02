@@ -77,7 +77,7 @@ public:
     /* Set the transformation of this group. */
     void setTransformation(vector<Transformation> new_transforms);
     /* make a copy of this group.*/
-    Group makeCopy();
+    Group makeCopy(string copy_group_name = "");
     /* make a copy of this group for future transformation. */
     Group makeCopyForTransform();
     /* Update me based on what I copied from .*/

@@ -148,10 +148,18 @@ void Group::clear()
     transformations_up.clear();
 }
 
-Group Group::makeCopy()
+Group Group::makeCopy(string copy_group_name)
 {
     Group newGroup;
     newGroup.clear();
+    if(copy_group_name == "")
+    {
+        newGroup.name = this->name;
+    }
+    else
+    {
+        newGroup.name = copy_group_name;
+    }
     vector<Mesh>::iterator mIt;
     vector<Group>::iterator gIt;
     vector<PolyLine>::iterator pIt;
@@ -180,6 +188,7 @@ Group Group::makeCopyForTransform()
 {
     Group newGroup;
     newGroup.before_transform_group = this;
+    newGroup.name = this->name;
     newGroup.clear();
     vector<Mesh>::iterator mIt;
     vector<Group>::iterator gIt;

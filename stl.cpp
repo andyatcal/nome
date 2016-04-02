@@ -19,7 +19,6 @@ vec3 getTriFaceNormal(Vertex * va, Vertex * vb, Vertex * vc){
 
 void STL::STLOutput(vector<Mesh> &meshes, string outputSTL){
     vector<Mesh>::iterator mIt;
-    vector<Face*>::iterator faceIt;
     ofstream file(outputSTL);
     if (!file.is_open()) {
         cout <<"COULD NOT OPEN THE FILE.\n";

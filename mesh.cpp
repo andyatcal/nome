@@ -575,15 +575,24 @@ void Mesh::setTransformation(vector<Transformation> new_transforms)
     transformations_up = new_transforms;
 }
 
-Mesh Mesh::makeCopy() {
+Mesh Mesh::makeCopy(string copy_mesh_name) {
     //cout<<"Creating a copy of the current map.\n";
     Mesh newMesh;
+    if(copy_mesh_name == "")
+    {
+        newMesh.name = this->name;
+    }
+    else
+    {
+        newMesh.name = copy_mesh_name;
+    }
     newMesh.clear();
     vector<Vertex*>::iterator vIt;
     for(vIt = vertList.begin();
         vIt < vertList.end(); vIt ++) {
         Vertex * vertCopy = new Vertex;
         vertCopy -> ID = (*vIt) -> ID;
+        vertCopy -> name = (*vIt) -> name;
         vertCopy -> position = (*vIt) -> position;
         newMesh.addVertex(vertCopy);
     }
@@ -652,6 +661,7 @@ Mesh Mesh::makeCopyForTransform() {
     Mesh newMesh;
     newMesh.before_transform_mesh = this;
     newMesh.clear();
+    newMesh.name = this -> name;
     vector<Vertex*>::iterator vIt;
     for(vIt = vertList.begin();
         vIt < vertList.end(); vIt ++) {
@@ -1066,6 +1076,7 @@ void Mesh::makeFunnel()
     {
         Vertex * newVertex = new Vertex;
         newVertex->ID = i;
+        newVertex->name = "bc" + to_string(i);
         float currAngle = 2.0 * i / n * PI;
         newVertex -> position = vec3(ro * glm::cos(currAngle),
                                      ro * glm::sin(currAngle), 0);
@@ -1077,6 +1088,7 @@ void Mesh::makeFunnel()
     {
         Vertex * newVertex = new Vertex;
         newVertex->ID = i + n;
+        newVertex->name = "hc"+ to_string(i);
         float currAngle = 2.0 * i / n * PI;
         newVertex -> position = vec3(ri * glm::cos(currAngle),
                                      ri * glm::sin(currAngle), h);
@@ -1106,6 +1118,7 @@ void Mesh::makeTunnel()
     {
         Vertex * newVertex = new Vertex;
         newVertex->ID = i;
+        newVertex->name = "bc" + to_string(i);
         float currAngle = 2.0 * i / n * PI;
         newVertex -> position = vec3(ro * glm::cos(currAngle),
                                      ro * glm::sin(currAngle), 0);
@@ -1117,6 +1130,7 @@ void Mesh::makeTunnel()
     {
         Vertex * newVertex = new Vertex;
         newVertex->ID = i + n;
+        newVertex->name = "hc" + to_string(i);
         float currAngle = 2.0 * i / n * PI;
         newVertex -> position = vec3(ri * glm::cos(currAngle),
                                      ri * glm::sin(currAngle), h);
@@ -1127,6 +1141,7 @@ void Mesh::makeTunnel()
     {
         Vertex * newVertex = new Vertex;
         newVertex->ID = i + 2 * n;
+        newVertex->name = "lc" + to_string(i);
         float currAngle = 2.0 * i / n * PI;
         newVertex -> position = vec3(ri * glm::cos(currAngle),
                                      ri * glm::sin(currAngle), -h);

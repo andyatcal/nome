@@ -19,7 +19,8 @@ void MainWindow::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
         tr("Import Input File"), "/", tr("Geometry Files (*.slf *.sif)"));
-    if(fileName == "") {
+    if(fileName == "")
+    {
         return;
     }
     createCanvas(fileName);
@@ -28,14 +29,24 @@ void MainWindow::open()
 void MainWindow::save()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-         tr("Save STL File"), "/", tr("STL Files (*.stl)"));
-    if(fileName == "") {
+         tr("Save Output File"), "/", tr("Output Files (*.stl *.aslf)"));
+    if(fileName == "")
+    {
         return;
-    } else if(canvas == NULL) {
+    }
+    else if(canvas == NULL)
+    {
         cout<<"Error: No work to be saved!"<<endl;
         return;
     }
-    canvas -> saveMesh(fileName.toStdString());
+    else if(fileName.right(3).toLower() == "stl")
+    {
+        canvas -> saveMesh(fileName.toStdString());
+    }
+    else
+    {
+        save_current_status(fileName.toStdString());
+    }
 }
 
 void MainWindow::close()
@@ -121,8 +132,61 @@ void MainWindow::createControlPanel(SlideGLWidget * canvas)
     controls -> move(900, 50);
     controls -> show();
 }
+
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
     menu.exec(event->globalPos());
+}
+
+void MainWindow::save_current_status(string out_put_file)
+{
+    ofstream file(out_put_file);
+    if (!file.is_open())
+    {
+        cout <<"Error: COULD NOT OPEN THE FILE.\n";
+    }
+    else
+    {
+        file<<"savedparameter\n";
+        for(ParameterBank& bank : banks)
+        {
+            for(Parameter*& p : bank.parameters)
+            {
+                file<<"    "<<(p->name).toStdString()<<" "<<to_string(p->value)<<"\n";
+            }
+        }
+        file<<"endsavedparameter\n";
+        if(!(canvas->temp_mesh).isEmpty())
+        {
+            file<<"\n";
+            file<<"saveworkingmesh\n";
+            int counter = 0;
+            for(Face*& face: (canvas->temp_mesh).faceList)
+            {
+                file<<"    Face "<<to_string(counter)<<"\n";
+                Edge * firstEdge = face -> oneEdge;
+                Edge * currEdge = firstEdge;
+                Edge * nextEdge;
+                Vertex * tempv;
+                do {
+                    if(face == currEdge -> fa) {
+                        tempv = currEdge -> vb;
+                        nextEdge = currEdge -> nextVbFa;
+                    } else {
+                        if(currEdge -> mobius) {
+                            tempv = currEdge -> vb;
+                            nextEdge = currEdge -> nextVbFb;
+                        } else {
+                            tempv = currEdge -> va;
+                            nextEdge = currEdge -> nextVaFb;
+                        }
+                    }
+                    file<<"        Vertex "<<tempv->name<<"\n";
+                    currEdge = nextEdge;
+                } while (currEdge != firstEdge);
+            }
+            file<<"endsaveworkingmesh\n";
+        }
+    }
 }

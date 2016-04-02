@@ -95,7 +95,7 @@ public:
      * @brief makeCopy: Make a copy of current mesh.
      * @return The copied mesh.
      */
-    Mesh makeCopy();
+    Mesh makeCopy(string copy_mesh_name = "");
     /**
      * @brief makeCopyForTransform: Make a copy of current mesh.
      * It is used for future transformation.
