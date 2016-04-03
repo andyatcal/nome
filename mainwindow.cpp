@@ -138,6 +138,7 @@ void MainWindow::createSliderPanel(SlideGLWidget * canvas)
         SliderPanel *newPanel = new SliderPanel(&banks[i], canvas);
         newPanel -> show();
         newPanel -> move(10, 10);
+        slider_panels.push_back(newPanel);
     }
 }
 

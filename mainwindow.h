@@ -45,7 +45,7 @@ private:
     Group scene;
     unordered_map<string, Parameter> params;
     vector<ParameterBank> banks;
-    vector<SliderPanel> sliderPanels;
+    vector<SliderPanel*> slider_panels;
 private slots:
     void open();
     void save();
