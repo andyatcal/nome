@@ -46,6 +46,12 @@ string warning(int type, int lineNumber)
     case 6:
         return "Warning: new instance at line"
                 + to_string(lineNumber) + " does not have a name.";
+    case 7:
+        return "Warning: parameter name at line"
+                + to_string(lineNumber) + " does not match any defined parameter.";
+    case 8:
+        return "Warning: parameter at line"
+                + to_string(lineNumber) + "does not have a retored value.";
     }
     return "";
 }
@@ -504,6 +510,84 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         group.addGroup(newGroup);
                     }
                 }
+            }
+        }
+        newLineEnd:
+        lineNumber++;
+    }
+    group.mapFromParameters();
+}
+
+void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
+                     unordered_map<string, Parameter> &params,
+                     Group &group, string inputSIF)
+{
+    ifstream file(inputSIF);
+    if (!file.good())
+    {
+        cout<<"THE PATH OF MINI SIF FILE IS NOT VAILD.";
+        exit(1);
+    }
+    string nextLine;
+    int lineNumber = 1;
+    bool restoreBank = false;
+    bool restoreWorkingMesh = false;
+    unordered_map<string, Parameter>::iterator pIt;
+    while(std::getline(file, nextLine))
+    {
+        istringstream iss(nextLine);
+        vector<string> tokens;
+        copy(istream_iterator<string>(iss),
+             istream_iterator<string>(),
+             back_inserter(tokens));
+        vector<string>::iterator tIt;
+        for(tIt = tokens.begin(); tIt < tokens.end(); tIt++)
+        {
+            if(testComments(*tIt))
+            {
+                break;
+            }
+            else if((*tIt) == "savedparameter")
+            {
+                restoreBank = true;
+                goto newLineEnd;
+            }
+            else if((*tIt) == "endsavedparameter")
+            {
+                restoreBank = false;
+                goto newLineEnd;
+            }
+            else if((*tIt) == "savedworkingmesh")
+            {
+                restoreWorkingMesh = true;
+                goto newLineEnd;
+            }
+            else if((*tIt) == "endsavedworkingmesh")
+            {
+                restoreWorkingMesh = false;
+                goto newLineEnd;
+            }
+            else if(restoreBank)
+            {
+                pIt = params.find(*tIt);
+                if(pIt == params.end())
+                {
+                    cout<<warning(7, lineNumber);
+                }
+                else
+                {
+                    tIt++;
+                    if(tIt >= tokens.end() && testComments(*tIt))
+                    {
+                        cout<<warning(8, lineNumber);
+                    }
+                    else
+                    {
+                        float value = stof(*(++tIt));
+                        params[*tIt].value = value;
+                    }
+                }
+                goto newLineEnd;
             }
         }
         newLineEnd:

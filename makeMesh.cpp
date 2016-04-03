@@ -1284,6 +1284,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             Vertex * newVert = new Vertex;
             newVert -> position = vec3(x, y, z) * 1.0f; // Can be modifed here to zoom in.
             newVert -> ID = vAfterMergeCounter;
+            newVert -> name = "v" + to_string(vAfterMergeCounter);
             vector<Vertex*>::iterator vIt;
             bool alreadyAdded = false;
             for (vIt = mesh.vertList.begin(); vIt < mesh.vertList.end(); vIt ++) {
@@ -1299,6 +1300,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             //cout<<"I am mapping "<<vBeforeMergeCounter<<" to "<<vAfterMergeCounter<<endl;
             if(!alreadyAdded) {
                 newVert -> ID = vAfterMergeCounter;
+                newVert -> name = "v" + to_string(vAfterMergeCounter);
                 mesh.addVertex(newVert);
                 mapBeforeMergeToAfter[vBeforeMergeCounter] = vAfterMergeCounter;
                 vAfterMergeCounter += 1;
@@ -1391,6 +1393,7 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
             Vertex * newVert = new Vertex;
             newVert -> position = vec3(x, y, z) * 1.0f; // Can be modifed here to zoom in.
             newVert -> ID = vAfterMergeCounter;
+            newVert -> name = "v" + to_string(vAfterMergeCounter);
             vector<Vertex*>::iterator vIt;
             bool alreadyAdded = false;
             for (vIt = mesh.vertList.begin(); vIt < mesh.vertList.end(); vIt ++) {
@@ -1404,6 +1407,7 @@ void makeWithQuadSIF(Mesh &mesh, string inputSIF){
             }
             if(!alreadyAdded) {
                 newVert -> ID = vAfterMergeCounter;
+                newVert -> name = "v" + to_string(vAfterMergeCounter);
                 mesh.addVertex(newVert);
                 mapBeforeMergeToAfter[vBeforeMergeCounter] = vAfterMergeCounter;
                 vAfterMergeCounter += 1;

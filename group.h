@@ -96,6 +96,8 @@ public:
     void mapFromParameters();
     /* A pointer to the original group before transformation. */
     Group * before_transform_group;
+    /* Update the names for all elements in the group. Used for the final scene.*/
+    void updateGroupElementName();
 };
 
 #endif // GROUP_H

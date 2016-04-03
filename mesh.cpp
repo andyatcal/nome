@@ -667,6 +667,7 @@ Mesh Mesh::makeCopyForTransform() {
         vIt < vertList.end(); vIt ++) {
         Vertex * vertCopy = new Vertex;
         vertCopy -> ID = (*vIt) -> ID;
+        vertCopy -> name = (*vIt) -> name;
         vertCopy -> position = (*vIt) -> position;
         vertCopy -> before_transform_vertex = (*vIt);
         newMesh.addVertex(vertCopy);

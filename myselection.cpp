@@ -133,13 +133,13 @@ void MySelection::selectVertex(vector<Mesh*> &globalMeshList, vector<int> &globa
                 }
             }
             selectedVertices.erase(vIt);
-            cout<<"Unselected Vertex: v"<<selectedVertex -> ID<<endl;
+            cout<<"Unselected Vertex: "<<selectedVertex -> name<<endl;
             cout<<"You have "<<selectedVertices.size()
             <<" vertices selected."<<endl;
         } else {
             selectedVertex -> selected = true;
             selectedVertices.push_back(selectedVertex);
-            cout<<"Selected Vertex: v"<<selectedVertex -> ID<<endl;
+            cout<<"Selected Vertex: "<<selectedVertex -> name<<endl;
             cout<<"You have "<<selectedVertices.size()
             <<" vertices selected."<<endl;
         }

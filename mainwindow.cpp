@@ -100,20 +100,35 @@ void MainWindow::createCanvas(QString name)
     if(name.right(3).toLower() == "sif")
     {
         canvas = new SlideGLWidget(name.toStdString());
+        canvas -> move(0, 50);
+        canvas -> show();
+        createControlPanel(canvas);
+    }
+    else if(name.right(4).toLower() == "aslf")
+    {
+        if(canvas == NULL)
+        {
+            cout<<"Warning: you need an existing working slf file to open this file.\n";
+            return;
+        }
+        else
+        {
+            slfParser->appendWithASLF(banks, params, scene, name.toStdString());
+        }
     }
     else if (name.right(3).toLower() == "slf")
     {
         slfParser->makeWithMiniSLF(banks, params, scene, name.toStdString());
         canvas = new SlideGLWidget(scene);
         createSliderPanel(canvas);
+        canvas -> move(0, 50);
+        canvas -> show();
+        createControlPanel(canvas);
     }
     else
     {
         cout<<"File not supported!";
     }
-    canvas -> move(0, 50);
-    canvas -> show();
-    createControlPanel(canvas);
 }
 
 void MainWindow::createSliderPanel(SlideGLWidget * canvas)
@@ -160,7 +175,7 @@ void MainWindow::save_current_status(string out_put_file)
         if(!(canvas->temp_mesh).isEmpty())
         {
             file<<"\n";
-            file<<"saveworkingmesh\n";
+            file<<"savedworkingmesh\n";
             int counter = 0;
             for(Face*& face: (canvas->temp_mesh).faceList)
             {
@@ -186,7 +201,7 @@ void MainWindow::save_current_status(string out_put_file)
                     currEdge = nextEdge;
                 } while (currEdge != firstEdge);
             }
-            file<<"endsaveworkingmesh\n";
+            file<<"endsavedworkingmesh\n";
         }
     }
 }

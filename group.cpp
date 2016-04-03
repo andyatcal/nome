@@ -119,6 +119,27 @@ void Group::assignColor()
     }
 }
 
+void Group::updateGroupElementName()
+{
+    vector<Mesh>::iterator mIt;
+    vector<Group>::iterator gIt;
+    if(this -> name != "")
+    {
+        for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
+        {
+            (*mIt).name = this->name + "_" + (*mIt).name;
+            for(Vertex*& v : (*mIt).vertList)
+            {
+                v -> name = (*mIt).name + "_" + v -> name;
+            }
+        }
+    }
+    for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
+    {
+        (*gIt).updateGroupElementName();
+    }
+}
+
 void Group:: setColor(QColor color)
 {
     this -> color = color;

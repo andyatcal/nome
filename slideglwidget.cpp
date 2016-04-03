@@ -81,6 +81,7 @@ void SlideGLWidget::makeSLFMesh()
     transform_meshes_in_scene();
     hierarchical_scene_transformed.setColor(foreColor);
     hierarchical_scene_transformed.assignColor();
+    hierarchical_scene_transformed.updateGroupElementName();
 }
 
 void SlideGLWidget::transform_meshes_in_scene()
