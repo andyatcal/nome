@@ -1,0 +1,33 @@
+savedparameter
+    fp_n 8.000000
+    fp_ro 0.400000
+    fp_ratio 0.000000
+    fp_h 0.500000
+    fp_z -1.100000
+endsavedparameter
+
+savedworkingmesh tempmesh
+    face
+        vertex cf_fun3_hc3 endvertex
+        vertex cf_fun2_hc5 endvertex
+        vertex cf_fun2_hc6 endvertex
+        vertex cf_fun3_hc2 endvertex
+    endface
+    face
+        vertex cf_fun3_hc3 endvertex
+        vertex cf_fun5_hc3 endvertex
+        vertex cf_fun2_hc5 endvertex
+    endface
+    face
+        vertex cf_fun3_hc4 endvertex
+        vertex cf_fun5_hc2 endvertex
+        vertex cf_fun5_hc3 endvertex
+        vertex cf_fun3_hc3 endvertex
+    endface
+    face
+        vertex cf_fun5_hc3 endvertex
+        vertex cf_fun5_hc4 endvertex
+        vertex cf_fun2_hc4 endvertex
+        vertex cf_fun2_hc5 endvertex
+    endface
+endsavedworkingmesh

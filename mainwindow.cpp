@@ -182,11 +182,10 @@ void MainWindow::save_current_status(string out_put_file)
         if(!(canvas->temp_mesh).isEmpty())
         {
             file<<"\n";
-            file<<"savedworkingmesh\n";
-            int counter = 0;
+            file<<"savedworkingmesh tempmesh\n";
             for(Face*& face: (canvas->temp_mesh).faceList)
             {
-                file<<"    face "<<to_string(counter)<<"\n";
+                file<<"    face\n";
                 Edge * firstEdge = face -> oneEdge;
                 Edge * currEdge = firstEdge;
                 Edge * nextEdge;
@@ -208,7 +207,6 @@ void MainWindow::save_current_status(string out_put_file)
                     currEdge = nextEdge;
                 } while (currEdge != firstEdge);
                 file<<"    endface\n";
-                counter++;
             }
             file<<"endsavedworkingmesh\n";
         }
