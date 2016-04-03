@@ -43,6 +43,7 @@ public:
      * @return Mesh build by zipping this two polylines.
      */
     Mesh zip_skewness(PolyLine * b1, PolyLine * b2, float penalty = 1.3);
+    void zip(PolyLine * b1, PolyLine * b2, Mesh &mesh, float trianglePenalty = 1.3);
 };
 
 #endif //__ZIPPER_H__
