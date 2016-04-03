@@ -56,7 +56,12 @@ void MainWindow::close()
         canvas = NULL;
         controls -> close();
         controls = NULL;
-
+        for(SliderPanel*& panel: slider_panels)
+        {
+            panel->close();
+            panel = NULL;
+        }
+        slider_panels.clear();
     }
 }
 
