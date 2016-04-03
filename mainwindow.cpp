@@ -56,6 +56,7 @@ void MainWindow::close()
         canvas = NULL;
         controls -> close();
         controls = NULL;
+
     }
 }
 
@@ -180,7 +181,7 @@ void MainWindow::save_current_status(string out_put_file)
             int counter = 0;
             for(Face*& face: (canvas->temp_mesh).faceList)
             {
-                file<<"    Face "<<to_string(counter)<<"\n";
+                file<<"    face "<<to_string(counter)<<"\n";
                 Edge * firstEdge = face -> oneEdge;
                 Edge * currEdge = firstEdge;
                 Edge * nextEdge;
@@ -198,9 +199,11 @@ void MainWindow::save_current_status(string out_put_file)
                             nextEdge = currEdge -> nextVaFb;
                         }
                     }
-                    file<<"        Vertex "<<tempv->name<<"\n";
+                    file<<"        vertex "<<tempv->name<<" endvertex\n";
                     currEdge = nextEdge;
                 } while (currEdge != firstEdge);
+                file<<"    endface\n";
+                counter++;
             }
             file<<"endsavedworkingmesh\n";
         }
