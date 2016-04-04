@@ -1,4 +1,5 @@
 #include "myslider.h"
+#include "parameter.h"
 
 MySlider::MySlider()
 {
@@ -18,7 +19,6 @@ void MySlider::generalSetup()
     QHBoxLayout *sliderLayout;
     mainLayout -> addLayout(sliderLayout = new QHBoxLayout);
     sliderLayout -> addWidget(new QLabel(QString::number(param -> start)));
-    QSlider *slider;
     sliderLayout -> addWidget(slider = new QSlider(Qt::Horizontal));
     slider -> setMinimum(0);
     slider -> setMaximum(int((param -> end - param -> start) / param -> stepsize));
@@ -39,4 +39,3 @@ void MySlider::changeValue(int newValue)
     currValue-> setText((param -> name) + QString(" : ") +QString::number(param -> value));
     emit paramValueChanged(param -> value);
 }
-

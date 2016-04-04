@@ -53,6 +53,7 @@ void SlideGLWidget::generalSetup()
     work_phase = 0;
     temp_mesh.color = Qt::yellow;
     temp_mesh.clear();
+    group_from_temp_mesh = NULL;
 }
 
 void SlideGLWidget::makeDefaultMesh()
@@ -780,5 +781,11 @@ void SlideGLWidget::paramValueChanged(float)
     {
         offset(offset_value);
     }
+    repaint();
+}
+
+void SlideGLWidget::updateFromSavedTempMesh()
+{
+    temp_mesh.computeNormals();
     repaint();
 }

@@ -18,7 +18,7 @@ MainWindow::MainWindow()
 void MainWindow::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Import Input File"), "/", tr("Geometry Files (*.slf *.sif)"));
+        tr("Import Input File"), "/", tr("Geometry Files (*.slf *.sif *.aslf)"));
     if(fileName == "")
     {
         return;
@@ -119,7 +119,8 @@ void MainWindow::createCanvas(QString name)
         }
         else
         {
-            slfParser->appendWithASLF(banks, params, scene, name.toStdString());
+            canvas -> group_from_temp_mesh = &append_scene;
+            slfParser->appendWithASLF(banks, params, append_scene, canvas, name.toStdString());
         }
     }
     else if (name.right(3).toLower() == "slf")

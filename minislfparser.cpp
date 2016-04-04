@@ -52,6 +52,9 @@ string warning(int type, int lineNumber)
     case 8:
         return "Warning: parameter at line"
                 + to_string(lineNumber) + "does not have a retored value.";
+    case 9:
+        return "Warning: vertex at line"
+                + to_string(lineNumber) + "can't be restored.";
     }
     return "";
 }
@@ -297,7 +300,6 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             {
                 currentGroup = "";
                 goto newLineEnd;
-
             }
             else if((*tIt) == "instance")
             {
@@ -519,8 +521,10 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
 }
 
 void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
-                     unordered_map<string, Parameter> &params,
-                     Group &group, string inputSIF)
+                                   unordered_map<string, Parameter> &params,
+                                   Group &group,
+                                   SlideGLWidget* canvas,
+                                   string inputSIF)
 {
     ifstream file(inputSIF);
     if (!file.good())
@@ -533,6 +537,10 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
     bool restoreBank = false;
     bool restoreWorkingMesh = false;
     unordered_map<string, Parameter>::iterator pIt;
+    vector<Vertex*> vertices;
+    unordered_map<string, Group> groups;
+    unordered_map<string, Group>::iterator groupIt;
+    string currentGroup = "";
     while(std::getline(file, nextLine))
     {
         istringstream iss(nextLine);
@@ -577,21 +585,286 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                 else
                 {
                     tIt++;
-                    if(tIt >= tokens.end() && testComments(*tIt))
+                    if(tIt >= tokens.end() || testComments(*tIt))
                     {
                         cout<<warning(8, lineNumber);
                     }
                     else
                     {
-                        float value = stof(*(++tIt));
-                        params[*tIt].value = value;
+                        float value = stof(*tIt);
+                        (pIt -> second).changeParameterValue(value);
                     }
                 }
                 goto newLineEnd;
+            }
+            else if(restoreWorkingMesh)
+            {
+                if(*tIt == "face")
+                {
+                    vertices.clear();
+                    goto newLineEnd;
+                }
+                else if(*tIt == "endface")
+                {
+                    canvas->temp_mesh.addPolygonFace(vertices);
+                    goto newLineEnd;
+                }
+                else if(*tIt == "vertex")
+                {
+                    tIt++;
+                    if(tIt >= tokens.end() || testComments(*tIt))
+                    {
+                        cout<<warning(9, lineNumber);
+                    }
+
+                    Vertex *v = (canvas -> hierarchical_scene_transformed).findVertexInThisGroup(*tIt);
+                    if(v == NULL)
+                    {
+                        cout<<warning(9, lineNumber);
+                    }
+                    else
+                    {
+                        vertices.push_back(v);
+                    }
+                    goto newLineEnd;
+                }
+                else if((*tIt) == "group")
+                {
+                    Group newGroup;
+                    if((++tIt) < tokens.end()) {
+                        if(!testComments(*tIt))
+                        {
+                            newGroup.setName(*tIt);
+                        }
+                    }
+                    groups[newGroup.name] = newGroup;
+                    currentGroup = newGroup.name;
+                    goto newLineEnd;
+                }
+                else if((*tIt) == "endgroup")
+                {
+                    currentGroup = "";
+                    goto newLineEnd;
+                }
+                else if((*tIt) == "instance")
+                {
+                    string instanceName;
+                    Mesh newMesh;
+                    Group newGroup;
+                    string newInstanceName;
+                    bool findMesh = false;
+                    bool findGroup = false;
+                    if((++tIt) < tokens.end()) {
+                        if(!testComments(*tIt))
+                        {
+                            instanceName = *tIt;
+                        }
+                    }
+                    else
+                    {
+                        cout<<warning(5, lineNumber);
+                    }
+                    if((++tIt) < tokens.end()) {
+                        if(!testComments(*tIt))
+                        {
+                            newInstanceName = *tIt;
+                        }
+                    }
+                    else
+                    {
+                        cout<<warning(6, lineNumber);
+                    }
+                    if(instanceName == "tempmesh")
+                    {
+                        newMesh = (canvas -> temp_mesh).makeCopy(newInstanceName);
+                        findMesh = true;
+                    }
+                    else
+                    {
+                        groupIt = groups.find(instanceName);
+                        if(groupIt != groups.end())
+                        {
+                            newGroup = (groupIt -> second).makeCopy(newInstanceName);
+                            findGroup = true;
+                        }
+                        else
+                        {
+                            cout<<warning(5, lineNumber);
+                        }
+                    }
+                    vector<Transformation> transformations_up;
+                    while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                    {
+                        if(testComments(*tIt))
+                        {
+                            goto newLineEnd;
+                        }
+                        if(*tIt == "rotate")
+                        {
+                            string xyz;
+                            string angle;
+                            bool makingXYZ = false;
+                            bool makingAngle = false;
+                            bool doneXYZ = false;
+                            while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                            {
+                                for(char& c : (*tIt))
+                                {
+                                    if(c == '(')
+                                    {
+                                        if(!doneXYZ)
+                                        {
+                                            makingXYZ = true;
+                                        }
+                                        else
+                                        {
+                                            makingAngle = true;
+                                        }
+                                    }
+                                    else if(c == ')')
+                                    {
+                                        if(makingXYZ)
+                                        {
+                                            doneXYZ = true;
+                                            makingXYZ = false;
+                                        } else if(makingAngle)
+                                        {
+                                            makingAngle = false;
+                                            goto endWhile1;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if(makingXYZ)
+                                        {
+                                            xyz.push_back(c);
+                                        }
+                                        else if(makingAngle)
+                                        {
+                                            angle.push_back(c);
+                                        }
+                                    }
+                                }
+                                if(makingXYZ && xyz != "")
+                                {
+                                    xyz.push_back(' ');
+                                }
+                                else if(makingAngle && angle != "")
+                                {
+                                    angle.push_back(' ');
+                                }
+                            }
+                            endWhile1:
+                            Transformation t(1, &params, xyz, angle);
+                            transformations_up.push_back(t);
+                        }
+                        else if(*tIt == "translate" || *tIt == "scale")
+                        {
+                            bool isTranslate = false;
+                            if(*tIt == "translate")
+                            {
+                                isTranslate = true;
+                            }
+                            string xyz = "";
+                            bool makingXYZ = false;
+                            while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                            {
+                                for(char& c : (*tIt))
+                                {
+                                    if(c == '(')
+                                    {
+                                        makingXYZ = true;
+                                    }
+                                    else if(c == ')')
+                                    {
+                                        makingXYZ = false;
+                                        goto endWhile2;
+                                    }
+                                    else if(makingXYZ)
+                                    {
+                                        xyz.push_back(c);
+                                    }
+                                }
+                                if(xyz != "")
+                                {
+                                    xyz.push_back(' ');
+                                }
+                            }
+                            endWhile2:
+                            if(isTranslate)
+                            {
+                                Transformation t(3,&params, xyz);
+                                transformations_up.push_back(t);
+                            }
+                            else
+                            {
+                                Transformation t(2, &params, xyz);
+                                transformations_up.push_back(t);
+                            }
+                        }
+                        else if(*tIt == "mirror")
+                        {
+                            string xyzw = "";
+                            bool makingXYZW = false;
+                            while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                            {
+                                for(char& c : (*tIt))
+                                {
+                                    if(c == '(')
+                                    {
+                                        makingXYZW = true;
+                                    }
+                                    else if(c == ')')
+                                    {
+                                        makingXYZW = false;
+                                        goto endWhile3;
+                                    }
+                                    else if(makingXYZW)
+                                    {
+                                        xyzw.push_back(c);
+                                    }
+                                }
+                                if(xyzw != "")
+                                {
+                                    xyzw.push_back(' ');
+                                }
+                            }
+                            endWhile3:
+                            Transformation t(4, &params, xyzw);
+                            transformations_up.push_back(t);
+                        }
+                    }
+                    if(currentGroup != "")
+                    {
+                        if(findMesh)
+                        {
+                            newMesh.setTransformation(transformations_up);
+                            groups[currentGroup].addMesh(newMesh);
+
+                        } else if(findGroup)
+                        {
+                            newGroup.setTransformation(transformations_up);
+                            groups[currentGroup].addGroup(newGroup);
+                        }
+                    }
+                    else
+                    {
+                        if(findMesh)
+                        {
+                            newMesh.setTransformation(transformations_up);
+                            group.addMesh(newMesh);
+                        }
+                        else
+                        {
+                            newGroup.setTransformation(transformations_up);
+                            group.addGroup(newGroup);
+                        }
+                    }
+                }
             }
         }
         newLineEnd:
         lineNumber++;
     }
-    group.mapFromParameters();
+    canvas -> updateFromSavedTempMesh();
 }

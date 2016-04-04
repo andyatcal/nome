@@ -17,9 +17,10 @@ public:
     MySlider(Parameter *param);
     void generalSetup();
     void setParameter(Parameter *param);
+    QSlider *slider;
+    QLabel *currValue;
 private:
     Parameter *param;
-    QLabel *currValue;
 public slots:
     void changeValue(int);
 signals:

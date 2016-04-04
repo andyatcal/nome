@@ -39,7 +39,6 @@
 #include "zipper.h"
 #include "parameter.h"
 #include "parameterbank.h"
-#include "minislfparser.h"
 #include <QMessageBox>
 #include <QColor>
 #include <QString>
@@ -84,6 +83,14 @@ public:
     Mesh merged_mesh;
     /* The current subdivided mesh. */
     Mesh subdiv_mesh;
+    /* The pointer to the whole scene. */
+    Group *hierarchical_scene;
+    /* A copy of the hierarchical_scene, with all meshes transformed. */
+    Group hierarchical_scene_transformed;
+    /* The group from saved temp mesh. It is created from aslf file. */
+    Group *group_from_temp_mesh;
+    /* Update the canvas after reading in the aslf file. */
+    void updateFromSavedTempMesh();
 private:
     /* Viewer variables.*/
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
@@ -204,10 +211,6 @@ private:
     void draw_scene();
     /* The trianglePanelty for zipping function. */
     float trianglePanelty;
-    /* The pointer to the whole scene. */
-    Group *hierarchical_scene;
-    /* A copy of the hierarchical_scene, with all meshes transformed. */
-    Group hierarchical_scene_transformed;
     /* Create the hierarchical_scene_transformed. */
     void transform_meshes_in_scene();
     /* The current mode of view.

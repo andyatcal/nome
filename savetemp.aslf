@@ -31,3 +31,8 @@ savedworkingmesh tempmesh
         vertex cf_fun2_hc5 endvertex
     endface
 endsavedworkingmesh
+
+instance tempmesh tp1 rotate (0 0 1) (90) endinstance
+instance tempmesh tp2 rotate (0 0 1) (180) endinstance
+instance tempmesh tp3 rotate (0 0 1) (270) endinstance
+instance tempmesh tp4 rotate (1 0 0) (90) endinstance

@@ -43,6 +43,7 @@ private:
     ControlPanel *controls;
     MiniSlfParser *slfParser;
     Group scene;
+    Group append_scene;
     unordered_map<string, Parameter> params;
     vector<ParameterBank> banks;
     vector<SliderPanel*> slider_panels;

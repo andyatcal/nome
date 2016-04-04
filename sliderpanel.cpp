@@ -17,6 +17,7 @@ SliderPanel::SliderPanel(ParameterBank *bank, SlideGLWidget * canvas)
     {
         Parameter *param = (*pIt);
         MySlider *newSlider = new MySlider(param);
+        param -> slider = newSlider;
         mainLayout -> addWidget(newSlider);
         connect(newSlider, SIGNAL(paramValueChanged(float)), canvas, SLOT(paramValueChanged(float)));
     }

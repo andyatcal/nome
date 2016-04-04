@@ -1196,3 +1196,15 @@ void Mesh::addParam(Parameter* param)
 {
     influencingParams.push_back(param);
 }
+
+Vertex * Mesh::findVertexInThisMesh(string name)
+{
+    for(Vertex*& v: vertList)
+    {
+        if(v->name == name)
+        {
+            return v;
+        }
+    }
+    return NULL;
+}

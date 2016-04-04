@@ -179,6 +179,8 @@ public:
     void addParam(Parameter*);
     /* The pointer to the copied mesh before transformation. */
     Mesh * before_transform_mesh;
+    /* Find a vertex in this mesh given its name. */
+    Vertex * findVertexInThisMesh(string name);
 };
 
 // @param p1, p2, p3 are positions of three vertices,

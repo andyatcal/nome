@@ -287,3 +287,24 @@ void Group::mapFromParameters()
         (*gIt).mapFromParameters();
     }
 }
+
+Vertex* Group::findVertexInThisGroup(string name)
+{
+    for(Mesh &mesh : myMeshes)
+    {
+        Vertex *v = mesh.findVertexInThisMesh(name);
+        if(v != NULL)
+        {
+            return v;
+        }
+    }
+    for(Group& group : subgroups)
+    {
+        Vertex *v = group.findVertexInThisGroup(name);
+        if(v != NULL)
+        {
+            return v;
+        }
+    }
+    return NULL;
+}

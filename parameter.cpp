@@ -1,11 +1,13 @@
 #include "parameter.h"
 #include "mesh.h"
+#include "myslider.h"
 
 Parameter::Parameter()
 {
     this -> name = QString("");
     influenceMeshes.clear();
     influenceVertices.clear();
+    influenceTransformations.clear();
 }
 
 float Parameter::getValue()
@@ -46,4 +48,10 @@ void Parameter::addInfluenceTransformation(Transformation * t)
 void Parameter::addInfluenceVertex(Vertex * vertex)
 {
     influenceVertices.push_back(vertex);
+}
+
+void Parameter::changeParameterValue(float value)
+{
+    this -> value = value;
+    slider -> slider -> setValue(int((this -> value - this -> start) / this -> stepsize + 0.5 ));
 }

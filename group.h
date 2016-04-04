@@ -98,6 +98,8 @@ public:
     Group * before_transform_group;
     /* Update the names for all elements in the group. Used for the final scene.*/
     void updateGroupElementName();
+    /* Find a vertex given its hierarchical name.*/
+    Vertex* findVertexInThisGroup(string name);
 };
 
 #endif // GROUP_H

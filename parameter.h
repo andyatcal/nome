@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <vector>
+class MySlider;
 class Mesh;
 class Vertex;
 class Transformation;
@@ -22,6 +23,8 @@ public:
     float stepsize;
     float value;
     float getValue();
+    /* The slider of this parameter. */
+    MySlider *slider;
     /* A list of objects to update when changing value of this parameter. */
     vector<Vertex*> influenceVertices;
     vector<Mesh*> influenceMeshes;
@@ -30,6 +33,7 @@ public:
     void addInfluenceMesh(Mesh * mesh);
     void addInfluenceTransformation(Transformation *t);
     void addInfluenceVertex(Vertex * vertex);
+    void changeParameterValue(float value);
 };
 
 #endif // PARAMETER_H
