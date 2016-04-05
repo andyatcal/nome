@@ -628,238 +628,191 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                     }
                     goto newLineEnd;
                 }
-                else if((*tIt) == "group")
-                {
-                    Group newGroup;
-                    if((++tIt) < tokens.end()) {
-                        if(!testComments(*tIt))
-                        {
-                            newGroup.setName(*tIt);
-                        }
+            }
+            else if((*tIt) == "instance")
+            {
+                string instanceName;
+                Mesh newMesh;
+                string newInstanceName;
+                if((++tIt) < tokens.end()) {
+                    if(!testComments(*tIt))
+                    {
+                        instanceName = *tIt;
                     }
-                    groups[newGroup.name] = newGroup;
-                    currentGroup = newGroup.name;
+                }
+                else
+                {
+                    cout<<warning(5, lineNumber);
+                }
+                if((++tIt) < tokens.end()) {
+                    if(!testComments(*tIt))
+                    {
+                        newInstanceName = *tIt;
+                    }
+                }
+                else
+                {
+                    cout<<warning(6, lineNumber);
+                }
+                if(instanceName == "tempmesh")
+                {
+                    newMesh = (canvas -> temp_mesh).makeCopyForTempMesh(newInstanceName);
+                }
+                else
+                {
                     goto newLineEnd;
                 }
-                else if((*tIt) == "endgroup")
+                vector<Transformation> transformations_up;
+                while(++tIt < tokens.end() && (*tIt) != "endinstance")
                 {
-                    currentGroup = "";
-                    goto newLineEnd;
-                }
-                else if((*tIt) == "instance")
-                {
-                    string instanceName;
-                    Mesh newMesh;
-                    Group newGroup;
-                    string newInstanceName;
-                    bool findMesh = false;
-                    bool findGroup = false;
-                    if((++tIt) < tokens.end()) {
-                        if(!testComments(*tIt))
-                        {
-                            instanceName = *tIt;
-                        }
-                    }
-                    else
+                    if(testComments(*tIt))
                     {
-                        cout<<warning(5, lineNumber);
+                        goto newLineEnd;
                     }
-                    if((++tIt) < tokens.end()) {
-                        if(!testComments(*tIt))
-                        {
-                            newInstanceName = *tIt;
-                        }
-                    }
-                    else
+                    if(*tIt == "rotate")
                     {
-                        cout<<warning(6, lineNumber);
-                    }
-                    if(instanceName == "tempmesh")
-                    {
-                        newMesh = (canvas -> temp_mesh).makeCopy(newInstanceName);
-                        findMesh = true;
-                    }
-                    else
-                    {
-                        groupIt = groups.find(instanceName);
-                        if(groupIt != groups.end())
+                        string xyz;
+                        string angle;
+                        bool makingXYZ = false;
+                        bool makingAngle = false;
+                        bool doneXYZ = false;
+                        while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
-                            newGroup = (groupIt -> second).makeCopy(newInstanceName);
-                            findGroup = true;
-                        }
-                        else
-                        {
-                            cout<<warning(5, lineNumber);
-                        }
-                    }
-                    vector<Transformation> transformations_up;
-                    while(++tIt < tokens.end() && (*tIt) != "endinstance")
-                    {
-                        if(testComments(*tIt))
-                        {
-                            goto newLineEnd;
-                        }
-                        if(*tIt == "rotate")
-                        {
-                            string xyz;
-                            string angle;
-                            bool makingXYZ = false;
-                            bool makingAngle = false;
-                            bool doneXYZ = false;
-                            while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                            for(char& c : (*tIt))
                             {
-                                for(char& c : (*tIt))
+                                if(c == '(')
                                 {
-                                    if(c == '(')
-                                    {
-                                        if(!doneXYZ)
-                                        {
-                                            makingXYZ = true;
-                                        }
-                                        else
-                                        {
-                                            makingAngle = true;
-                                        }
-                                    }
-                                    else if(c == ')')
-                                    {
-                                        if(makingXYZ)
-                                        {
-                                            doneXYZ = true;
-                                            makingXYZ = false;
-                                        } else if(makingAngle)
-                                        {
-                                            makingAngle = false;
-                                            goto endWhile1;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if(makingXYZ)
-                                        {
-                                            xyz.push_back(c);
-                                        }
-                                        else if(makingAngle)
-                                        {
-                                            angle.push_back(c);
-                                        }
-                                    }
-                                }
-                                if(makingXYZ && xyz != "")
-                                {
-                                    xyz.push_back(' ');
-                                }
-                                else if(makingAngle && angle != "")
-                                {
-                                    angle.push_back(' ');
-                                }
-                            }
-                            endWhile1:
-                            Transformation t(1, &params, xyz, angle);
-                            transformations_up.push_back(t);
-                        }
-                        else if(*tIt == "translate" || *tIt == "scale")
-                        {
-                            bool isTranslate = false;
-                            if(*tIt == "translate")
-                            {
-                                isTranslate = true;
-                            }
-                            string xyz = "";
-                            bool makingXYZ = false;
-                            while(++tIt < tokens.end() && (*tIt) != "endinstance")
-                            {
-                                for(char& c : (*tIt))
-                                {
-                                    if(c == '(')
+                                    if(!doneXYZ)
                                     {
                                         makingXYZ = true;
                                     }
-                                    else if(c == ')')
+                                    else
                                     {
-                                        makingXYZ = false;
-                                        goto endWhile2;
+                                        makingAngle = true;
                                     }
-                                    else if(makingXYZ)
+                                }
+                                else if(c == ')')
+                                {
+                                    if(makingXYZ)
+                                    {
+                                        doneXYZ = true;
+                                        makingXYZ = false;
+                                    } else if(makingAngle)
+                                    {
+                                        makingAngle = false;
+                                        goto endWhile1;
+                                    }
+                                }
+                                else
+                                {
+                                    if(makingXYZ)
                                     {
                                         xyz.push_back(c);
                                     }
-                                }
-                                if(xyz != "")
-                                {
-                                    xyz.push_back(' ');
+                                    else if(makingAngle)
+                                    {
+                                        angle.push_back(c);
+                                    }
                                 }
                             }
-                            endWhile2:
-                            if(isTranslate)
+                            if(makingXYZ && xyz != "")
                             {
-                                Transformation t(3,&params, xyz);
-                                transformations_up.push_back(t);
+                                xyz.push_back(' ');
                             }
-                            else
+                            else if(makingAngle && angle != "")
                             {
-                                Transformation t(2, &params, xyz);
-                                transformations_up.push_back(t);
+                                angle.push_back(' ');
                             }
                         }
-                        else if(*tIt == "mirror")
+                        endWhile1:
+                        Transformation t(1, &params, xyz, angle);
+                        transformations_up.push_back(t);
+                    }
+                    else if(*tIt == "translate" || *tIt == "scale")
+                    {
+                        bool isTranslate = false;
+                        if(*tIt == "translate")
                         {
-                            string xyzw = "";
-                            bool makingXYZW = false;
-                            while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                            isTranslate = true;
+                        }
+                        string xyz = "";
+                        bool makingXYZ = false;
+                        while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                        {
+                            for(char& c : (*tIt))
                             {
-                                for(char& c : (*tIt))
+                                if(c == '(')
                                 {
-                                    if(c == '(')
-                                    {
-                                        makingXYZW = true;
-                                    }
-                                    else if(c == ')')
-                                    {
-                                        makingXYZW = false;
-                                        goto endWhile3;
-                                    }
-                                    else if(makingXYZW)
-                                    {
-                                        xyzw.push_back(c);
-                                    }
+                                    makingXYZ = true;
                                 }
-                                if(xyzw != "")
+                                else if(c == ')')
                                 {
-                                    xyzw.push_back(' ');
+                                    makingXYZ = false;
+                                    goto endWhile2;
+                                }
+                                else if(makingXYZ)
+                                {
+                                    xyz.push_back(c);
                                 }
                             }
-                            endWhile3:
-                            Transformation t(4, &params, xyzw);
+                            if(xyz != "")
+                            {
+                                xyz.push_back(' ');
+                            }
+                        }
+                        endWhile2:
+                        if(isTranslate)
+                        {
+                            Transformation t(3,&params, xyz);
                             transformations_up.push_back(t);
-                        }
-                    }
-                    if(currentGroup != "")
-                    {
-                        if(findMesh)
-                        {
-                            newMesh.setTransformation(transformations_up);
-                            groups[currentGroup].addMesh(newMesh);
-
-                        } else if(findGroup)
-                        {
-                            newGroup.setTransformation(transformations_up);
-                            groups[currentGroup].addGroup(newGroup);
-                        }
-                    }
-                    else
-                    {
-                        if(findMesh)
-                        {
-                            newMesh.setTransformation(transformations_up);
-                            group.addMesh(newMesh);
                         }
                         else
                         {
-                            newGroup.setTransformation(transformations_up);
-                            group.addGroup(newGroup);
+                            Transformation t(2, &params, xyz);
+                            transformations_up.push_back(t);
                         }
                     }
+                    else if(*tIt == "mirror")
+                    {
+                        string xyzw = "";
+                        bool makingXYZW = false;
+                        while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                        {
+                            for(char& c : (*tIt))
+                            {
+                                if(c == '(')
+                                {
+                                    makingXYZW = true;
+                                }
+                                else if(c == ')')
+                                {
+                                    makingXYZW = false;
+                                    goto endWhile3;
+                                }
+                                else if(makingXYZW)
+                                {
+                                    xyzw.push_back(c);
+                                }
+                            }
+                            if(xyzw != "")
+                            {
+                                xyzw.push_back(' ');
+                            }
+                        }
+                        endWhile3:
+                        Transformation t(4, &params, xyzw);
+                        transformations_up.push_back(t);
+                    }
+                }
+                if(currentGroup != "")
+                {
+                    newMesh.setTransformation(transformations_up);
+                    groups[currentGroup].addMesh(newMesh);
+                }
+                else
+                {
+                    newMesh.setTransformation(transformations_up);
+                    group.addMesh(newMesh);
                 }
             }
         }

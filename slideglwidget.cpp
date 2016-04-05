@@ -767,6 +767,11 @@ void SlideGLWidget::resetTrianglePanelty(QString new_value)
 void SlideGLWidget::paramValueChanged(float)
 {
     transform_meshes_in_scene();
+    if(group_from_temp_mesh != NULL)
+    {
+        group_from_temp_mesh -> updateCopyForTransform();
+        group_from_temp_mesh -> flattenedMeshes();
+    }
     updateGlobalIndexList();
     if(work_phase >= 1)
     {
@@ -787,5 +792,8 @@ void SlideGLWidget::paramValueChanged(float)
 void SlideGLWidget::updateFromSavedTempMesh()
 {
     temp_mesh.computeNormals();
+    //group_from_temp_mesh -> flattenedMeshes();
+    //hierarchical_scene_transformed.addGroup(*group_from_temp_mesh);
+    updateGlobalIndexList();
     repaint();
 }

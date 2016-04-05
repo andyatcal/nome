@@ -656,6 +656,95 @@ Mesh Mesh::makeCopy(string copy_mesh_name) {
     return newMesh;
 }
 
+Mesh Mesh::makeCopyForTempMesh(string copy_mesh_name) {
+    Mesh newMesh;
+    newMesh.before_transform_mesh = this;
+    if(copy_mesh_name == "")
+    {
+        newMesh.name = this->name;
+    }
+    else
+    {
+        newMesh.name = copy_mesh_name;
+    }
+    newMesh.clear();
+    unordered_map<Vertex*, Vertex*> original_to_copy;
+    unordered_map<Vertex*, Vertex*>::iterator o2cIt;
+    vector<Face*>::iterator fIt;
+    vector<Vertex*> vertices;
+    for(fIt = faceList.begin();
+     fIt < faceList.end(); fIt ++) {
+        Face * tempFace = *fIt;
+        Edge * firstEdge = tempFace -> oneEdge;
+        Edge * currEdge = firstEdge;
+        Edge * nextEdge;
+        Vertex * tempv;
+        vertices.clear();
+        do {
+            if(tempFace == currEdge -> fa) {
+                tempv = currEdge -> vb;
+                nextEdge = currEdge -> nextVbFa;
+            } else {
+                if(currEdge -> mobius) {
+                    tempv = currEdge -> vb;
+                    nextEdge = currEdge -> nextVbFb;
+                } else {
+                    tempv = currEdge -> va;
+                    nextEdge = currEdge -> nextVaFb;
+                }
+            }
+            o2cIt = original_to_copy.find(tempv);
+            if(o2cIt == original_to_copy.end())
+            {
+                Vertex * vertCopy = new Vertex;
+                vertCopy -> ID = tempv -> ID;
+                vertCopy -> name = tempv  -> name;
+                vertCopy -> position = tempv -> position;
+                vertCopy -> before_transform_vertex = tempv;
+                newMesh.addVertex(vertCopy);
+                original_to_copy[tempv] = vertCopy;
+                vertices.push_back(vertCopy);
+            }
+            else
+            {
+                vertices.push_back(o2cIt -> second);
+            }
+            currEdge = nextEdge;
+        } while (currEdge != firstEdge);
+        newMesh.addPolygonFace(vertices);
+    }
+    newMesh.buildBoundary();
+    newMesh.computeNormals();
+    newMesh.color = color;
+    newMesh.params = params;
+    newMesh.type = type;
+    if(type == 1)
+    {
+        newMesh.n = n;
+        newMesh.ro = ro;
+        newMesh.ratio = ratio;
+        newMesh.h = h;
+        newMesh.n_expr = n_expr;
+        newMesh.ro_expr = ro_expr;
+        newMesh.ratio_expr = ratio_expr;
+        newMesh.h_expr = h_expr;
+        newMesh.influencingParams = influencingParams;
+    }
+    else if(type == 2)
+    {
+        newMesh.n = n;
+        newMesh.ro = ro;
+        newMesh.ratio = ratio;
+        newMesh.h = h;
+        newMesh.n_expr = n_expr;
+        newMesh.ro_expr = ro_expr;
+        newMesh.ratio_expr = ratio_expr;
+        newMesh.h_expr = h_expr;
+        newMesh.influencingParams = influencingParams;
+    }
+    return newMesh;
+}
+
 Mesh Mesh::makeCopyForTransform() {
     //cout<<"Creating a copy of the current map.\n";
     Mesh newMesh;
