@@ -769,7 +769,13 @@ void SlideGLWidget::paramValueChanged(float)
     transform_meshes_in_scene();
     if(group_from_temp_mesh != NULL && group_from_temp_mesh->myMeshes.size() != 0)
     {
-        group_from_temp_mesh -> updateCopyForTransform();
+        for(Mesh& mesh : group_from_temp_mesh->myMeshes)
+        {
+            for(Vertex*& v: mesh.vertList)
+            {
+                v->position = v ->before_transform_vertex->position;
+            }
+        }
         vector<Mesh*> append_list = group_from_temp_mesh -> flattenedMeshes();
         global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
     }
