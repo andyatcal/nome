@@ -15,7 +15,7 @@ PolyLine::PolyLine()
     transformations_up.clear();
 }
 
-void PolyLine::drawLine()
+void PolyLine::drawLine(int start_index)
 {
     if(!isLoop)
     {
@@ -91,27 +91,73 @@ void PolyLine::addVertex(Vertex *v)
     vertices.push_back(v);
 }
 
-PolyLine PolyLine::makeCopy()
-{
-    PolyLine newPolyline;
-    newPolyline.clear();
-    vector<Vertex*>::iterator vIt;
-    for(vIt = vertices.begin();
-        vIt < vertices.end(); vIt ++) {
-        Vertex * vertCopy = new Vertex;
-        vertCopy -> ID = (*vIt) -> ID;
-        vertCopy -> position = (*vIt) -> position;
-        newPolyline.addVertex(vertCopy);
-    }
-    newPolyline.setColor(color);
-    return newPolyline;
-}
-
 void PolyLine::transform(Transformation *t)
 {
     mat4 matrix = t -> getMatrix();
     vector<Vertex*>::iterator vIt;
     for(vIt = vertices.begin(); vIt < vertices.end(); vIt++) {
         (*vIt) -> position = vec3(matrix * vec4((*vIt) -> position, 1));
+    }
+}
+
+PolyLine PolyLine::makeCopy(string copy_polyline_name)
+{
+    PolyLine newPolyline;
+    newPolyline.clear();
+    if(copy_polyline_name == "")
+    {
+        newPolyline.name = this -> name;
+    }
+    else
+    {
+        newPolyline.name = copy_polyline_name;
+    }
+    newPolyline.isLoop = this->isLoop;
+    newPolyline.color = color;
+    for(Vertex*& v: vertices)
+    {
+        Vertex* newVertex = new Vertex;
+        newVertex -> ID = v -> ID;
+        newVertex -> name = v -> name;
+        newVertex -> position = v -> position;
+        newVertex -> isParametric = v -> isParametric;
+        if(v -> isParametric)
+        {
+            newVertex -> x_expr = v -> x_expr;
+            newVertex -> y_expr = v -> y_expr;
+            newVertex -> z_expr = v -> z_expr;
+            newVertex -> influencingParams = v -> influencingParams;
+            newVertex -> params = v -> params;
+        }
+        newPolyline.addVertex(newVertex);
+    }
+    return newPolyline;
+}
+
+PolyLine PolyLine::makeCopyForTransform()
+{
+    PolyLine newPolyline;
+    newPolyline.before_transform_polyline = this;
+    newPolyline.name = this -> name;
+    newPolyline.isLoop = this->isLoop;
+    newPolyline.color = color;
+    for(Vertex*& v: vertices)
+    {
+        Vertex* newVertex = new Vertex;
+        newVertex -> ID = v -> ID;
+        newVertex -> name = v -> name;
+        newVertex -> position = v -> position;
+        newVertex -> before_transform_vertex = v;
+        newPolyline.addVertex(newVertex);
+    }
+    return newPolyline;
+}
+
+void PolyLine::updateCopyForTransform()
+{
+    transformations_up = before_transform_polyline -> transformations_up;
+    for(Vertex*& v: vertices)
+    {
+        v -> position = v -> before_transform_vertex -> position;
     }
 }

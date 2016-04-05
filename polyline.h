@@ -27,7 +27,7 @@ public:
     /**
      * @brief drawLine: Draw this polyline in OpenGL
      */
-    void drawLine();
+    void drawLine(int start_index = 0);
     // Return the skewness of points in this polyline.
     /**
      * @brief skewness: Find the skeness of all points.
@@ -46,12 +46,13 @@ public:
      * @brief makeCopy: Make a copy of this PolyLine
      * @return the copied polyline
      */
-    PolyLine makeCopy();
+    PolyLine makeCopy(string copy_polyline_name = "");
     /**
      * @brief transform: Transform this polyline.
      * @param t: The transformation for this polyline.
      */
     void transform(Transformation* t);
+    /* Check if this polyline is empty.*/
     bool isEmpty();
     /* Set the color of this mesh. */
     void setColor(QColor color);
@@ -67,6 +68,13 @@ public:
     void addVertex(Vertex *v);
     /* parent group */
     Group *parent;
+    /* The name of this polyline. */
+    string name;
+    /* Make a copy of this polyline in order for futrue transformation. */
+    PolyLine makeCopyForTransform();
+    /* The pointer to the polyline it copied from.*/
+    PolyLine *before_transform_polyline;
+    void updateCopyForTransform();
 };
 
 #endif // __POLYLINE_H__

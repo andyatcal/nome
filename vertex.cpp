@@ -122,3 +122,36 @@ void Vertex::setGlobalParameter(unordered_map<string, Parameter> *params)
 {
     this -> params = params;
 }
+
+void Vertex::update()
+{
+    if(isParametric)
+    {
+        float new_x, new_y, new_z;
+        if(x_expr != "")
+        {
+            new_x = evaluate_expression(x_expr, params);
+        }
+        else
+        {
+            new_x = position[0];
+        }
+        if(y_expr != "")
+        {
+            new_y = evaluate_expression(y_expr, params);
+        }
+        else
+        {
+            new_y = position[1];
+        }
+        if(z_expr != "")
+        {
+            new_z = evaluate_expression(z_expr, params);
+        }
+        else
+        {
+            new_z = position[2];
+        }
+        position = vec3(new_x, new_y, new_z);
+    }
+}

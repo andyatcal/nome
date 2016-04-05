@@ -89,6 +89,7 @@ void SlideGLWidget::transform_meshes_in_scene()
 {
     hierarchical_scene_transformed.updateCopyForTransform();
     global_mesh_list = hierarchical_scene_transformed.flattenedMeshes();
+    global_polyline_list = hierarchical_scene_transformed.flattenedPolylines();
     global_mesh_list.push_back(&temp_mesh);
 }
 
@@ -159,7 +160,7 @@ void SlideGLWidget::mouse_select(int x, int y) {
     winX = (double) x;
     winY = (double) view[3] - (double)y;
     glReadPixels( x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
-    cout<<"winX "<<winX<<" "<<"winY "<<winY<<" "<<"winZ "<<winZ<<endl;
+    //cout<<"winX "<<winX<<" "<<"winY "<<winY<<" "<<"winZ "<<winZ<<endl;
     gluUnProject( winX, winY, winZ, modelview, projection,
      view, &posX, &posY, &posZ);
     //cout<<"X: "<<posX<<" Y: "<<posY<<" Z: "<<posZ<<endl;
@@ -260,15 +261,32 @@ void SlideGLWidget::draw_mesh(int start_index, Mesh *mesh)
     mesh -> drawMesh(start_index, smoothshading);
 }
 
+void SlideGLWidget::draw_polyline(int start_index, PolyLine *polyline)
+{
+    QColor color = polyline -> color;
+    GLfloat fcolor[] = {1.0f * color.red() / 255,
+                        1.0f * color.green() / 255,
+                        1.0f * color.blue() / 255,
+                        1.0f * color.alpha() /255};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
+    polyline -> drawLine(start_index);
+}
+
 void SlideGLWidget::draw_scene()
 {
-
+    vector<PolyLine*>::iterator pIt;
     vector<Mesh*>::iterator mIt;
     vector<int>::iterator nIt;
     for(mIt = global_mesh_list.begin(), nIt = global_name_index_list.begin();
         nIt < global_name_index_list.end(); nIt++, mIt++)
     {
         draw_mesh(*nIt, *mIt);
+    }
+    for(pIt = global_polyline_list.begin(),  nIt = global_polyline_name_index_list.begin();
+        pIt != global_polyline_list.end(); nIt++, pIt++)
+    {
+        draw_polyline(*nIt, *pIt);
     }
     GLfloat afcolor[] = {0.0f, 1.0f, 1.0f, 1.0f};
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, afcolor);
@@ -578,7 +596,6 @@ void SlideGLWidget::addModeChecked(bool checked)
             selection_mode = 3;
         }
     }
-    clearSelection();
 }
 
 void SlideGLWidget::zipModeChecked(bool checked)
@@ -619,7 +636,7 @@ void SlideGLWidget::zipToTempCalled(bool)
     zipper->zip(&border1, &border2, temp_mesh, 1.3);
     //new_temp_mesh.color = temp_mesh.color;
     //temp_mesh = merge(temp_mesh, new_temp_mesh);
-    //temp_mesh.computeNormals();
+    temp_mesh.computeNormals();
     //temp_mesh.color = new_temp_mesh.color;
     updateGlobalIndexList();
     mySelect.clearSelection();
@@ -732,7 +749,8 @@ void SlideGLWidget::addBorderCalled(bool)
     }
     else
     {
-        emit feedback_status_bar(tr("The two borders are added. You are ready to zip."), 0);
+        emit feedback_status_bar(tr("The two borders are added."
+                                    "You are ready to zip."), 0);
     }
     repaint();
 }
@@ -770,11 +788,18 @@ void SlideGLWidget::updateGlobalIndexList()
 {
     int count = 0;
     vector<Mesh*>::iterator mIt;
+    vector<PolyLine*>::iterator pIt;
     global_name_index_list.clear();
+    global_polyline_name_index_list.clear();
     for(mIt = global_mesh_list.begin(); mIt < global_mesh_list.end(); mIt++)
     {
         global_name_index_list.push_back(count);
-        count += (*mIt) -> vertList.size();
+        count += (*mIt) -> faceList.size();
+    }
+    for(pIt = global_polyline_list.begin(); pIt < global_polyline_list.end(); pIt++)
+    {
+        global_polyline_name_index_list.push_back(count);
+        count += (*pIt) -> vertices.size();
     }
 }
 

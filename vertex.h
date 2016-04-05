@@ -78,6 +78,8 @@ public:
     void setVertexParameterValues(string);
     /* Set the global parameter pointer for this vertex. */
     void setGlobalParameter(unordered_map<string, Parameter> *params);
+    /* Update the current position of this vertex.*/
+    void update();
 };
 
 #endif // __VERTEX_H__

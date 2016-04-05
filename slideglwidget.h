@@ -201,8 +201,12 @@ private:
     void clearSelection();
     /* A flattened view of meshes in the current scene. */
     vector<Mesh*> global_mesh_list;
+    /* A flattened view of polylines in the current scene. */
+    vector<PolyLine*> global_polyline_list;
     /* Index list of where the name buffer start for every mesh.*/
     vector<int> global_name_index_list;
+    /* Index list of where the name buffer start for every polyline.*/
+    vector<int> global_polyline_name_index_list;
     /* Update the global name index list.*/
     void updateGlobalIndexList();
     /* A wrapper class to draw the whole scene.
@@ -227,6 +231,8 @@ private:
     int viewer_mode;
     /* A wrapper function to draw the viewed mesh. */
     void draw_mesh(int start_index, Mesh *mesh);
+    /* A wrapper function to draw the viewed polyline. */
+    void draw_polyline(int start_index, PolyLine *polyline);
     /* Current work phase. */
     int work_phase;
     /* The current subdivision level.*/

@@ -32,6 +32,7 @@ void Group::addGroup(Group &group)
 void Group::addPolyline(PolyLine &polyline)
 {
     myPolylines.push_back(polyline);
+    polyline.parent = this;
 }
 
 vector<Mesh*> Group::flattenedMeshes()
@@ -74,8 +75,8 @@ vector<PolyLine*> Group::flattenedPolylines()
         for(Transformation& transformUp : (*pIt).transformations_up)
         {
             (*pIt).transform(&transformUp);
-            result.push_back(&(*pIt));
         }
+        result.push_back(&(*pIt));
     }
     vector<Group>::iterator gIt;
     for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
@@ -224,7 +225,7 @@ Group Group::makeCopyForTransform()
     }
     for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
     {
-        PolyLine newPolyline = (*pIt).makeCopy();
+        PolyLine newPolyline = (*pIt).makeCopyForTransform();
         newPolyline.transformations_up = (*pIt).transformations_up;
         newGroup.addPolyline(newPolyline);
     }
@@ -242,9 +243,14 @@ void Group::updateCopyForTransform()
     transformations_up = before_transform_group -> transformations_up;
     vector<Mesh>::iterator mIt;
     vector<Group>::iterator gIt;
+    vector<PolyLine>::iterator pIt;
     for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
     {
         (*mIt).updateCopyForTransform();
+    }
+    for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
+    {
+        (*pIt).updateCopyForTransform();
     }
     for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
     {
@@ -275,6 +281,26 @@ void Group::mapFromParameters()
             p->addInfluenceMesh(&(*mIt));
         }
         for(Transformation& t : (*mIt).transformations_up)
+        {
+            vector<Parameter*> params = t.influencingParams;
+            for(Parameter*& p : params)
+            {
+                p->addInfluenceTransformation(&t);
+            }
+        }
+    }
+    vector<PolyLine>::iterator pIt;
+    for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
+    {
+        for(Vertex*& v : (*pIt).vertices)
+        {
+            vector<Parameter*> params = v -> influencingParams;
+            for(Parameter*& p : params)
+            {
+                p->addInfluenceVertex(v);
+            }
+        }
+        for(Transformation& t : (*pIt).transformations_up)
         {
             vector<Parameter*> params = t.influencingParams;
             for(Parameter*& p : params)

@@ -57,11 +57,21 @@ string warning(int type, int lineNumber)
                 + to_string(lineNumber) + " can't be restored.";
     case 10:
         return "Warning: point at line"
-                + to_string(lineNumber) + " don't have a name. It can't be initiated.";
+                + to_string(lineNumber) + " doesn't have a name. It can't be initiated.";
     case 11:
         return "Warning: point at line"
                 + to_string(lineNumber) + " has already been created (duplicate names)." +
                                           " It can't be initiated.";
+    case 12:
+        return "Warning: polyline at line"
+                + to_string(lineNumber) + " doesn't have a name. It can't be initiated.";
+    case 13:
+        return "Warning: polyline at line"
+                + to_string(lineNumber) + " has already been created (duplicate names)." +
+                                          " It can't be initiated.";
+    case 14:
+        return "Warning: vertex at line"
+                + to_string(lineNumber) + " can't be added to polyline. It has not been created.";
     }
     return "";
 }
@@ -89,6 +99,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
     unordered_map<string, Group>::iterator groupIt;
     unordered_map<string, Vertex*> global_vertices;
     unordered_map<string, Vertex*>::iterator vertIt;
+    unordered_map<string, PolyLine> polylines;
+    unordered_map<string, PolyLine>::iterator lineIt;
     string name = "";
     while(std::getline(file, nextLine))
     {
@@ -298,6 +310,58 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             else if((*tIt) == "polyline")
             {
                 PolyLine newPolyline;
+                if((++tIt) < tokens.end())
+                {
+                    lineIt = polylines.find(*tIt);
+                    if(lineIt == polylines.end())
+                    {
+                        newPolyline.name = *tIt;
+                    }
+                    else
+                    {
+                        cout<<warning(13, lineNumber)<<endl;
+                    }
+                }
+                else
+                {
+                    cout<<warning(12, lineNumber)<<endl;
+                }
+                string vertInside = "";
+                bool addingVert = false;
+                while(++tIt < tokens.end() && (*tIt) != "endpolyline")
+                {
+                    for(char& c : (*tIt))
+                    {
+                        if(c == '(')
+                        {
+                            addingVert = true;
+                        }
+                        else if(c == ')')
+                        {
+                            addingVert = false;
+                        }
+                        else if(addingVert)
+                        {
+                            vertInside.push_back(c);
+                        }
+                    }
+                    if(vertInside != "")
+                    {
+                        //xyz.push_back(' ');
+                        vertIt = global_vertices.find(vertInside);
+                        if(vertIt == global_vertices.end())
+                        {
+                            cout<<warning(14, lineNumber);
+                        }
+                        else
+                        {
+                            newPolyline.addVertex(vertIt -> second);
+                        }
+                        vertInside = "";
+                    }
+                }
+                endPolyLineWhile:
+                polylines[newPolyline.name] = newPolyline;
             }
             else if((*tIt) == "point")
             {
@@ -323,7 +387,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 }
                 string xyz;
                 bool makingXYZ = false;
-                while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                while(++tIt < tokens.end() && (*tIt) != "endpoint")
                 {
                     for(char& c : (*tIt))
                     {
@@ -373,9 +437,11 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 string instanceName;
                 Mesh newMesh;
                 Group newGroup;
+                PolyLine newPolyline;
                 string newInstanceName;
                 bool findMesh = false;
                 bool findGroup = false;
+                bool findPolyline = false;
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
                     {
@@ -408,7 +474,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     }
                     else
                     {
-                        cout<<warning(5, lineNumber);
+                        lineIt = polylines.find(instanceName);
+                        if(lineIt != polylines.end())
+                        {
+                            newPolyline = (lineIt -> second).makeCopy(newInstanceName);
+                            findPolyline = true;
+                        }
+                        else
+                        {
+                            cout<<warning(5, lineNumber);
+                        }
                     }
                 }
                 vector<Transformation> transformations_up;
@@ -560,10 +635,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         newMesh.setTransformation(transformations_up);
                         groups[currentGroup].addMesh(newMesh);
 
-                    } else if(findGroup)
+                    }
+                    else if(findGroup)
                     {
                         newGroup.setTransformation(transformations_up);
                         groups[currentGroup].addGroup(newGroup);
+                    }
+                    else if(findPolyline)
+                    {
+                        newPolyline.setTransformation(transformations_up);
+                        groups[currentGroup].addPolyline(newPolyline);
                     }
                 }
                 else
@@ -573,10 +654,15 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         newMesh.setTransformation(transformations_up);
                         group.addMesh(newMesh);
                     }
-                    else
+                    else if(findGroup)
                     {
                         newGroup.setTransformation(transformations_up);
                         group.addGroup(newGroup);
+                    }
+                    else if(findPolyline)
+                    {
+                        newPolyline.setTransformation(transformations_up);
+                        group.addPolyline(newPolyline);
                     }
                 }
             }

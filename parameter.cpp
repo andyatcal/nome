@@ -33,6 +33,10 @@ void Parameter::update()
     {
         t -> update();
     }
+    for(Vertex*& v : influenceVertices)
+    {
+        v -> update();
+    }
 }
 
 void Parameter::addInfluenceMesh(Mesh * mesh)
