@@ -100,6 +100,11 @@ public:
     void updateGroupElementName();
     /* Find a vertex given its hierarchical name.*/
     Vertex* findVertexInThisGroup(string name);
+    /* Indicator that this group is in editing mode.
+     * So we can't change the hyper parameters of this mesh,
+     * e.g. the parameter n of the mesh.
+     */
+    bool in_editing_mode;
 };
 
 #endif // GROUP_H

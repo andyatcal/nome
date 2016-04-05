@@ -5,6 +5,7 @@
 #include "parameterbank.h"
 #include "slideglwidget.h"
 #include "mesh.h"
+#include "polyline.h"
 #include "group.h"
 #include "utils.h"
 #include <string>

@@ -52,6 +52,4 @@ group kleinbottle
 	instance tun5 t5 endinstance
 endgroup
 
-instance kleinbottle endinstance
-
-instance 
+instance kleinbottle kb endinstance

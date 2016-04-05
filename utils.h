@@ -23,6 +23,10 @@ float evaluate_transformation_expression(string expr,
                                unordered_map<string, Parameter> *params,
                                Transformation * t);
 
+float evaluate_vertex_expression(string expr,
+                                 unordered_map<string, Parameter> *params,
+                                 Vertex * t);
+
 float getParameterValue(string name,
                         unordered_map<string, Parameter> *params);
 
@@ -33,6 +37,10 @@ float getMeshParameterValue(string name,
 float getTransformationParameterValue(string name,
                                       unordered_map<string, Parameter> *params,
                                       Transformation *t);
+
+float getVertexParameterValue(string name,
+                              unordered_map<string, Parameter> *params,
+                              Vertex * mesh);
 
 bool isOperator(char token);
 

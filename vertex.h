@@ -10,17 +10,23 @@
 
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
+#include <unordered_map>
+#include "utils.h"
+
 using namespace glm;
 using namespace std;
 
 class Edge;
 class Mesh;
+class Parameter;
 
 /**
  * @brief The Vertex class. Build for vertex in winged-
  * edge data structure.
  */
-class Vertex{
+class Vertex
+{
 public:
     Vertex();
     /**
@@ -62,6 +68,16 @@ public:
     string z_expr;
     /* The name of this vertex.*/
     string name;
+    /* Add a parameter that influence this funnel. */
+    void addParam(Parameter*);
+    /* Parameters that influence this vertex. */
+    vector<Parameter*> influencingParams;
+    /* A pointer to the global parameter. */
+    unordered_map<string, Parameter> *params;
+    /* Set the parameters for this vertex. */
+    void setVertexParameterValues(string);
+    /* Set the global parameter pointer for this vertex. */
+    void setGlobalParameter(unordered_map<string, Parameter> *params);
 };
 
 #endif // __VERTEX_H__

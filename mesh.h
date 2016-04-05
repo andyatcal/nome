@@ -187,6 +187,11 @@ public:
     Mesh * before_transform_mesh;
     /* Find a vertex in this mesh given its name. */
     Vertex * findVertexInThisMesh(string name);
+    /* Indicator that this group is in editing mode.
+     * So we can't change the hyper parameters of this mesh,
+     * e.g. the parameter n of the mesh.
+     */
+    bool in_editing_mode;
 };
 
 // @param p1, p2, p3 are positions of three vertices,

@@ -131,10 +131,20 @@ vec3 SlideGLWidget::get_arcball_vector(int x, int y) {
     return p;
 }
 
+void SlideGLWidget::set_to_editing_mode(bool in_editing_mode)
+{
+    hierarchical_scene_transformed.in_editing_mode = in_editing_mode;
+    for(Mesh*& mesh : global_mesh_list)
+    {
+        mesh->in_editing_mode = in_editing_mode;
+    }
+}
+
 void SlideGLWidget::mouse_select(int x, int y) {
     if(viewer_mode != 0) {
         return;
     }
+    set_to_editing_mode(true);
     GLuint buff[64] = {0};
     GLint hits, view[4];
     GLdouble modelview[16];
@@ -695,7 +705,8 @@ void SlideGLWidget::addTempToMaster()
 }
 
 void SlideGLWidget::addTempToMasterCalled(bool) {
-    if(temp_mesh.isEmpty()) {
+    if(temp_mesh.isEmpty())
+    {
         emit feedback_status_bar(tr("Current temp mesh is empty."), 0);
         return;
     }
@@ -739,6 +750,14 @@ void SlideGLWidget::clearSelection()
     border1.clear();
     border2.clear();
     temp_mesh.clear();
+    if(group_from_temp_mesh != NULL && group_from_temp_mesh->myMeshes.size()>0)
+    {
+        group_from_temp_mesh -> clear();
+        group_from_temp_mesh = NULL;
+        transform_meshes_in_scene();
+        updateGlobalIndexList();
+    }
+    set_to_editing_mode(false);
     repaint();
 }
 
@@ -766,7 +785,15 @@ void SlideGLWidget::resetTrianglePanelty(QString new_value)
 
 void SlideGLWidget::paramValueChanged(float)
 {
-    transform_meshes_in_scene();
+
+    if(hierarchical_scene_transformed.in_editing_mode)
+    {
+        transform_meshes_in_scene();
+    }
+    else
+    {
+        makeSLFMesh();
+    }
     if(group_from_temp_mesh != NULL && group_from_temp_mesh->myMeshes.size() != 0)
     {
         for(Mesh& mesh : group_from_temp_mesh->myMeshes)
@@ -802,5 +829,6 @@ void SlideGLWidget::updateFromSavedTempMesh()
     vector<Mesh*> append_list = group_from_temp_mesh -> flattenedMeshes();
     global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
     updateGlobalIndexList();
+    set_to_editing_mode(true);
     repaint();
 }

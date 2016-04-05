@@ -14,6 +14,7 @@ Group::Group()
     user_set_color = false;
     transformations_up.clear();
     parent = NULL;
+    in_editing_mode = false;
 }
 
 void Group::addMesh(Mesh &mesh)

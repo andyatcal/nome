@@ -51,10 +51,17 @@ string warning(int type, int lineNumber)
                 + to_string(lineNumber) + " does not match any defined parameter.";
     case 8:
         return "Warning: parameter at line"
-                + to_string(lineNumber) + "does not have a retored value.";
+                + to_string(lineNumber) + " does not have a retored value.";
     case 9:
         return "Warning: vertex at line"
-                + to_string(lineNumber) + "can't be restored.";
+                + to_string(lineNumber) + " can't be restored.";
+    case 10:
+        return "Warning: point at line"
+                + to_string(lineNumber) + " don't have a name. It can't be initiated.";
+    case 11:
+        return "Warning: point at line"
+                + to_string(lineNumber) + " has already been created (duplicate names)." +
+                                          " It can't be initiated.";
     }
     return "";
 }
@@ -80,6 +87,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
     unordered_map<string, Mesh>::iterator meshIt;
     unordered_map<string, Group> groups;
     unordered_map<string, Group>::iterator groupIt;
+    unordered_map<string, Vertex*> global_vertices;
+    unordered_map<string, Vertex*>::iterator vertIt;
     string name = "";
     while(std::getline(file, nextLine))
     {
@@ -130,7 +139,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     switch(i)
                     {
                     case 0:
-                        newParameter.name = banks[banks.size() - 1].name + QString::fromStdString("_" + nextToken);
+                        newParameter.name = banks[banks.size() - 1].name
+                                + QString::fromStdString("_" + nextToken);
                         name = nextToken;
                         break;
                     case 1:
@@ -183,14 +193,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 pIt = params.find(newParameter.name.toStdString());
                 if(pIt == params.end())
                 {
-                    params[banks[banks.size() - 1].name.toStdString() + "_" + name] = newParameter;
+                    params[banks[banks.size() - 1].name.toStdString() + "_" + name]
+                            = newParameter;
                 }
                 else
                 {
                     cout<<warning(2, lineNumber)<<endl;
                     goto newLineEnd;
                 }
-                banks[banks.size() - 1].addParameter(&params[banks[banks.size() - 1].name.toStdString() + "_" + name]);
+                banks[banks.size() - 1].addParameter(
+                            &params[banks[banks.size() - 1].name.toStdString() + "_" + name]);
             }
             else if((*tIt) == "funnel")
             {
@@ -282,6 +294,61 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     cout<<warning(3, lineNumber)<<endl;
                 }
                 newTunnel.computeNormals();
+            }
+            else if((*tIt) == "polyline")
+            {
+                PolyLine newPolyline;
+            }
+            else if((*tIt) == "point")
+            {
+                Vertex * newVertex = new Vertex;
+                if((++tIt) < tokens.end()) {
+                    if(!testComments(*tIt))
+                    {
+                        vertIt = global_vertices.find(*tIt);
+                        if(vertIt == global_vertices.end())
+                        {
+                            newVertex -> name = *tIt;
+                            global_vertices[*tIt] = newVertex;
+                        }
+                        else
+                        {
+                            cout<<warning(11, lineNumber)<<endl;
+                        }
+                    }
+                    else
+                    {
+                        cout<<warning(10, lineNumber)<<endl;
+                    }
+                }
+                string xyz;
+                bool makingXYZ = false;
+                while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                {
+                    for(char& c : (*tIt))
+                    {
+                        if(c == '(')
+                        {
+                            makingXYZ = true;
+                        }
+                        else if(c == ')')
+                        {
+                            makingXYZ = false;
+                            goto endPointWhile;
+                        }
+                        else if(makingXYZ)
+                        {
+                            xyz.push_back(c);
+                        }
+                    }
+                    if(xyz != "")
+                    {
+                        xyz.push_back(' ');
+                    }
+                }
+                endPointWhile:
+                newVertex->setGlobalParameter(&params);
+                newVertex->setVertexParameterValues(xyz);
             }
             else if((*tIt) == "group")
             {

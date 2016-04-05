@@ -1,0 +1,14 @@
+bank v1p
+    set     x      0      -0.5     0.5     0.1
+    set     y      0      -0.5     0.5     0.1
+    set     z      0      -0.5     0.5     0.1
+endbank
+
+point v1 ($v1p_x $v1p_y $v1p_z) endpoint
+point v2 (1 0 0) endpoint
+point v3 (1 1 0) endpoint
+point v4 (1 1 1) endpoint
+
+polyline line1 (v1 v2 v3 v4) endpolyline
+
+instance line1 l1 endinstance 

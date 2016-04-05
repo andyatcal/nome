@@ -14,6 +14,7 @@ Mesh::Mesh(int type)
     transformations_up.clear();
     parent = NULL;
     this -> type = type;
+    in_editing_mode = false;
     if(type == 1 || type == 2)
     {
         n = 0;
@@ -1053,6 +1054,10 @@ void Mesh::updateFunnel()
         int new_n = evaluate_expression(n_expr, params);
         if(new_n != n)
         {
+            if(in_editing_mode)
+            {
+                return;
+            }
             n = new_n;
             updateFunnel_n();
         }
@@ -1093,6 +1098,10 @@ void Mesh::updateTunnel()
         int new_n = evaluate_expression(n_expr, params);
         if(new_n != n)
         {
+            if(in_editing_mode)
+            {
+                return;
+            }
             n = new_n;
             updateTunnel_n();
         }

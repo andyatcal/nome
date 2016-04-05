@@ -235,6 +235,8 @@ private:
     float offset_value;
     /* Merge all meshes from global_mesh_list into master_mesh.*/
     void mergeAll();
+    /* Set the in_eidting_mode of scene shown and all leave meshes.*/
+    void set_to_editing_mode(bool in_editing_mode);
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
