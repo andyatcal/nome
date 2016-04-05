@@ -624,6 +624,7 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                     }
                     else
                     {
+                        (canvas -> temp_mesh).addVertex(v);
                         vertices.push_back(v);
                     }
                     goto newLineEnd;

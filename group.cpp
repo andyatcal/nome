@@ -43,6 +43,7 @@ vector<Mesh*> Group::flattenedMeshes()
         {
             (*mIt).transform(&transformUp);
         }
+        (*mIt).computeNormals();
         result.push_back(&(*mIt));
     }
     vector<Group>::iterator gIt;
