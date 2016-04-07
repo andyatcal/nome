@@ -9,7 +9,7 @@ point v2 (1 0 0) endpoint
 point v3 (1 1 0) endpoint
 point v4 (1 1 1) endpoint
 
-polyline line1 (v1 v2 v3 v4) endpolyline
+polyline line1 (v1 v2 v3 v4) isloop endpolyline
 
 group polylinegroup
 	instance line1 l1 (v1 v2 v3 v4) endinstance

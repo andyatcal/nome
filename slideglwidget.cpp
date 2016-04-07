@@ -270,7 +270,7 @@ void SlideGLWidget::draw_polyline(int start_index, PolyLine *polyline)
                         1.0f * color.alpha() /255};
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
-    polyline -> drawLine(start_index);
+    polyline -> drawLineWithCubes(start_index);
 }
 
 void SlideGLWidget::draw_scene()

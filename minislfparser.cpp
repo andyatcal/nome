@@ -310,7 +310,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             else if((*tIt) == "polyline")
             {
                 PolyLine newPolyline;
-                if((++tIt) < tokens.end())
+                if((++tIt) < tokens.end() && !testComments(*tIt))
                 {
                     lineIt = polylines.find(*tIt);
                     if(lineIt == polylines.end())
@@ -339,6 +339,13 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         else if(c == ')')
                         {
                             addingVert = false;
+                            if(++tIt < tokens.end() && (*tIt) != "endpolyline")
+                            {
+                                if(*tIt == "isloop")
+                                {
+                                    newPolyline.isLoop = true;
+                                }
+                            }
                         }
                         else if(addingVert)
                         {

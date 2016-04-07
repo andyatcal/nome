@@ -36,6 +36,10 @@ void PolyLine::drawLine(int start_index)
 
 void PolyLine::clear()
 {
+    for(Vertex*& v : vertices)
+    {
+        delete v;
+    }
     vertices.clear();
     transformations_up.clear();
 }
@@ -159,5 +163,112 @@ void PolyLine::updateCopyForTransform()
     for(Vertex*& v: vertices)
     {
         v -> position = v -> before_transform_vertex -> position;
+    }
+}
+
+void PolyLine::drawLineWithCubes(int start_index)
+{
+    int counter = 0;
+    updateCubeSizes();
+    for(Vertex*& v : vertices)
+    {
+        glLoadName(start_index + counter);
+        drawCubeAroundVertex(v, 0.1 * cubeSizes[counter]);
+        counter++;
+    }
+    drawLine(start_index);
+}
+
+void PolyLine::drawCubeAroundVertex(Vertex *v, float size)
+{
+    vec3 p = v -> position;
+    float x = p[0];
+    float y = p[1];
+    float z = p[2];
+    glBegin(GL_QUADS);
+        glNormal3f(0, 0, 1);
+        glVertex3f(x + size / 2, y + size / 2, z + size / 2);
+        glVertex3f(x - size / 2, y + size / 2, z + size / 2);
+        glVertex3f(x - size / 2, y - size / 2, z + size / 2);
+        glVertex3f(x + size / 2, y - size / 2, z + size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+        glNormal3f(1, 0, 0);
+        glVertex3f(x + size / 2, y + size / 2, z + size / 2);
+        glVertex3f(x + size / 2, y - size / 2, z + size / 2);
+        glVertex3f(x + size / 2, y - size / 2, z - size / 2);
+        glVertex3f(x + size / 2, y + size / 2, z - size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+        glNormal3f(0, 0, -1);
+        glVertex3f(x + size / 2, y + size / 2, z - size / 2);
+        glVertex3f(x + size / 2, y - size / 2, z - size / 2);
+        glVertex3f(x - size / 2, y - size / 2, z - size / 2);
+        glVertex3f(x - size / 2, y + size / 2, z - size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+        glNormal3f(-1, 0, 0);
+        glVertex3f(x - size / 2, y + size / 2, z - size / 2);
+        glVertex3f(x - size / 2, y - size / 2, z - size / 2);
+        glVertex3f(x - size / 2, y - size / 2, z + size / 2);
+        glVertex3f(x - size / 2, y + size / 2, z + size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+        glNormal3f(0, 1, 0);
+        glVertex3f(x + size / 2, y + size / 2, z - size / 2);
+        glVertex3f(x + size / 2, y + size / 2, z + size / 2);
+        glVertex3f(x - size / 2, y + size / 2, z + size / 2);
+        glVertex3f(x - size / 2, y + size / 2, z - size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+        glNormal3f(0, -1, 0);
+        glVertex3f(x + size / 2, y - size / 2, z + size / 2);
+        glVertex3f(x + size / 2, y - size / 2, z - size / 2);
+        glVertex3f(x - size / 2, y - size / 2, z - size / 2);
+        glVertex3f(x - size / 2, y - size / 2, z + size / 2);
+    glEnd();
+}
+
+void PolyLine::updateCubeSizes()
+{
+    cubeSizes.clear();
+    vector<Vertex*>::iterator vIt;
+    vector<float> distances;
+    for(vIt = vertices.begin(); vIt < vertices.end() - 1; vIt++)
+    {
+        distances.push_back(glm::distance((*vIt) -> position, (*(vIt + 1)) -> position));
+    }
+    if(isLoop)
+    {
+        distances.push_back(glm::distance((*vIt) -> position, vertices[0] -> position));
+        for(size_t i = 0; i < distances.size(); i++)
+        {
+            if(i == 0)
+            {
+                cubeSizes.push_back((distances[0] + *(distances.end() - 1)) / 2);
+            }
+            else
+            {
+                cubeSizes.push_back((distances[i] + distances[i - 1]) / 2);
+            }
+        }
+    }
+    else
+    {
+        for(size_t i = 0; i <= distances.size(); i++)
+        {
+            if(i == 0)
+            {
+                cubeSizes.push_back(distances[0]);
+            }
+            else if(i == distances.size())
+            {
+                cubeSizes.push_back(distances[distances.size() - 1]);
+            }
+            else
+            {
+                cubeSizes.push_back((distances[i - 1] + distances[i]) / 2);
+            }
+        }
     }
 }

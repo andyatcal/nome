@@ -28,6 +28,13 @@ public:
      * @brief drawLine: Draw this polyline in OpenGL
      */
     void drawLine(int start_index = 0);
+    /**
+     * @brief drawLineWithCubes: Draw this polygon with
+     * a cube around every vertex.
+     * @param start_index: the starting index of the name
+     * buffer.
+     */
+    void drawLineWithCubes(int start_index = 0);
     // Return the skewness of points in this polyline.
     /**
      * @brief skewness: Find the skeness of all points.
@@ -75,6 +82,12 @@ public:
     /* The pointer to the polyline it copied from.*/
     PolyLine *before_transform_polyline;
     void updateCopyForTransform();
+    /* A helper functoin for drawLineWithCubes.*/
+    void drawCubeAroundVertex(Vertex *v, float size);
+    /* specify the sizes of the cubes to draw in the scene. */
+    vector<float> cubeSizes;
+    /* A helper function for drawLineWithCubes.*/
+    void updateCubeSizes();
 };
 
 #endif // __POLYLINE_H__

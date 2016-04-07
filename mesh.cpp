@@ -551,6 +551,14 @@ bool Mesh::isEmpty() {
 }
 
 void Mesh::clear() {
+    for(Vertex*& v : vertList)
+    {
+        delete v;
+    }
+    for(Face*& f : faceList)
+    {
+        delete f;
+    }
     vertList.clear();
     faceList.clear();
     edgeTable.clear();
