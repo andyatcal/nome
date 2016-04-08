@@ -861,7 +861,7 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                 }
                 if(instanceName == "tempmesh")
                 {
-                    newMesh = (canvas -> temp_mesh).makeCopyForTempMesh(newInstanceName);
+                    newMesh = (canvas -> consolidate_mesh).makeCopyForConsolidateMesh(newInstanceName);
                 }
                 else
                 {

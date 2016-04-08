@@ -1,0 +1,24 @@
+savedparameter
+    tp1_n 8.000000
+    tp1_ro 1.000000
+    tp1_ratio 0.000000
+    tp1_h 1.500000
+    tp2_n 8.000000
+    tp2_ro 1.000000
+    tp2_ratio 0.000000
+    tp2_h 0.200000
+    tp3_n 8.000000
+    tp3_ro 2.000000
+    tp3_ratio 0.000000
+    tp3_h 0.200000
+    tp3_x -2.000000
+    tp3_z 8.000000
+    tp4_n 8.000000
+    tp4_ro 3.000000
+    tp4_ratio 0.000000
+    tp4_h 0.200000
+    tp5_n 8.000000
+    tp5_ro 3.000000
+    tp5_ratio 0.000000
+    tp5_h 1.500000
+endsavedparameter

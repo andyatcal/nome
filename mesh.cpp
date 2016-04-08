@@ -664,7 +664,7 @@ Mesh Mesh::makeCopy(string copy_mesh_name) {
     return newMesh;
 }
 
-Mesh Mesh::makeCopyForTempMesh(string copy_mesh_name) {
+Mesh Mesh::makeCopyForConsolidateMesh(string copy_mesh_name) {
     Mesh newMesh;
     newMesh.before_transform_mesh = this;
     if(copy_mesh_name == "")

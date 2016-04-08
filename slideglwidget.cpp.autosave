@@ -671,6 +671,7 @@ void SlideGLWidget::zipToTempCalled(bool)
 void SlideGLWidget::consolidateTempMesh(bool)
 {
     consolidate_meshes.push_back(temp_mesh);
+    global_mesh_list
 }
 
 void SlideGLWidget::addTempToMaster()
