@@ -1272,7 +1272,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
         nextLine.pop_back();
 #endif
         if(regex_match(nextLine, vRegex)) {
-            //cout<<"Vert!"<<endl;
+            cout<<"Vert!"<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
             temp = temp.substr(temp.find(" ") + 1);
@@ -1287,8 +1287,10 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             newVert -> name = "v" + to_string(vAfterMergeCounter);
             vector<Vertex*>::iterator vIt;
             bool alreadyAdded = false;
-            for (vIt = mesh.vertList.begin(); vIt < mesh.vertList.end(); vIt ++) {
-                if(distance(newVert -> position, (*vIt) -> position) < 0.001 ){
+            for (vIt = mesh.vertList.begin(); vIt < mesh.vertList.end(); vIt ++)
+            {
+                if(distance(newVert -> position, (*vIt) -> position) < 0.001 )
+                {
                     //cout << "The distance between vertex "<<newVert -> ID<<" and vertex "<<vIt -> second -> ID<<" is: "<<endl;
                     //cout << newVert -> position - (*vIt) -> position<<endl;
                     alreadyAdded = true;
@@ -1296,8 +1298,8 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
                     break;
                 }
             }
-            //cout<<newVert -> ID<<" Vertex added"<<endl;
-            //cout<<"I am mapping "<<vBeforeMergeCounter<<" to "<<vAfterMergeCounter<<endl;
+            cout<<newVert -> ID<<" Vertex added"<<endl;
+            cout<<"I am mapping "<<vBeforeMergeCounter<<" to "<<vAfterMergeCounter<<endl;
             if(!alreadyAdded) {
                 newVert -> ID = vAfterMergeCounter;
                 newVert -> name = "v" + to_string(vAfterMergeCounter);
@@ -1306,8 +1308,10 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
                 vAfterMergeCounter += 1;
             }
             vBeforeMergeCounter += 1;
-        } else if(regex_match(nextLine, tRegex)) {
-            //cout<<"Polygon!"<<endl;
+        }
+        else if(regex_match(nextLine, tRegex))
+        {
+            cout<<"Polygon!"<<endl;
             string temp;
             temp = nextLine.substr(nextLine.find("\("), nextLine.find("\)") - nextLine.find("\("));
             //cout<<temp<<endl;
@@ -1328,18 +1332,22 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             a += IDplusBecauseOfShells;
             b += IDplusBecauseOfShells;
             c += IDplusBecauseOfShells;
-            //cout<<"a: "<< a <<" b: "<<b<<" c: "<<c<<endl;
+            cout<<"a: "<< a <<" b: "<<b<<" c: "<<c<<endl;
             a = mapBeforeMergeToAfter[a];
             b = mapBeforeMergeToAfter[b];
             c = mapBeforeMergeToAfter[c];
             Vertex * va = mesh.vertList[a];
             Vertex * vb = mesh.vertList[b];
             Vertex * vc = mesh.vertList[c];
-            //cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
+            cout<<va -> ID<<" "<<vb -> ID<<" "<<vc -> ID<<endl;
             mesh.addTriFace(va, vb, vc);
-        } else if(regex_match(nextLine, shRegex)) {
+        }
+        else if(regex_match(nextLine, shRegex))
+        {
             shellNum += 1;
-        } else if(regex_match(nextLine, verticesRegex)){
+        }
+        else if(regex_match(nextLine, verticesRegex))
+        {
             string temp;
             temp = nextLine.substr(nextLine.find("\("));
             temp = temp.substr(temp.find(" ") + 1);
