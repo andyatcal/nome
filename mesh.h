@@ -103,11 +103,11 @@ public:
      */
     Mesh makeCopyForTransform();
     /**
-     * @brief makeCopyForConsolidateMesh: Make a copy of the temp mesh from canvas.
+     * @brief makeCopyForTempMesh: Make a copy of the temp mesh from canvas.
      * @param copy_mesh_name: the name of the new copy mesh.
      * @return The copied mesh.
      */
-    Mesh makeCopyForConsolidateMesh(string copy_mesh_name);
+    Mesh makeCopyForTempMesh(string copy_mesh_name);
     void updateCopyForTransform();
     /**
      * @brief transform: Transform this mesh.

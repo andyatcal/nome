@@ -53,6 +53,8 @@ void SlideGLWidget::generalSetup()
     work_phase = 0;
     temp_mesh.color = Qt::yellow;
     temp_mesh.clear();
+    consolidate_mesh.color = QColor(255, 69, 0);
+    consolidate_mesh.clear();
     group_from_consolidate_mesh = NULL;
     trianglePanelty = 1.3;
 }
@@ -63,6 +65,7 @@ void SlideGLWidget::makeDefaultMesh()
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
     global_mesh_list.push_back(&master_mesh);
+    global_mesh_list.push_back(&consolidate_mesh);
     global_mesh_list.push_back(&temp_mesh);
 }
 
@@ -74,6 +77,7 @@ void SlideGLWidget::makeSIFMesh(string name)
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
     global_mesh_list.push_back(&master_mesh);
+    global_mesh_list.push_back(&consolidate_mesh);
     global_mesh_list.push_back(&temp_mesh);
 }
 
@@ -91,6 +95,7 @@ void SlideGLWidget::transform_meshes_in_scene()
     hierarchical_scene_transformed.updateCopyForTransform();
     global_mesh_list = hierarchical_scene_transformed.flattenedMeshes();
     global_polyline_list = hierarchical_scene_transformed.flattenedPolylines();
+    global_mesh_list.push_back(&consolidate_mesh);
     global_mesh_list.push_back(&temp_mesh);
 }
 
@@ -670,7 +675,29 @@ void SlideGLWidget::zipToTempCalled(bool)
 
 void SlideGLWidget::consolidateTempMesh(bool)
 {
-    consolidate_meshes.push_back(temp_mesh);
+    for(Vertex*& v : temp_mesh.vertList)
+    {
+        if(std::find(consolidate_mesh.vertList.begin(),
+                     consolidate_mesh.vertList.end(), v)
+                == consolidate_mesh.vertList.end())
+        {
+            consolidate_mesh.vertList.push_back(v);
+        }
+    }
+    for(Face*& f : temp_mesh.faceList)
+    {
+        {
+            if(std::find(consolidate_mesh.faceList.begin(),
+                         consolidate_mesh.faceList.end(), f)
+                    == consolidate_mesh.faceList.end())
+            {
+                consolidate_mesh.faceList.push_back(f);
+            }
+        }
+    }
+    consolidate_mesh.buildBoundary();
+    consolidate_mesh.computeNormals();
+    clearSelection();
 }
 
 void SlideGLWidget::addTempToMaster()

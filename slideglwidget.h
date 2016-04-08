@@ -80,7 +80,7 @@ public:
     /* The mesh that contains temporary added meshes.*/
     Mesh temp_mesh;
     /* The mesh confirmed by the user and become permenant change. */
-    vector<Mesh> consolidate_meshes;
+    Mesh consolidate_mesh;
     /* The merged result of all meshes in the scene and consolidate mesh. */
     Mesh merged_mesh;
     /* The current subdivided mesh. */
