@@ -686,18 +686,41 @@ void SlideGLWidget::consolidateTempMesh(bool)
     }
     for(Face*& f : temp_mesh.faceList)
     {
-        {
-            if(std::find(consolidate_mesh.faceList.begin(),
-                         consolidate_mesh.faceList.end(), f)
-                    == consolidate_mesh.faceList.end())
+        Edge * firstEdge = f -> oneEdge;
+        Edge * currEdge = firstEdge;
+        Edge * nextEdge;
+        vector<Vertex*> vertices;
+        Vertex * tempv;
+        vertices.clear();
+        do {
+            if(f == currEdge -> fa)
             {
-                consolidate_mesh.faceList.push_back(f);
+                tempv = currEdge -> vb;
+                nextEdge = currEdge -> nextVbFa;
             }
-        }
+            else
+            {
+                if(currEdge -> mobius)
+                {
+                    tempv = currEdge -> vb;
+                    nextEdge = currEdge -> nextVbFb;
+                }
+                else
+                {
+                    tempv = currEdge -> va;
+                    nextEdge = currEdge -> nextVaFb;
+                }
+            }
+            vertices.push_back(tempv);
+            currEdge = nextEdge;
+        } while (currEdge != firstEdge);
+        consolidate_mesh.addPolygonFace(vertices);
     }
     consolidate_mesh.buildBoundary();
     consolidate_mesh.computeNormals();
     clearSelection();
+    updateGlobalIndexList();
+    repaint();
 }
 
 void SlideGLWidget::addTempToMaster()
@@ -823,7 +846,10 @@ void SlideGLWidget::clearSelection()
     border1.clear();
     border2.clear();
     temp_mesh.clear();
-    set_to_editing_mode(false);
+    if(temp_mesh.isEmpty() && consolidate_mesh.isEmpty())
+    {
+        set_to_editing_mode(false);
+    }
     repaint();
 }
 
