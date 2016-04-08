@@ -49,6 +49,7 @@ void ControlPanel::buildConnection()
     connect(addTempToMasterButton, SIGNAL(clicked(bool)), canvas, SLOT(addTempToMasterCalled(bool)));
     connect(wholeBorderCheck,SIGNAL(clicked(bool)), canvas, SLOT(wholeBorderSelectionChecked(bool)));
     connect(trianglePaneltyEdit, SIGNAL(textChanged(QString)), canvas, SLOT(resetTrianglePanelty(QString)));
+    connect(consolidateButton, SIGNAL(clicked(bool)), canvas, SLOT(consolidateTempMesh(bool)));
 }
 
 void ControlPanel::setupLayout()
@@ -58,9 +59,9 @@ void ControlPanel::setupLayout()
     setLayout(mainLayout = new QVBoxLayout);
     mainLayout -> setMargin(10);
     mainLayout->setSpacing(5);
-    mainLayout -> addWidget(new QLabel("VIEWER MODE"));
+    mainLayout -> addWidget(new QLabel("VIEW MODE"));
     mainLayout -> addLayout(viewLayout = new QVBoxLayout);
-    mainLayout -> addWidget(new QLabel("EDITER MODE"));
+    mainLayout -> addWidget(new QLabel("EDIT MODE"));
     mainLayout -> addLayout(modeLayout = new QVBoxLayout);
     mainLayout -> addWidget(new QLabel("SUBDIVISION"));
     mainLayout -> addLayout(subdivLayout = new QVBoxLayout);
@@ -97,6 +98,7 @@ void ControlPanel::setupLayout()
     wholeBorderCheck -> setEnabled(false);
     addOrClearLayout->addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
     addOrClearLayout->addWidget(clearSelectionButton = new QPushButton(tr("Clear Selection")));
+    modeLayout -> addWidget(consolidateButton = new QPushButton(tr("Consolidate Temp Mesh")));
     modeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge All")));
     /* Subdivision layout. */
     subdivLayout -> addLayout(subdivLevelLayout = new QHBoxLayout);

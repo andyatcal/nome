@@ -20,7 +20,8 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////
 // Selection Class -- Handles Mouse Selection.
 
-class MySelection {
+class MySelection
+{
     /* Vertices selected. Can be used to create Face or Polyline.*/
     vector<Vertex*> selectedVertices;
     /* For partial border selection/*/
@@ -57,7 +58,14 @@ public:
      * @param posY: Y position from the actual hit point on polygon.
      * @param posZ: Z position from the actual hit point on polygon.
      */
-    void selectVertex(vector<Mesh*> &globalMeshList, vector<int> &globalNameIndexList,
+    void selectVertex(vector<Mesh*> &globalMeshList,
+                      vector<int> &globalNameIndexList,
+                      GLint hits, GLuint *names,
+                      GLdouble posX, GLdouble posY, GLdouble posZ);
+    void selectVertex(vector<Mesh*> &globalMeshList,
+                      vector<PolyLine*> &globalPolylineList,
+                      vector<int> &globalNameIndexList,
+                      vector<int> &globalPolyllineNameIndexList,
                       GLint hits, GLuint *names,
                       GLdouble posX, GLdouble posY, GLdouble posZ);
     // Select all border vertices
@@ -73,9 +81,16 @@ public:
      * @param posY: Y position from the actual hit point on polygon.
      * @param posZ: Z position from the actual hit point on polygon.
      */
-    void selectWholeBorder(vector<Mesh*> &globalMeshList, vector<int> &globalNameIndexList,
+    void selectWholeBorder(vector<Mesh*> &globalMeshList,
+                           vector<int> &globalNameIndexList,
                            GLint hits, GLuint *names,
                            GLdouble posX, GLdouble posY, GLdouble posZ);
+    void selectWholeBorder(vector<Mesh*> &globalMeshList,
+                      vector<PolyLine*> &globalPolylineList,
+                      vector<int> &globalNameIndexList,
+                      vector<int> &globalPolyllineNameIndexList,
+                      GLint hits, GLuint *names,
+                      GLdouble posX, GLdouble posY, GLdouble posZ);
     /**
      * @brief selectPartialBorder: Select all vertices from a border.
      * The border is the cloest one to the clicking ray hit.
@@ -87,9 +102,16 @@ public:
      * @param posY: Y position from the actual hit point on polygon.
      * @param posZ: Z position from the actual hit point on polygon.
      */
-    void selectPartialBorder(vector<Mesh*> &globalMeshList, vector<int> &globalNameIndexList,
+    void selectPartialBorder(vector<Mesh*> &globalMeshList,
+                             vector<int> &globalNameIndexList,
                              GLint hits, GLuint *names,
                              GLdouble posX, GLdouble posY, GLdouble posZ);
+    void selectPartialBorder(vector<Mesh*> &globalMeshList,
+                      vector<PolyLine*> &globalPolylineList,
+                      vector<int> &globalNameIndexList,
+                      vector<int> &globalPolyllineNameIndexList,
+                      GLint hits, GLuint *names,
+                      GLdouble posX, GLdouble posY, GLdouble posZ);
     /**
      * @brief: clear the current selection
      */

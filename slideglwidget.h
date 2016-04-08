@@ -79,7 +79,9 @@ public:
     Mesh master_mesh;
     /* The mesh that contains temporary added meshes.*/
     Mesh temp_mesh;
-    /* The merged result of all meshes in the scene and temp mesh. */
+    /* The mesh confirmed by the user and become permenant change. */
+    Mesh consolidate_mesh;
+    /* The merged result of all meshes in the scene and consolidate mesh. */
     Mesh merged_mesh;
     /* The current subdivided mesh. */
     Mesh subdiv_mesh;
@@ -87,10 +89,10 @@ public:
     Group *hierarchical_scene;
     /* A copy of the hierarchical_scene, with all meshes transformed. */
     Group hierarchical_scene_transformed;
-    /* The group from saved temp mesh. It is created from aslf file. */
-    Group *group_from_temp_mesh;
+    /* The group from saved consolidate mesh. It is created from aslf file. */
+    Group *group_from_consolidate_mesh;
     /* Update the canvas after reading in the aslf file. */
-    void updateFromSavedTempMesh();
+    void updateFromSavedMesh();
 private:
     /* Viewer variables.*/
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
@@ -288,6 +290,8 @@ public slots:
     void zipToTempCalled(bool);
     /* Recieve signal to add the temp_mesh to master_mesh.*/
     void addTempToMasterCalled(bool);
+    /* Recieve signal to add the temp_mesh to consolidated_mesh. */
+    void consolidateTempMesh(bool);
     /* Add temp_mesh to master_mesh. */
     void addTempToMaster();
     /* Receive the signal to add a border. Add border1 first*/

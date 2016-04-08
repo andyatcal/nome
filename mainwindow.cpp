@@ -119,7 +119,7 @@ void MainWindow::createCanvas(QString name)
         }
         else
         {
-            canvas -> group_from_temp_mesh = &append_scene;
+            canvas -> group_from_consolidate_mesh = &append_scene;
             slfParser->appendWithASLF(banks, params, append_scene, canvas, name.toStdString());
         }
     }
@@ -180,11 +180,11 @@ void MainWindow::save_current_status(string out_put_file)
             }
         }
         file<<"endsavedparameter\n";
-        if(!(canvas->temp_mesh).isEmpty())
+        if(!(canvas->consolidate_mesh).isEmpty())
         {
             file<<"\n";
-            file<<"savedworkingmesh tempmesh\n";
-            for(Face*& face: (canvas->temp_mesh).faceList)
+            file<<"savedworkingmesh consolidatemesh\n";
+            for(Face*& face: (canvas->consolidate_mesh).faceList)
             {
                 file<<"    face\n";
                 Edge * firstEdge = face -> oneEdge;

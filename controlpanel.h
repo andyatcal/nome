@@ -72,6 +72,7 @@ private:
     QVBoxLayout *colorLayout;
     QComboBox *viewContent;
     QPushButton *resetViewButton;
+    QPushButton *consolidateButton;
     QPushButton *mergeButton;
     QHBoxLayout *subdivLevelLayout;
     QLabel *currentLevelLabel;

@@ -125,15 +125,27 @@ void Group::assignColor()
 void Group::updateGroupElementName()
 {
     vector<Mesh>::iterator mIt;
+    vector<PolyLine>::iterator pIt;
     vector<Group>::iterator gIt;
-    if(this -> name != "")
+    if(this -> name != "" || this -> parent == NULL)
     {
         for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
         {
-            (*mIt).name = this->name + "_" + (*mIt).name;
+            if(this -> parent != NULL)
+            {
+                (*mIt).name = this->name + "_" + (*mIt).name;
+            }
             for(Vertex*& v : (*mIt).vertList)
             {
                 v -> name = (*mIt).name + "_" + v -> name;
+            }
+        }
+        for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
+        {
+            (*pIt).name = this -> name + "_" + (*pIt).name;
+            for(Vertex*& v: (*pIt).vertices)
+            {
+                v -> name = (*pIt).name + "_" + v -> name;
             }
         }
     }
@@ -321,6 +333,14 @@ Vertex* Group::findVertexInThisGroup(string name)
     for(Mesh &mesh : myMeshes)
     {
         Vertex *v = mesh.findVertexInThisMesh(name);
+        if(v != NULL)
+        {
+            return v;
+        }
+    }
+    for(PolyLine &polyline : myPolylines)
+    {
+        Vertex *v = polyline.findVertexInThisPolyline(name);
         if(v != NULL)
         {
             return v;

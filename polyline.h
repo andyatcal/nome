@@ -88,6 +88,10 @@ public:
     vector<float> cubeSizes;
     /* A helper function for drawLineWithCubes.*/
     void updateCubeSizes();
+    /* Draw the selected vertices. */
+    void drawVertices();
+    /* Find a vertex in this polyline given its name. */
+    Vertex * findVertexInThisPolyline(string name);
 };
 
 #endif // __POLYLINE_H__

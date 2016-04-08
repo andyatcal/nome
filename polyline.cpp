@@ -272,3 +272,31 @@ void PolyLine::updateCubeSizes()
         }
     }
 }
+
+void PolyLine::drawVertices()
+{
+    glPointSize(10);
+    glBegin(GL_POINTS);
+    for(Vertex*& v : vertices)
+    {
+        if(v -> selected)
+        {
+            vec3 p = v -> position;
+            glNormal3f(p[0] * 100, p[1] * 100, p[2] * 100);
+            glVertex3f(p[0], p[1], p[2]);
+        }
+    }
+    glEnd();
+}
+
+Vertex * PolyLine::findVertexInThisPolyline(string name)
+{
+    for(Vertex*& v: vertices)
+    {
+        if(v->name == name)
+        {
+            return v;
+        }
+    }
+    return NULL;
+}

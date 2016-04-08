@@ -23,7 +23,7 @@ savedparameter
     tp5_h 1.500000
 endsavedparameter
 
-savedworkingmesh tempmesh
+savedworkingmesh consolidatemesh
     face
         vertex kb_t1_lc4 endvertex
         vertex kb_t1_lc3 endvertex

@@ -20,7 +20,8 @@ float evaluate_expression(string expr, unordered_map<string, Parameter> *params)
         {
             readingFromExpr = true;
         }
-        else if(readingFromExpr && !(m == ' ' || m == '(' || m ==')' || isOperator(m)))
+        else if(readingFromExpr && !(m == ' ' || m == '(' || m ==')'
+                                     || isOperator(m)))
         {
             parameterName.push_back(m);
         }
@@ -31,7 +32,8 @@ float evaluate_expression(string expr, unordered_map<string, Parameter> *params)
                 tokens.push_back(number);
                 lastNumber = number;
                 number = "";
-            } else if(parameterName != "")
+            }
+            else if(parameterName != "")
             {
                 string value = to_string(getParameterValue(parameterName, params));
                 tokens.push_back(value);
@@ -41,7 +43,8 @@ float evaluate_expression(string expr, unordered_map<string, Parameter> *params)
             }
             if(isOperator(m))
             {
-                if(lastNumber == "") {
+                if(lastNumber == "")
+                {
                     tokens.push_back("0");
                 }
                 while(numberStack.size() > 0)

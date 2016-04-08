@@ -53,7 +53,10 @@ void SlideGLWidget::generalSetup()
     work_phase = 0;
     temp_mesh.color = Qt::yellow;
     temp_mesh.clear();
-    group_from_temp_mesh = NULL;
+    consolidate_mesh.color = QColor(255, 69, 0);
+    consolidate_mesh.clear();
+    group_from_consolidate_mesh = NULL;
+    trianglePanelty = 1.3;
 }
 
 void SlideGLWidget::makeDefaultMesh()
@@ -62,6 +65,7 @@ void SlideGLWidget::makeDefaultMesh()
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
     global_mesh_list.push_back(&master_mesh);
+    global_mesh_list.push_back(&consolidate_mesh);
     global_mesh_list.push_back(&temp_mesh);
 }
 
@@ -73,6 +77,7 @@ void SlideGLWidget::makeSIFMesh(string name)
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
     global_mesh_list.push_back(&master_mesh);
+    global_mesh_list.push_back(&consolidate_mesh);
     global_mesh_list.push_back(&temp_mesh);
 }
 
@@ -90,13 +95,16 @@ void SlideGLWidget::transform_meshes_in_scene()
     hierarchical_scene_transformed.updateCopyForTransform();
     global_mesh_list = hierarchical_scene_transformed.flattenedMeshes();
     global_polyline_list = hierarchical_scene_transformed.flattenedPolylines();
+    global_mesh_list.push_back(&consolidate_mesh);
     global_mesh_list.push_back(&temp_mesh);
 }
 
 void SlideGLWidget::mergeAll()
 {
     work_phase = glm::max(work_phase, 1);
+    global_mesh_list.pop_back();
     merged_mesh = merge(global_mesh_list);
+    global_mesh_list.push_back(&temp_mesh);
     merged_mesh.color = foreColor;
     merged_mesh.computeNormals();
 }
@@ -119,7 +127,8 @@ void SlideGLWidget::saveMesh(string name)
     }
 }
 
-vec3 SlideGLWidget::get_arcball_vector(int x, int y) {
+vec3 SlideGLWidget::get_arcball_vector(int x, int y)
+{
     vec3 p = vec3(1.0 * x / this->width() * 2 - 1.0,
       1.0 * y / this->height() * 2 - 1.0, 0);
     p.y = - p.y;
@@ -141,7 +150,8 @@ void SlideGLWidget::set_to_editing_mode(bool in_editing_mode)
     }
 }
 
-void SlideGLWidget::mouse_select(int x, int y) {
+void SlideGLWidget::mouse_select(int x, int y)
+{
     if(viewer_mode != 0) {
         return;
     }
@@ -181,18 +191,28 @@ void SlideGLWidget::mouse_select(int x, int y) {
     hits = glRenderMode(GL_RENDER);
     //cout<<posX<<" "<<posY<<" "<<posZ<<endl;
     //mySelect.list_hits(hits, buff);
-    if(selection_mode == 1){
+    if(selection_mode == 1)
+    {
         mySelect.selectVertex(global_mesh_list,
+                              global_polyline_list,
                               global_name_index_list,
+                              global_polyline_name_index_list,
                               hits, buff, posX, posY, posZ);
-        (hits, buff, posX, posY, posZ);
-    } else if(selection_mode == 2) {
+    }
+    else if(selection_mode == 2)
+    {
         mySelect.selectWholeBorder(global_mesh_list,
+                                   global_polyline_list,
                                    global_name_index_list,
+                                   global_polyline_name_index_list,
                                    hits, buff, posX, posY, posZ);
-    } else {
+    }
+    else
+    {
         mySelect.selectPartialBorder(global_mesh_list,
+                                     global_polyline_list,
                                      global_name_index_list,
+                                     global_polyline_name_index_list,
                                      hits, buff, posX, posY, posZ);
     }
     glMatrixMode(GL_MODELVIEW);
@@ -236,7 +256,9 @@ void SlideGLWidget::initializeGL()
     glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular1);
     glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
 
-    transforms[MODE_CAMERA] = lookAt(vec3(0.0,  0.0, 10.0), vec3(0.0,  0.0, 0.0), vec3(0.0,  1.0, 0.0));
+    transforms[MODE_CAMERA] = lookAt(vec3(0.0,  0.0, 10.0),
+                                     vec3(0.0,  0.0, 0.0),
+                                     vec3(0.0,  1.0, 0.0));
 }
 
 void SlideGLWidget::resizeGL(int w, int h)
@@ -295,6 +317,11 @@ void SlideGLWidget::draw_scene()
     {
         Mesh * currentMesh = (*mIt);
         currentMesh -> drawVertices();
+    }
+    for(pIt = global_polyline_list.begin(); pIt != global_polyline_list.end(); pIt++)
+    {
+        PolyLine * currentPolyline = (*pIt);
+        currentPolyline -> drawVertices();
     }
     if(!border1.isEmpty() || !border2.isEmpty())
     {
@@ -624,6 +651,7 @@ void SlideGLWidget::wholeBorderSelectionChecked(bool checked)
 void SlideGLWidget::addToTempCalled(bool)
 {
     mySelect.addSelectedToMesh(temp_mesh);
+    updateGlobalIndexList();
     repaint();
 }
 
@@ -643,6 +671,33 @@ void SlideGLWidget::zipToTempCalled(bool)
     border1.clear();
     border2.clear();
     repaint();
+}
+
+void SlideGLWidget::consolidateTempMesh(bool)
+{
+    for(Vertex*& v : temp_mesh.vertList)
+    {
+        if(std::find(consolidate_mesh.vertList.begin(),
+                     consolidate_mesh.vertList.end(), v)
+                == consolidate_mesh.vertList.end())
+        {
+            consolidate_mesh.vertList.push_back(v);
+        }
+    }
+    for(Face*& f : temp_mesh.faceList)
+    {
+        {
+            if(std::find(consolidate_mesh.faceList.begin(),
+                         consolidate_mesh.faceList.end(), f)
+                    == consolidate_mesh.faceList.end())
+            {
+                consolidate_mesh.faceList.push_back(f);
+            }
+        }
+    }
+    consolidate_mesh.buildBoundary();
+    consolidate_mesh.computeNormals();
+    clearSelection();
 }
 
 void SlideGLWidget::addTempToMaster()
@@ -768,13 +823,6 @@ void SlideGLWidget::clearSelection()
     border1.clear();
     border2.clear();
     temp_mesh.clear();
-    if(group_from_temp_mesh != NULL && group_from_temp_mesh->myMeshes.size()>0)
-    {
-        group_from_temp_mesh -> clear();
-        group_from_temp_mesh = NULL;
-        transform_meshes_in_scene();
-        updateGlobalIndexList();
-    }
     set_to_editing_mode(false);
     repaint();
 }
@@ -819,16 +867,16 @@ void SlideGLWidget::paramValueChanged(float)
     {
         makeSLFMesh();
     }
-    if(group_from_temp_mesh != NULL && group_from_temp_mesh->myMeshes.size() != 0)
+    if(group_from_consolidate_mesh != NULL && group_from_consolidate_mesh->myMeshes.size() != 0)
     {
-        for(Mesh& mesh : group_from_temp_mesh->myMeshes)
+        for(Mesh& mesh : group_from_consolidate_mesh->myMeshes)
         {
             for(Vertex*& v: mesh.vertList)
             {
                 v->position = v ->before_transform_vertex->position;
             }
         }
-        vector<Mesh*> append_list = group_from_temp_mesh -> flattenedMeshes();
+        vector<Mesh*> append_list = group_from_consolidate_mesh -> flattenedMeshes();
         global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
     }
     updateGlobalIndexList();
@@ -848,10 +896,10 @@ void SlideGLWidget::paramValueChanged(float)
     repaint();
 }
 
-void SlideGLWidget::updateFromSavedTempMesh()
+void SlideGLWidget::updateFromSavedMesh()
 {
-    temp_mesh.computeNormals();
-    vector<Mesh*> append_list = group_from_temp_mesh -> flattenedMeshes();
+    consolidate_mesh.computeNormals();
+    vector<Mesh*> append_list = group_from_consolidate_mesh -> flattenedMeshes();
     global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
     updateGlobalIndexList();
     set_to_editing_mode(true);

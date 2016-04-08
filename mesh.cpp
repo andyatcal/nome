@@ -530,10 +530,10 @@ vector<Edge*> Mesh::boundaryEdgeList() {
     return boundaryEdgeList;
 }
 
-void Mesh::drawVertices() {
+void Mesh::drawVertices()
+{
     vector<Vertex*>::iterator vIt;
     glPointSize(10);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
     for(vIt = vertList.begin(); vIt < vertList.end(); vIt++) {
         if((*vIt) -> selected) {
             glBegin(GL_POINTS);
@@ -543,7 +543,6 @@ void Mesh::drawVertices() {
             glEnd();
         }
     }
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, YELLOW);
 }
 
 bool Mesh::isEmpty() {
@@ -551,14 +550,14 @@ bool Mesh::isEmpty() {
 }
 
 void Mesh::clear() {
-    for(Vertex*& v : vertList)
-    {
-        delete v;
-    }
-    for(Face*& f : faceList)
-    {
-        delete f;
-    }
+    //for(Vertex*& v : vertList)
+    //{
+    //    delete v;
+    //}
+    //for(Face*& f : faceList)
+    //{
+    //    delete f;
+    //}
     vertList.clear();
     faceList.clear();
     edgeTable.clear();

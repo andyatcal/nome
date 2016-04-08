@@ -394,15 +394,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 }
                 string xyz;
                 bool makingXYZ = false;
+                bool inExpression = false;
                 while(++tIt < tokens.end() && (*tIt) != "endpoint")
                 {
                     for(char& c : (*tIt))
                     {
-                        if(c == '(')
+                        if(c == '(' && !inExpression)
                         {
                             makingXYZ = true;
                         }
-                        else if(c == ')')
+                        else if(c == ')' && !inExpression)
                         {
                             makingXYZ = false;
                             goto endPointWhile;
@@ -410,6 +411,14 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         else if(makingXYZ)
                         {
                             xyz.push_back(c);
+                            if(c == '{')
+                            {
+                                inExpression = true;
+                            }
+                            else if(c == '}')
+                            {
+                                inExpression = false;
+                            }
                         }
                     }
                     if(xyz != "")
@@ -507,11 +516,12 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         bool makingXYZ = false;
                         bool makingAngle = false;
                         bool doneXYZ = false;
+                        bool inExpression = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
                             for(char& c : (*tIt))
                             {
-                                if(c == '(')
+                                if(c == '(' && !inExpression)
                                 {
                                     if(!doneXYZ)
                                     {
@@ -522,7 +532,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                         makingAngle = true;
                                     }
                                 }
-                                else if(c == ')')
+                                else if(c == ')' && !inExpression)
                                 {
                                     if(makingXYZ)
                                     {
@@ -539,10 +549,26 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                     if(makingXYZ)
                                     {
                                         xyz.push_back(c);
+                                        if(c == '{')
+                                        {
+                                            inExpression = true;
+                                        }
+                                        else if(c == '}')
+                                        {
+                                            inExpression = false;
+                                        }
                                     }
                                     else if(makingAngle)
                                     {
                                         angle.push_back(c);
+                                        if(c == '{')
+                                        {
+                                            inExpression = true;
+                                        }
+                                        else if(c == '}')
+                                        {
+                                            inExpression = false;
+                                        }
                                     }
                                 }
                             }
@@ -568,15 +594,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         }
                         string xyz = "";
                         bool makingXYZ = false;
+                        bool inExpression = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
                             for(char& c : (*tIt))
                             {
-                                if(c == '(')
+                                if(c == '(' && !inExpression)
                                 {
                                     makingXYZ = true;
                                 }
-                                else if(c == ')')
+                                else if(c == ')' && !inExpression)
                                 {
                                     makingXYZ = false;
                                     goto endWhile2;
@@ -584,6 +611,14 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                 else if(makingXYZ)
                                 {
                                     xyz.push_back(c);
+                                    if(c == '{')
+                                    {
+                                        inExpression = true;
+                                    }
+                                    else if(c == '}')
+                                    {
+                                        inExpression = false;
+                                    }
                                 }
                             }
                             if(xyz != "")
@@ -607,15 +642,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     {
                         string xyzw = "";
                         bool makingXYZW = false;
+                        bool inExpression = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
                             for(char& c : (*tIt))
                             {
-                                if(c == '(')
+                                if(c == '(' && !inExpression)
                                 {
                                     makingXYZW = true;
                                 }
-                                else if(c == ')')
+                                else if(c == ')' && !inExpression)
                                 {
                                     makingXYZW = false;
                                     goto endWhile3;
@@ -623,6 +659,14 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                 else if(makingXYZW)
                                 {
                                     xyzw.push_back(c);
+                                    if(c == '{')
+                                    {
+                                        inExpression = true;
+                                    }
+                                    else if(c == '}')
+                                    {
+                                        inExpression = false;
+                                    }
                                 }
                             }
                             if(xyzw != "")
@@ -766,7 +810,7 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                 }
                 else if(*tIt == "endface")
                 {
-                    canvas->temp_mesh.addPolygonFace(vertices);
+                    canvas->consolidate_mesh.addPolygonFace(vertices);
                     goto newLineEnd;
                 }
                 else if(*tIt == "vertex")
@@ -784,7 +828,7 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                     }
                     else
                     {
-                        (canvas -> temp_mesh).addVertex(v);
+                        (canvas -> consolidate_mesh).addVertex(v);
                         vertices.push_back(v);
                     }
                     goto newLineEnd;
@@ -837,11 +881,12 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                         bool makingXYZ = false;
                         bool makingAngle = false;
                         bool doneXYZ = false;
+                        bool inExpression = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
                             for(char& c : (*tIt))
                             {
-                                if(c == '(')
+                                if(c == '(' && !inExpression)
                                 {
                                     if(!doneXYZ)
                                     {
@@ -852,7 +897,7 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                                         makingAngle = true;
                                     }
                                 }
-                                else if(c == ')')
+                                else if(c == ')' && !inExpression)
                                 {
                                     if(makingXYZ)
                                     {
@@ -869,10 +914,26 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                                     if(makingXYZ)
                                     {
                                         xyz.push_back(c);
+                                        if(c == '{')
+                                        {
+                                            inExpression = true;
+                                        }
+                                        else if(c == '}')
+                                        {
+                                            inExpression = false;
+                                        }
                                     }
                                     else if(makingAngle)
                                     {
                                         angle.push_back(c);
+                                        if(c == '{')
+                                        {
+                                            inExpression = true;
+                                        }
+                                        else if(c == '}')
+                                        {
+                                            inExpression = false;
+                                        }
                                     }
                                 }
                             }
@@ -898,15 +959,16 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                         }
                         string xyz = "";
                         bool makingXYZ = false;
+                        bool inExpression = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
                             for(char& c : (*tIt))
                             {
-                                if(c == '(')
+                                if(c == '(' && !inExpression)
                                 {
                                     makingXYZ = true;
                                 }
-                                else if(c == ')')
+                                else if(c == ')' && !inExpression)
                                 {
                                     makingXYZ = false;
                                     goto endWhile2;
@@ -914,6 +976,14 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                                 else if(makingXYZ)
                                 {
                                     xyz.push_back(c);
+                                    if(c == '{')
+                                    {
+                                        inExpression = true;
+                                    }
+                                    else if(c == '}')
+                                    {
+                                        inExpression = false;
+                                    }
                                 }
                             }
                             if(xyz != "")
@@ -937,15 +1007,16 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                     {
                         string xyzw = "";
                         bool makingXYZW = false;
+                        bool inExpression = false;
                         while(++tIt < tokens.end() && (*tIt) != "endinstance")
                         {
                             for(char& c : (*tIt))
                             {
-                                if(c == '(')
+                                if(c == '(' && !inExpression)
                                 {
                                     makingXYZW = true;
                                 }
-                                else if(c == ')')
+                                else if(c == ')' && !inExpression)
                                 {
                                     makingXYZW = false;
                                     goto endWhile3;
@@ -953,6 +1024,14 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                                 else if(makingXYZW)
                                 {
                                     xyzw.push_back(c);
+                                    if(c == '{')
+                                    {
+                                        inExpression = true;
+                                    }
+                                    else if(c == '}')
+                                    {
+                                        inExpression = false;
+                                    }
                                 }
                             }
                             if(xyzw != "")
@@ -980,5 +1059,5 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
         newLineEnd:
         lineNumber++;
     }
-    canvas -> updateFromSavedTempMesh();
+    canvas -> updateFromSavedMesh();
 }

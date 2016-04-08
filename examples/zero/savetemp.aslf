@@ -1,0 +1,12 @@
+savedparameter
+    rimP_outerradius 1.000000
+    rimP_innerradius 0.300000
+endsavedparameter
+
+savedworkingmesh consolidatemesh
+    face
+        vertex _ir_i3 endvertex
+        vertex _ir_i2 endvertex
+        vertex _ir_i1 endvertex
+    endface
+endsavedworkingmesh
