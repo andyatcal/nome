@@ -1,0 +1,267 @@
+savedparameter
+    tp1_n 8.000000
+    tp1_ro 1.000000
+    tp1_ratio 0.000000
+    tp1_h 1.500000
+    tp2_n 8.000000
+    tp2_ro 1.000000
+    tp2_ratio 0.000000
+    tp2_h 0.900000
+    tp3_n 8.000000
+    tp3_ro 2.000000
+    tp3_ratio 0.000000
+    tp3_h 0.700000
+    tp3_x -0.900000
+    tp3_z 8.000000
+    tp4_n 8.000000
+    tp4_ro 1.600000
+    tp4_ratio 0.000000
+    tp4_h 0.900000
+    tp5_n 8.000000
+    tp5_ro 3.000000
+    tp5_ratio 0.000000
+    tp5_h 1.500000
+endsavedparameter
+
+savedworkingmesh consolidatemesh
+    face
+        vertex t2_lc4 endvertex
+        vertex t2_lc3 endvertex
+        vertex t1_hc3 endvertex
+        vertex t1_hc4 endvertex
+    endface
+    face
+        vertex t2_lc5 endvertex
+        vertex t2_lc4 endvertex
+        vertex t1_hc4 endvertex
+        vertex t1_hc5 endvertex
+    endface
+    face
+        vertex t2_lc3 endvertex
+        vertex t2_lc2 endvertex
+        vertex t1_hc2 endvertex
+        vertex t1_hc3 endvertex
+    endface
+    face
+        vertex t2_lc6 endvertex
+        vertex t2_lc5 endvertex
+        vertex t1_hc5 endvertex
+        vertex t1_hc6 endvertex
+    endface
+    face
+        vertex t2_lc2 endvertex
+        vertex t2_lc1 endvertex
+        vertex t1_hc1 endvertex
+        vertex t1_hc2 endvertex
+    endface
+    face
+        vertex t2_lc7 endvertex
+        vertex t2_lc6 endvertex
+        vertex t1_hc6 endvertex
+        vertex t1_hc7 endvertex
+    endface
+    face
+        vertex t2_lc1 endvertex
+        vertex t2_lc0 endvertex
+        vertex t1_hc0 endvertex
+        vertex t1_hc1 endvertex
+    endface
+    face
+        vertex t2_lc0 endvertex
+        vertex t2_lc7 endvertex
+        vertex t1_hc7 endvertex
+        vertex t1_hc0 endvertex
+    endface
+    face
+        vertex t4_lc0 endvertex
+        vertex t4_lc7 endvertex
+        vertex t5_hc7 endvertex
+        vertex t5_hc0 endvertex
+    endface
+    face
+        vertex t4_lc1 endvertex
+        vertex t4_lc0 endvertex
+        vertex t5_hc0 endvertex
+        vertex t5_hc1 endvertex
+    endface
+    face
+        vertex t4_lc7 endvertex
+        vertex t4_lc6 endvertex
+        vertex t5_hc6 endvertex
+        vertex t5_hc7 endvertex
+    endface
+    face
+        vertex t4_lc2 endvertex
+        vertex t4_lc1 endvertex
+        vertex t5_hc1 endvertex
+        vertex t5_hc2 endvertex
+    endface
+    face
+        vertex t4_lc6 endvertex
+        vertex t4_lc5 endvertex
+        vertex t5_hc5 endvertex
+        vertex t5_hc6 endvertex
+    endface
+    face
+        vertex t4_lc3 endvertex
+        vertex t4_lc2 endvertex
+        vertex t5_hc2 endvertex
+        vertex t5_hc3 endvertex
+    endface
+    face
+        vertex t4_lc5 endvertex
+        vertex t4_lc4 endvertex
+        vertex t5_hc4 endvertex
+        vertex t5_hc5 endvertex
+    endface
+    face
+        vertex t4_lc4 endvertex
+        vertex t4_lc3 endvertex
+        vertex t5_hc3 endvertex
+        vertex t5_hc4 endvertex
+    endface
+    face
+        vertex t1_lc4 endvertex
+        vertex t1_lc3 endvertex
+        vertex t5_lc3 endvertex
+        vertex t5_lc4 endvertex
+    endface
+    face
+        vertex t1_lc5 endvertex
+        vertex t1_lc4 endvertex
+        vertex t5_lc4 endvertex
+        vertex t5_lc5 endvertex
+    endface
+    face
+        vertex t1_lc3 endvertex
+        vertex t1_lc2 endvertex
+        vertex t5_lc2 endvertex
+        vertex t5_lc3 endvertex
+    endface
+    face
+        vertex t1_lc6 endvertex
+        vertex t1_lc5 endvertex
+        vertex t5_lc5 endvertex
+        vertex t5_lc6 endvertex
+    endface
+    face
+        vertex t1_lc2 endvertex
+        vertex t1_lc1 endvertex
+        vertex t5_lc1 endvertex
+        vertex t5_lc2 endvertex
+    endface
+    face
+        vertex t1_lc7 endvertex
+        vertex t1_lc6 endvertex
+        vertex t5_lc6 endvertex
+        vertex t5_lc7 endvertex
+    endface
+    face
+        vertex t1_lc1 endvertex
+        vertex t1_lc0 endvertex
+        vertex t5_lc0 endvertex
+        vertex t5_lc1 endvertex
+    endface
+    face
+        vertex t1_lc0 endvertex
+        vertex t1_lc7 endvertex
+        vertex t5_lc7 endvertex
+        vertex t5_lc0 endvertex
+    endface
+    face
+        vertex t4_hc0 endvertex
+        vertex t4_hc1 endvertex
+        vertex t3_hc3 endvertex
+        vertex t3_hc4 endvertex
+    endface
+    face
+        vertex t4_hc7 endvertex
+        vertex t4_hc0 endvertex
+        vertex t3_hc4 endvertex
+        vertex t3_hc5 endvertex
+    endface
+    face
+        vertex t4_hc1 endvertex
+        vertex t4_hc2 endvertex
+        vertex t3_hc2 endvertex
+        vertex t3_hc3 endvertex
+    endface
+    face
+        vertex t4_hc6 endvertex
+        vertex t4_hc7 endvertex
+        vertex t3_hc5 endvertex
+        vertex t3_hc6 endvertex
+    endface
+    face
+        vertex t4_hc2 endvertex
+        vertex t4_hc3 endvertex
+        vertex t3_hc1 endvertex
+        vertex t3_hc2 endvertex
+    endface
+    face
+        vertex t4_hc5 endvertex
+        vertex t4_hc6 endvertex
+        vertex t3_hc6 endvertex
+        vertex t3_hc7 endvertex
+    endface
+    face
+        vertex t4_hc3 endvertex
+        vertex t4_hc4 endvertex
+        vertex t3_hc0 endvertex
+        vertex t3_hc1 endvertex
+    endface
+    face
+        vertex t4_hc4 endvertex
+        vertex t4_hc5 endvertex
+        vertex t3_hc7 endvertex
+        vertex t3_hc0 endvertex
+    endface
+    face
+        vertex t2_hc4 endvertex
+        vertex t2_hc3 endvertex
+        vertex t3_lc3 endvertex
+        vertex t3_lc4 endvertex
+    endface
+    face
+        vertex t2_hc5 endvertex
+        vertex t2_hc4 endvertex
+        vertex t3_lc4 endvertex
+        vertex t3_lc5 endvertex
+    endface
+    face
+        vertex t2_hc3 endvertex
+        vertex t2_hc2 endvertex
+        vertex t3_lc2 endvertex
+        vertex t3_lc3 endvertex
+    endface
+    face
+        vertex t2_hc6 endvertex
+        vertex t2_hc5 endvertex
+        vertex t3_lc5 endvertex
+        vertex t3_lc6 endvertex
+    endface
+    face
+        vertex t2_hc2 endvertex
+        vertex t2_hc1 endvertex
+        vertex t3_lc1 endvertex
+        vertex t3_lc2 endvertex
+    endface
+    face
+        vertex t2_hc7 endvertex
+        vertex t2_hc6 endvertex
+        vertex t3_lc6 endvertex
+        vertex t3_lc7 endvertex
+    endface
+    face
+        vertex t2_hc1 endvertex
+        vertex t2_hc0 endvertex
+        vertex t3_lc0 endvertex
+        vertex t3_lc1 endvertex
+    endface
+    face
+        vertex t2_hc0 endvertex
+        vertex t2_hc7 endvertex
+        vertex t3_lc7 endvertex
+        vertex t3_lc0 endvertex
+    endface
+endsavedworkingmesh

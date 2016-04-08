@@ -653,11 +653,21 @@ void Zipper::zip(PolyLine * b1, PolyLine * b2,  Mesh &mesh, float trianglePenalt
         }
         vector<Vertex*>::iterator b1It;
         vector<Vertex*>::iterator b2It;
-        for(b1It = boarder1.begin(); b1It < boarder1.end(); b1It ++) {
-            mesh.addVertex(*b1It);
+        for(b1It = boarder1.begin(); b1It < boarder1.end(); b1It ++)
+        {
+            if(std::find(mesh.vertList.begin(), mesh.vertList.end(),
+                         *b1It) == mesh.vertList.end())
+            {
+                mesh.addVertex(*b1It);
+            }
         }
-        for(b2It = boarder2.begin(); b2It < boarder2.end(); b2It ++) {
-            mesh.addVertex(*b2It);
+        for(b2It = boarder2.begin(); b2It < boarder2.end(); b2It ++)
+        {
+            if(std::find(mesh.vertList.begin(), mesh.vertList.end(),
+                         *b2It) == mesh.vertList.end())
+            {
+                mesh.addVertex(*b2It);
+            }
         }
         vector<Vertex*>::iterator bIt1start = boarder1.begin();
         vector<Vertex*>::iterator bIt1end = boarder1.end() - 1;
@@ -864,11 +874,21 @@ void Zipper::zip(PolyLine * b1, PolyLine * b2,  Mesh &mesh, float trianglePenalt
         }
         vector<Vertex*>::iterator b1It;
         vector<Vertex*>::iterator b2It;
-        for(b1It = boarder1.begin(); b1It < boarder1.end(); b1It ++) {
-            mesh.addVertex(*b1It);
+        for(b1It = boarder1.begin(); b1It < boarder1.end(); b1It ++)
+        {
+            if(std::find(mesh.vertList.begin(), mesh.vertList.end()
+                         , *b1It) == mesh.vertList.end())
+            {
+                mesh.addVertex(*b1It);
+            }
         }
-        for(b2It = boarder2.begin(); b2It < boarder2.end(); b2It ++) {
-            mesh.addVertex(*b2It);
+        for(b2It = boarder2.begin(); b2It < boarder2.end(); b2It ++)
+        {
+            if(std::find(mesh.vertList.begin(), mesh.vertList.end()
+                         , *b2It) == mesh.vertList.end())
+            {
+                mesh.addVertex(*b2It);
+            }
         }
         vector<Vertex*>::iterator bIt1start = boarder1.begin();
         vector<Vertex*>::iterator bIt1end = boarder1.begin();

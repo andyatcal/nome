@@ -36,10 +36,6 @@ void PolyLine::drawLine(int start_index)
 
 void PolyLine::clear()
 {
-    for(Vertex*& v : vertices)
-    {
-        delete v;
-    }
     vertices.clear();
     transformations_up.clear();
 }
