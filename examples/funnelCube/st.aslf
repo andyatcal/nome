@@ -1,0 +1,41 @@
+savedparameter
+    fp_n 8.000000
+    fp_ro 0.400000
+    fp_ratio 0.000000
+    fp_h 0.400000
+    fp_z -1.000000
+endsavedparameter
+
+savedworkingmesh consolidatemesh
+    face
+        vertex fun3_hc3 endvertex
+        vertex fun2_hc5 endvertex
+        vertex fun2_hc6 endvertex
+        vertex fun3_hc2 endvertex
+    endface
+    face
+        vertex fun3_hc4 endvertex
+        vertex fun5_hc2 endvertex
+        vertex fun5_hc3 endvertex
+        vertex fun3_hc3 endvertex
+    endface
+    face
+        vertex fun3_hc3 endvertex
+        vertex fun5_hc3 endvertex
+        vertex fun2_hc5 endvertex
+    endface
+    face
+        vertex fun5_hc3 endvertex
+        vertex fun5_hc4 endvertex
+        vertex fun2_hc4 endvertex
+        vertex fun2_hc5 endvertex
+    endface
+endsavedworkingmesh
+
+instance tp1 consolidatemesh rotate (0 0 1) (90) endinstance
+instance tp2 consolidatemesh rotate (0 0 1) (180) endinstance
+instance tp3 consolidatemesh rotate (0 0 1) (270) endinstance
+instance tp4 consolidatemesh rotate (0 1 0) (-90) endinstance
+instance tp5 consolidatemesh rotate (0 1 0) (-180) endinstance
+instance tp6 consolidatemesh rotate (0 0 1) (90) rotate (0 1 0) (-90) endinstance
+instance tp7 consolidatemesh rotate (0 0 1) (90) rotate (0 1 0) (-180) endinstance

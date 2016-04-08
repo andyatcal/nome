@@ -10,13 +10,13 @@ funnel fun ({expr $fp_n} {expr $fp_ro} {expr $fp_ratio} {expr $fp_h}) endfunnel
 #funnel fun ({expr $fp_n} 0.4 -0.2 0.2) endfunnel
 
 group cubeMadeByFunnel
-    instance fun fun1 translate (0 0 {expr $fp_z}) endinstance
-    instance fun fun2 translate (0 0 {expr $fp_z}) rotate (1 0 0) (180) endinstance
-    instance fun fun3 translate (0 0 {expr $fp_z}) rotate (1 0 0) (90) endinstance
-    instance fun fun4 translate (0 0 {expr $fp_z}) rotate (1 0 0) (-90) endinstance
-    instance fun fun5 translate (0 0 {expr $fp_z}) rotate (0 1 0) (90) endinstance
-    instance fun fun6 translate (0 0 {expr $fp_z}) rotate (0 1 0) (-90) endinstance
+    instance fun1 fun translate (0 0 {expr $fp_z}) endinstance
+    instance fun2 fun translate (0 0 {expr $fp_z}) rotate (1 0 0) (180) endinstance
+    instance fun3 fun translate (0 0 {expr $fp_z}) rotate (1 0 0) (90) endinstance
+    instance fun4 fun translate (0 0 {expr $fp_z}) rotate (1 0 0) (-90) endinstance
+    instance fun5 fun translate (0 0 {expr $fp_z}) rotate (0 1 0) (90) endinstance
+    instance fun6 fun translate (0 0 {expr $fp_z}) rotate (0 1 0) (-90) endinstance
 endgroup
 
-instance cubeMadeByFunnel cf endinstance
+instance cf cubeMadeByFunnel endinstance
 

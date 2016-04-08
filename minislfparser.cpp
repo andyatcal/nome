@@ -454,7 +454,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 Mesh newMesh;
                 Group newGroup;
                 PolyLine newPolyline;
-                string newInstanceName;
+                string className;
                 bool findMesh = false;
                 bool findGroup = false;
                 bool findPolyline = false;
@@ -469,31 +469,31 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
                     {
-                        newInstanceName = *tIt;
+                        className = *tIt;
                     }
                 } else {
                     cout<<warning(6, lineNumber);
                 }
-                meshIt = meshes.find(instanceName);
+                meshIt = meshes.find(className);
                 if(meshIt != meshes.end())
                 {
-                    newMesh = (meshIt -> second).makeCopy(newInstanceName);
+                    newMesh = (meshIt -> second).makeCopy(instanceName);
                     findMesh = true;
                 }
                 else
                 {
-                    groupIt = groups.find(instanceName);
+                    groupIt = groups.find(className);
                     if(groupIt != groups.end())
                     {
-                        newGroup = (groupIt -> second).makeCopy(newInstanceName);
+                        newGroup = (groupIt -> second).makeCopy(instanceName);
                         findGroup = true;
                     }
                     else
                     {
-                        lineIt = polylines.find(instanceName);
+                        lineIt = polylines.find(className);
                         if(lineIt != polylines.end())
                         {
-                            newPolyline = (lineIt -> second).makeCopy(newInstanceName);
+                            newPolyline = (lineIt -> second).makeCopy(instanceName);
                             findPolyline = true;
                         }
                         else
@@ -838,7 +838,7 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
             {
                 string instanceName;
                 Mesh newMesh;
-                string newInstanceName;
+                string className;
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
                     {
@@ -852,16 +852,16 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
                     {
-                        newInstanceName = *tIt;
+                        className = *tIt;
                     }
                 }
                 else
                 {
                     cout<<warning(6, lineNumber);
                 }
-                if(instanceName == "consolidatemesh")
+                if(className == "consolidatemesh")
                 {
-                    newMesh = (canvas -> consolidate_mesh).makeCopyForTempMesh(newInstanceName);
+                    newMesh = (canvas -> consolidate_mesh).makeCopyForTempMesh(instanceName);
                 }
                 else
                 {

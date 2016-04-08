@@ -72,8 +72,8 @@ void SlideGLWidget::makeDefaultMesh()
 void SlideGLWidget::makeSIFMesh(string name)
 {
     /* Figure out the QuadSIF or SIF later.*/
-    //makeWithSIF(master_mesh,name);
-    makeWithQuadSIF(master_mesh,name);
+    makeWithSIF(master_mesh,name);
+    //makeWithQuadSIF(master_mesh,name);
     master_mesh.computeNormals();
     master_mesh.color = foreColor;
     global_mesh_list.push_back(&master_mesh);
@@ -903,7 +903,9 @@ void SlideGLWidget::paramValueChanged(float)
             }
         }
         vector<Mesh*> append_list = group_from_consolidate_mesh -> flattenedMeshes();
+        global_mesh_list.pop_back();
         global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
+        global_mesh_list.push_back(&temp_mesh);
     }
     updateGlobalIndexList();
     if(work_phase >= 1)
@@ -926,7 +928,9 @@ void SlideGLWidget::updateFromSavedMesh()
 {
     consolidate_mesh.computeNormals();
     vector<Mesh*> append_list = group_from_consolidate_mesh -> flattenedMeshes();
+    global_mesh_list.pop_back();
     global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
+    global_mesh_list.push_back(&temp_mesh);
     updateGlobalIndexList();
     set_to_editing_mode(true);
     repaint();
