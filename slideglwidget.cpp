@@ -558,7 +558,7 @@ void SlideGLWidget::resetViewDirection(bool)
 
 void SlideGLWidget::zoom_in()
 {
-    if(cameraDistance > 0.1)
+    if(cameraDistance > 0.001)
     {
         cameraDistance *= 0.9;
     }

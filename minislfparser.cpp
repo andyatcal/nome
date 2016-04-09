@@ -78,7 +78,10 @@ string warning(int type, int lineNumber)
 
 void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                                     unordered_map<string, Parameter> &params,
-                                    Group &group, string inputSIF)
+                                    Group &group,
+                                    string inputSIF,
+                                    vector<string> &banklines,
+                                    vector<string> &geometrylines)
 {
     banks.clear();
     group.clear();
@@ -101,7 +104,9 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
     unordered_map<string, Vertex*>::iterator vertIt;
     unordered_map<string, PolyLine> polylines;
     unordered_map<string, PolyLine>::iterator lineIt;
+    vector<Vertex*> restore_vertices;
     string name = "";
+    bool restoreConsolidateMesh = false;
     while(std::getline(file, nextLine))
     {
         istringstream iss(nextLine);
@@ -118,6 +123,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "bank")
             {
+                banklines.push_back(nextLine);
                 ParameterBank newBank;
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
@@ -131,11 +137,13 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "endbank")
             {
+                banklines.push_back(nextLine);
                 createBank = false;
                 goto newLineEnd;
             }
             else if(createBank && (*tIt) == "set")
             {
+                banklines.push_back(nextLine);
                 Parameter newParameter;
                 int i = 0;
                 while(i < 5) {
@@ -218,6 +226,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "funnel")
             {
+                geometrylines.push_back(nextLine);
                 Mesh newFunnel(1);
                 newFunnel.setGlobalParameter(&params);
                 if(++tIt < tokens.end())
@@ -264,6 +273,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "tunnel")
             {
+                geometrylines.push_back(nextLine);
                 Mesh newTunnel(2);
                 newTunnel.setGlobalParameter(&params);
                 if(++tIt < tokens.end())
@@ -309,6 +319,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "polyline")
             {
+                geometrylines.push_back(nextLine);
                 PolyLine newPolyline;
                 if((++tIt) < tokens.end() && !testComments(*tIt))
                 {
@@ -372,6 +383,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "point")
             {
+                geometrylines.push_back(nextLine);
                 Vertex * newVertex = new Vertex;
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
@@ -432,6 +444,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "group")
             {
+                geometrylines.push_back(nextLine);
                 Group newGroup;
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
@@ -445,11 +458,13 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "endgroup")
             {
+                geometrylines.push_back(nextLine);
                 currentGroup = "";
                 goto newLineEnd;
             }
             else if((*tIt) == "instance")
             {
+                geometrylines.push_back(nextLine);
                 string instanceName;
                 Mesh newMesh;
                 Group newGroup;
@@ -473,6 +488,10 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     }
                 } else {
                     cout<<warning(6, lineNumber);
+                }
+                if(className == "consolidatemesh")
+                {
+                    goto newLineEnd;
                 }
                 meshIt = meshes.find(className);
                 if(meshIt != meshes.end())
@@ -724,8 +743,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
     group.mapFromParameters();
 }
 
-void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
-                                   unordered_map<string, Parameter> &params,
+void MiniSlfParser::appendWithASLF(unordered_map<string, Parameter> &params,
                                    Group &group,
                                    SlideGLWidget* canvas,
                                    string inputSIF)
@@ -739,11 +757,10 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
     string nextLine;
     int lineNumber = 1;
     bool restoreBank = false;
-    bool restoreWorkingMesh = false;
+    bool restoreConsolidateMesh = false;
     unordered_map<string, Parameter>::iterator pIt;
-    vector<Vertex*> vertices;
+    vector<Vertex*> restore_vertices;
     unordered_map<string, Group> groups;
-    unordered_map<string, Group>::iterator groupIt;
     string currentGroup = "";
     while(std::getline(file, nextLine))
     {
@@ -769,14 +786,14 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                 restoreBank = false;
                 goto newLineEnd;
             }
-            else if((*tIt) == "savedworkingmesh")
+            else if((*tIt) == "consolidate")
             {
-                restoreWorkingMesh = true;
+                restoreConsolidateMesh = true;
                 goto newLineEnd;
             }
-            else if((*tIt) == "endsavedworkingmesh")
+            else if((*tIt) == "endconsolidate")
             {
-                restoreWorkingMesh = false;
+                restoreConsolidateMesh = false;
                 goto newLineEnd;
             }
             else if(restoreBank)
@@ -801,16 +818,16 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                 }
                 goto newLineEnd;
             }
-            else if(restoreWorkingMesh)
+            else if(restoreConsolidateMesh)
             {
-                if(*tIt == "face")
+                if(*tIt == "consolidateface")
                 {
-                    vertices.clear();
+                    restore_vertices.clear();
                     goto newLineEnd;
                 }
-                else if(*tIt == "endface")
+                else if(*tIt == "endconsolidateface")
                 {
-                    canvas->consolidate_mesh.addPolygonFace(vertices);
+                    canvas->consolidate_mesh.addPolygonFace(restore_vertices);
                     goto newLineEnd;
                 }
                 else if(*tIt == "vertex")
@@ -820,8 +837,11 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                     {
                         cout<<warning(9, lineNumber);
                     }
-
                     Vertex *v = (canvas -> hierarchical_scene_transformed).findVertexInThisGroup(*tIt);
+                    if(!(canvas -> master_mesh.isEmpty())) /* Dealing with recovery of SIF.*/
+                    {
+                        v = (canvas -> master_mesh.findVertexInThisMesh(*tIt));
+                    }
                     if(v == NULL)
                     {
                         cout<<warning(9, lineNumber);
@@ -829,7 +849,7 @@ void MiniSlfParser::appendWithASLF(vector<ParameterBank> &banks,
                     else
                     {
                         (canvas -> consolidate_mesh).addVertex(v);
-                        vertices.push_back(v);
+                        restore_vertices.push_back(v);
                     }
                     goto newLineEnd;
                 }

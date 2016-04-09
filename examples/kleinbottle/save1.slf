@@ -1,0 +1,45 @@
+bank tp1
+    set     n       8       3       10      1
+    set     ro      1     0.1     1.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       1.5     0.1     1.5     0.1
+endbank
+bank tp2
+    set     n       8       3       10      1
+    set     ro      1     0.1     1.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       0.2     0.1     1.5     0.1
+endbank
+bank tp3
+    set     n       8       3       10      1
+    set     ro      2     0.1     2.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       0.2     0.1     1.5     0.1
+    set     x       -2    -4   2     0.1
+    set     z       8      5   10    0.5
+endbank
+bank tp4
+    set     n       8       3       10      1
+    set     ro      3     0.1     3.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       0.2     0.1     1.5     0.1
+endbank
+bank tp5
+    set     n       8       3       10      1
+    set     ro      3     0.1     3.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       1.5     0.1     1.5     0.1
+endbank
+tunnel tun1 ({expr $tp1_n} {expr $tp1_ro} {expr $tp1_ratio} {expr $tp1_h}) endfunnel
+tunnel tun2 ({expr $tp2_n} {expr $tp2_ro} {expr $tp2_ratio} {expr $tp2_h}) endfunnel
+tunnel tun3 ({expr $tp3_n} {expr $tp3_ro} {expr $tp3_ratio} {expr $tp3_h}) endfunnel
+tunnel tun4 ({expr $tp4_n} {expr $tp4_ro} {expr $tp4_ratio} {expr $tp4_h}) endfunnel
+tunnel tun5 ({expr $tp5_n} {expr $tp5_ro} {expr $tp5_ratio} {expr $tp5_h}) endfunnel
+group kleinbottle
+	instance t1 tun1  endinstance
+	instance t2 tun2  translate (-3 0 5) endinstance
+	instance t3 tun3  rotate (0 1 0) (90) translate ({expr $tp3_x} 0 {expr $tp3_z}) endinstance
+	instance t4 tun4  translate (2 0 5) endinstance
+	instance t5 tun5  endinstance
+endgroup
+instance kb kleinbottle endinstance

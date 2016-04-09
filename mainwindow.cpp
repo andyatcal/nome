@@ -29,7 +29,7 @@ void MainWindow::open()
 void MainWindow::save()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-         tr("Save Output File"), "/", tr("Output Files (*.stl *.aslf)"));
+         tr("Save Output File"), "/", tr("Output Files (*.stl *.slf *.aslf)"));
     if(fileName == "")
     {
         return;
@@ -43,9 +43,13 @@ void MainWindow::save()
     {
         canvas -> saveMesh(fileName.toStdString());
     }
+    else if(fileName.right(4).toLower() == "aslf")
+    {
+        save_current_status_aslf(fileName.toStdString());
+    }
     else
     {
-        save_current_status(fileName.toStdString());
+        save_current_status_slf(fileName.toStdString());
     }
 }
 
@@ -120,13 +124,16 @@ void MainWindow::createCanvas(QString name)
         else
         {
             canvas -> group_from_consolidate_mesh = &append_scene;
-            slfParser->appendWithASLF(banks, params, append_scene, canvas, name.toStdString());
+            slfParser->appendWithASLF(params, append_scene, canvas, name.toStdString());
         }
     }
     else if (name.right(3).toLower() == "slf")
     {
-        slfParser->makeWithMiniSLF(banks, params, scene, name.toStdString());
+        slfParser->makeWithMiniSLF(banks, params, scene, name.toStdString(),
+                                   banklines, geometrylines);
         canvas = new SlideGLWidget(scene);
+        canvas -> group_from_consolidate_mesh = &append_scene;
+        slfParser->appendWithASLF(params, append_scene, canvas, name.toStdString());
         createSliderPanel(canvas);
         canvas -> move(0, 50);
         canvas -> show();
@@ -162,7 +169,7 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     menu.exec(event->globalPos());
 }
 
-void MainWindow::save_current_status(string out_put_file)
+void MainWindow::save_current_status_aslf(string out_put_file)
 {
     ofstream file(out_put_file);
     if (!file.is_open())
@@ -183,10 +190,10 @@ void MainWindow::save_current_status(string out_put_file)
         if(!(canvas->consolidate_mesh).isEmpty())
         {
             file<<"\n";
-            file<<"savedworkingmesh consolidatemesh\n";
+            file<<"consolidate\n";
             for(Face*& face: (canvas->consolidate_mesh).faceList)
             {
-                file<<"    face\n";
+                file<<"    consolidateface\n";
                 Edge * firstEdge = face -> oneEdge;
                 Edge * currEdge = firstEdge;
                 Edge * nextEdge;
@@ -207,9 +214,92 @@ void MainWindow::save_current_status(string out_put_file)
                     file<<"        vertex "<<tempv->name<<" endvertex\n";
                     currEdge = nextEdge;
                 } while (currEdge != firstEdge);
-                file<<"    endface\n";
+                file<<"    endconsolidateface\n";
             }
-            file<<"endsavedworkingmesh\n";
+            file<<"endconsolidate\n";
         }
+    }
+}
+
+void MainWindow::save_current_status_slf(string out_put_file)
+{
+    ofstream file(out_put_file);
+    if (!file.is_open())
+    {
+        cout <<"Error: COULD NOT OPEN THE FILE.\n";
+    }
+    else
+    {
+        string bankname = "";
+        for(string& line : banklines)
+        {
+            istringstream iss(line);
+            vector<string> tokens;
+            copy(istream_iterator<string>(iss),
+                 istream_iterator<string>(),
+                 back_inserter(tokens));
+            //file << line <<'\n';
+            if(tokens[0] == "bank")
+            {
+                bankname = tokens[1];
+            }
+            if(tokens[0] == "set")
+            {
+                file << "    ";
+                for(int i = 0; i < tokens.size(); i++)
+                {
+                    if(i == 2)
+                    {
+                        file << params[bankname + "_" + tokens[1]].value;
+                    }
+                    else
+                    {
+                        file << tokens[i];
+                    }
+                    file<<'\t'<<'\t';
+                }
+                file << '\n';
+            }
+            else
+            {
+                file << line <<'\n';
+            }
+        }
+        for(string& line : geometrylines)
+        {
+            file<<line<<'\n';
+        }
+    }
+
+    if(!(canvas->consolidate_mesh).isEmpty())
+    {
+        file<<"\n";
+        file<<"consolidate\n";
+        for(Face*& face: (canvas->consolidate_mesh).faceList)
+        {
+            file<<"    consolidateface\n";
+            Edge * firstEdge = face -> oneEdge;
+            Edge * currEdge = firstEdge;
+            Edge * nextEdge;
+            Vertex * tempv;
+            do {
+                if(face == currEdge -> fa) {
+                    tempv = currEdge -> vb;
+                    nextEdge = currEdge -> nextVbFa;
+                } else {
+                    if(currEdge -> mobius) {
+                        tempv = currEdge -> vb;
+                        nextEdge = currEdge -> nextVbFb;
+                    } else {
+                        tempv = currEdge -> va;
+                        nextEdge = currEdge -> nextVaFb;
+                    }
+                }
+                file<<"        vertex "<<tempv->name<<" endvertex\n";
+                currEdge = nextEdge;
+            } while (currEdge != firstEdge);
+            file<<"    endconsolidateface\n";
+        }
+        file<<"endconsolidate\n";
     }
 }

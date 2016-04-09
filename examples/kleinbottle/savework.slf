@@ -1,27 +1,48 @@
-savedparameter
-    tp1_n 8.000000
-    tp1_ro 1.000000
-    tp1_ratio 0.000000
-    tp1_h 1.500000
-    tp2_n 8.000000
-    tp2_ro 1.000000
-    tp2_ratio 0.000000
-    tp2_h 0.900000
-    tp3_n 8.000000
-    tp3_ro 2.000000
-    tp3_ratio 0.000000
-    tp3_h 0.700000
-    tp3_x -0.900000
-    tp3_z 8.000000
-    tp4_n 8.000000
-    tp4_ro 1.600000
-    tp4_ratio 0.000000
-    tp4_h 0.900000
-    tp5_n 8.000000
-    tp5_ro 3.000000
-    tp5_ratio 0.000000
-    tp5_h 1.500000
-endsavedparameter
+bank tp1
+    set		n		8		3		10		1		
+    set		ro		1		0.1		1.0		0.1		
+    set		ratio		7.45058e-009		-0.5		0.5		0.1		
+    set		h		1.5		0.1		1.5		0.1		
+endbank
+bank tp2
+    set		n		8		3		10		1		
+    set		ro		1		0.1		1.0		0.1		
+    set		ratio		7.45058e-009		-0.5		0.5		0.1		
+    set		h		0.9		0.1		1.5		0.1		
+endbank
+bank tp3
+    set		n		8		3		10		1		
+    set		ro		2		0.1		2.0		0.1		
+    set		ratio		7.45058e-009		-0.5		0.5		0.1		
+    set		h		0.7		0.1		1.5		0.1		
+    set		x		-0.9		-4		2		0.1		
+    set		z		8		5		10		0.5		
+endbank
+bank tp4
+    set		n		8		3		10		1		
+    set		ro		1.6		0.1		3.0		0.1		
+    set		ratio		7.45058e-009		-0.5		0.5		0.1		
+    set		h		0.9		0.1		1.5		0.1		
+endbank
+bank tp5
+    set		n		8		3		10		1		
+    set		ro		3		0.1		3.0		0.1		
+    set		ratio		7.45058e-009		-0.5		0.5		0.1		
+    set		h		1.5		0.1		1.5		0.1		
+endbank
+tunnel tun1 ({expr $tp1_n} {expr $tp1_ro} {expr $tp1_ratio} {expr $tp1_h}) endfunnel
+tunnel tun2 ({expr $tp2_n} {expr $tp2_ro} {expr $tp2_ratio} {expr $tp2_h}) endfunnel
+tunnel tun3 ({expr $tp3_n} {expr $tp3_ro} {expr $tp3_ratio} {expr $tp3_h}) endfunnel
+tunnel tun4 ({expr $tp4_n} {expr $tp4_ro} {expr $tp4_ratio} {expr $tp4_h}) endfunnel
+tunnel tun5 ({expr $tp5_n} {expr $tp5_ro} {expr $tp5_ratio} {expr $tp5_h}) endfunnel
+group kleinbottle
+	instance t1 tun1  endinstance
+	instance t2 tun2  translate (-3 0 5) endinstance
+	instance t3 tun3  rotate (0 1 0) (90) translate ({expr $tp3_x} 0 {expr $tp3_z}) endinstance
+	instance t4 tun4  translate (2 0 5) endinstance
+	instance t5 tun5  endinstance
+endgroup
+instance kb kleinbottle endinstance
 
 consolidate
     consolidateface
@@ -265,3 +286,11 @@ consolidate
         vertex t3_lc0 endvertex
     endconsolidateface
 endconsolidate
+
+instance tp1 consolidatemesh rotate (0 0 1) (90) endinstance
+instance tp2 consolidatemesh rotate (0 0 1) (180) endinstance
+instance tp3 consolidatemesh rotate (0 0 1) (270) endinstance
+instance tp4 consolidatemesh rotate (0 1 0) (-90) endinstance
+instance tp5 consolidatemesh rotate (0 1 0) (-180) endinstance
+instance tp6 consolidatemesh rotate (0 0 1) (90) rotate (0 1 0) (-90) endinstance
+instance tp7 consolidatemesh rotate (0 0 1) (90) rotate (0 1 0) (-180) endinstance

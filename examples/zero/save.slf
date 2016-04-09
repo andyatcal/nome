@@ -1,0 +1,32 @@
+bank rimP
+    set		outerradius		1.1		0.5		1.5		0.1		
+    set		innerradius		0.2		0.1		0.5		0.1		
+endbank
+point o1 ({expr $rimP_outerradius * 1} 0 {expr $rimP_outerradius * 0}) endpoint
+point o2 ({expr $rimP_outerradius * 0.866} 0 {expr $rimP_outerradius * 0.5}) endpoint
+point o3 ({expr $rimP_outerradius * 0.5} 0 {expr $rimP_outerradius * 0.866}) endpoint
+point o4 ({expr $rimP_outerradius * 0} 0 {expr $rimP_outerradius * 1}) endpoint
+point o5 ({expr $rimP_outerradius * (-0.5)} 0 {expr $rimP_outerradius * 0.866}) endpoint
+point o6 ({expr $rimP_outerradius * (-0.866)} 0 {expr $rimP_outerradius * 0.5}) endpoint
+point o7 ({expr $rimP_outerradius* (-1)} 0 {expr $rimP_outerradius * 0}) endpoint
+point o8 ({expr $rimP_outerradius * (-0.866)} 0 {expr $rimP_outerradius * (-0.5)}) endpoint
+point o9 ({expr $rimP_outerradius * (-0.5)} 0 {expr $rimP_outerradius * (-0.866)}) endpoint
+point o10 ({expr $rimP_outerradius * 0} 0 {expr $rimP_outerradius * (-1)}) endpoint
+point o11 ({expr $rimP_outerradius * 0.5} 0 {expr $rimP_outerradius * (-0.866)}) endpoint
+point o12 ({expr $rimP_outerradius * 0.866} 0 {expr $rimP_outerradius * (-0.5)}) endpoint
+point i1 ({expr $rimP_innerradius * 1} {expr $rimP_innerradius * 0} 0) endpoint
+point i2 ({expr $rimP_innerradius * 0.866} {expr $rimP_innerradius * 0.5} 0) endpoint
+point i3 ({expr $rimP_innerradius * 0.5} {expr $rimP_innerradius * 0.866} 0) endpoint
+point i4 ({expr $rimP_innerradius * 0} {expr $rimP_innerradius * 1} 0) endpoint
+point i5 ({expr $rimP_innerradius * (-0.5)} {expr $rimP_innerradius * 0.866} 0) endpoint
+point i6 ({expr $rimP_innerradius * (-0.866)} {expr $rimP_innerradius * 0.5} 0) endpoint
+point i7 ({expr $rimP_innerradius* (-1)} {expr $rimP_innerradius * 0} 0) endpoint
+point i8 ({expr $rimP_innerradius * (-0.866)} {expr $rimP_innerradius * (-0.5)} 0) endpoint
+point i9 ({expr $rimP_innerradius * (-0.5)} {expr $rimP_innerradius * (-0.866)} 0) endpoint
+point i10 ({expr $rimP_innerradius * 0} {expr $rimP_innerradius * (-1)} 0) endpoint
+point i11 ({expr $rimP_innerradius * 0.5} {expr $rimP_innerradius * (-0.866)} 0) endpoint
+point i12 ({expr $rimP_innerradius * 0.866} {expr $rimP_innerradius * (-0.5)} 0) endpoint
+polyline outerrim (o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12) isloop endpolyline
+polyline innerrim (i1 i2 i3 i4 i5 i6 i7 i8 i9 i10 i11 i12) isloop endpolyline
+instance or outerrim endinstance
+instance ir innerrim endinstance

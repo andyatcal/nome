@@ -14,6 +14,7 @@
 #include "controlpanel.h"
 #include "minislfparser.h"
 #include "sliderpanel.h"
+#include <sstream>
 QT_BEGIN_NAMESPACE
 class QAction;
 class QActionGroup;
@@ -33,7 +34,8 @@ private:
     void createCanvas(QString name);
     void createControlPanel(SlideGLWidget *canvas);
     void createSliderPanel(SlideGLWidget * canvas);
-    void save_current_status(string out_put_file);
+    void save_current_status_slf(string out_put_file);
+    void save_current_status_aslf(string out_put_file);
     QMenu *fileMenu;
     QAction *openAct;
     QAction *saveAct;
@@ -47,6 +49,8 @@ private:
     unordered_map<string, Parameter> params;
     vector<ParameterBank> banks;
     vector<SliderPanel*> slider_panels;
+    vector<string> banklines;
+    vector<string> geometrylines;
 private slots:
     void open();
     void save();

@@ -1,10 +1,20 @@
-savedparameter
-    fp_n 8.000000
-    fp_ro 0.400000
-    fp_ratio 0.000000
-    fp_h 0.400000
-    fp_z -1.000000
-endsavedparameter
+bank fp
+    set		n		8		3		10		1		
+    set		ro		0.5		0.1		1.0		0.1		
+    set		ratio		7.45058e-009		-0.5		0.5		0.1		
+    set		h		0.3		0.1		1.5		0.1		
+    set		z		-1		-1.5		-0.1		0.1		
+endbank
+funnel fun ({expr $fp_n} {expr $fp_ro} {expr $fp_ratio} {expr $fp_h}) endfunnel
+group cubeMadeByFunnel
+    instance fun1 fun translate (0 0 {expr $fp_z}) endinstance
+    instance fun2 fun translate (0 0 {expr $fp_z}) rotate (1 0 0) (180) endinstance
+    instance fun3 fun translate (0 0 {expr $fp_z}) rotate (1 0 0) (90) endinstance
+    instance fun4 fun translate (0 0 {expr $fp_z}) rotate (1 0 0) (-90) endinstance
+    instance fun5 fun translate (0 0 {expr $fp_z}) rotate (0 1 0) (90) endinstance
+    instance fun6 fun translate (0 0 {expr $fp_z}) rotate (0 1 0) (-90) endinstance
+endgroup
+instance cf cubeMadeByFunnel endinstance
 
 consolidate
     consolidateface
@@ -14,15 +24,15 @@ consolidate
         vertex fun3_hc2 endvertex
     endconsolidateface
     consolidateface
+        vertex fun3_hc3 endvertex
+        vertex fun5_hc3 endvertex
+        vertex fun2_hc5 endvertex
+    endconsolidateface
+    consolidateface
         vertex fun3_hc4 endvertex
         vertex fun5_hc2 endvertex
         vertex fun5_hc3 endvertex
         vertex fun3_hc3 endvertex
-    endconsolidateface
-    consolidateface
-        vertex fun3_hc3 endvertex
-        vertex fun5_hc3 endvertex
-        vertex fun2_hc5 endvertex
     endconsolidateface
     consolidateface
         vertex fun5_hc3 endvertex
