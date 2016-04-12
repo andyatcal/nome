@@ -19,14 +19,14 @@ instance cf cubeMadeByFunnel endinstance
 consolidate
     consolidateface
         vertex fun3_hc3 endvertex
+        vertex fun5_hc3 endvertex
         vertex fun2_hc5 endvertex
-        vertex fun2_hc6 endvertex
-        vertex fun3_hc2 endvertex
     endconsolidateface
     consolidateface
         vertex fun3_hc3 endvertex
-        vertex fun5_hc3 endvertex
         vertex fun2_hc5 endvertex
+        vertex fun2_hc6 endvertex
+        vertex fun3_hc2 endvertex
     endconsolidateface
     consolidateface
         vertex fun3_hc4 endvertex

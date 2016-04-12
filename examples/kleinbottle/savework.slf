@@ -286,11 +286,3 @@ consolidate
         vertex t3_lc0 endvertex
     endconsolidateface
 endconsolidate
-
-instance tp1 consolidatemesh rotate (0 0 1) (90) endinstance
-instance tp2 consolidatemesh rotate (0 0 1) (180) endinstance
-instance tp3 consolidatemesh rotate (0 0 1) (270) endinstance
-instance tp4 consolidatemesh rotate (0 1 0) (-90) endinstance
-instance tp5 consolidatemesh rotate (0 1 0) (-180) endinstance
-instance tp6 consolidatemesh rotate (0 0 1) (90) rotate (0 1 0) (-90) endinstance
-instance tp7 consolidatemesh rotate (0 0 1) (90) rotate (0 1 0) (-180) endinstance

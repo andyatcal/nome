@@ -1,0 +1,191 @@
+savedparameter
+endsavedparameter
+
+consolidate
+    consolidateface
+        vertex v104 endvertex
+        vertex v120 endvertex
+        vertex v121 endvertex
+        vertex v105 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v103 endvertex
+        vertex v119 endvertex
+        vertex v120 endvertex
+        vertex v104 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v102 endvertex
+        vertex v118 endvertex
+        vertex v119 endvertex
+        vertex v103 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v105 endvertex
+        vertex v121 endvertex
+        vertex v122 endvertex
+        vertex v106 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v96 endvertex
+        vertex v97 endvertex
+        vertex v41 endvertex
+        vertex v40 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v97 endvertex
+        vertex v98 endvertex
+        vertex v42 endvertex
+        vertex v41 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v127 endvertex
+        vertex v96 endvertex
+        vertex v40 endvertex
+        vertex v39 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v99 endvertex
+        vertex v43 endvertex
+        vertex v42 endvertex
+        vertex v98 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v126 endvertex
+        vertex v127 endvertex
+        vertex v39 endvertex
+        vertex v38 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v126 endvertex
+        vertex v38 endvertex
+        vertex v37 endvertex
+        vertex v125 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v125 endvertex
+        vertex v37 endvertex
+        vertex v36 endvertex
+        vertex v124 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v124 endvertex
+        vertex v36 endvertex
+        vertex v35 endvertex
+        vertex v123 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v123 endvertex
+        vertex v35 endvertex
+        vertex v34 endvertex
+        vertex v122 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v100 endvertex
+        vertex v44 endvertex
+        vertex v43 endvertex
+        vertex v99 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v101 endvertex
+        vertex v45 endvertex
+        vertex v44 endvertex
+        vertex v100 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v102 endvertex
+        vertex v46 endvertex
+        vertex v45 endvertex
+        vertex v101 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v112 endvertex
+        vertex v56 endvertex
+        vertex v55 endvertex
+        vertex v113 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v113 endvertex
+        vertex v55 endvertex
+        vertex v54 endvertex
+        vertex v114 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v114 endvertex
+        vertex v54 endvertex
+        vertex v53 endvertex
+        vertex v115 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v115 endvertex
+        vertex v53 endvertex
+        vertex v52 endvertex
+        vertex v116 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v116 endvertex
+        vertex v52 endvertex
+        vertex v51 endvertex
+        vertex v117 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v117 endvertex
+        vertex v51 endvertex
+        vertex v50 endvertex
+        vertex v118 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v111 endvertex
+        vertex v57 endvertex
+        vertex v56 endvertex
+        vertex v112 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v110 endvertex
+        vertex v58 endvertex
+        vertex v57 endvertex
+        vertex v111 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v109 endvertex
+        vertex v59 endvertex
+        vertex v58 endvertex
+        vertex v110 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v108 endvertex
+        vertex v60 endvertex
+        vertex v59 endvertex
+        vertex v109 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v107 endvertex
+        vertex v61 endvertex
+        vertex v60 endvertex
+        vertex v108 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v106 endvertex
+        vertex v62 endvertex
+        vertex v61 endvertex
+        vertex v107 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v122 endvertex
+        vertex v34 endvertex
+        vertex v33 endvertex
+        vertex v32 endvertex
+        vertex v63 endvertex
+        vertex v62 endvertex
+        vertex v106 endvertex
+    endconsolidateface
+    consolidateface
+        vertex v118 endvertex
+        vertex v50 endvertex
+        vertex v49 endvertex
+        vertex v48 endvertex
+        vertex v47 endvertex
+        vertex v46 endvertex
+        vertex v102 endvertex
+    endconsolidateface
+endconsolidate
