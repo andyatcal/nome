@@ -183,8 +183,7 @@ void MySelection::selectFace(vector<Mesh*> &globalMeshList,
                 }
                 else
                 {
-                    vector<Face*> faces = mfIt -> second;
-                    faces.push_back(selectedFace);
+                    (mfIt -> second).push_back(selectedFace);
                     cout<<"Selected Face: "<<selectedFace -> id<<endl;
                 }
 
@@ -1084,8 +1083,13 @@ void MySelection::deleteSelectedFaces()
             mesh -> deleteFace(face);
         }
         mesh -> buildBoundary();
+        mesh -> computeNormals();
+        if(mesh -> isConsolidateMesh)
+        {
+            mesh -> updateVertListAfterDeletion();
+        }
     }
-    selectedFaces.clear();
+    clearSelection();
 }
 
 PolyLine MySelection::addSelectedToPolyline(bool isLoop)

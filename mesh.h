@@ -208,6 +208,10 @@ public:
      * e.g. the parameter n of the mesh.
      */
     bool in_editing_mode;
+    /* For the face deletion for consolidate mesh.*/
+    bool isConsolidateMesh;
+    /* Update the vertList after we delete from consolidate mesh.*/
+    void updateVertListAfterDeletion();
 };
 
 // @param p1, p2, p3 are positions of three vertices,

@@ -150,7 +150,8 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
     for(vIt = mesh1.vertList.begin(); vIt < mesh1.vertList.end(); vIt++) {
         if((*vIt) -> oneEdge != NULL) {
             merIt = replacingMap.find(*vIt);
-            if(merIt == replacingMap.end()) {
+            if(merIt == replacingMap.end())
+            {
                 Vertex * v = new Vertex;
                 v -> position = (*vIt) -> position;
                 v -> ID = mergedMesh.vertList.size();

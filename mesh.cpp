@@ -26,6 +26,7 @@ Mesh::Mesh(int type)
         ratio_expr = "";
         h_expr = "";
     }
+    isConsolidateMesh = false;
 }
 
 void Mesh::addVertex(Vertex * v)
@@ -1337,7 +1338,24 @@ Vertex * Mesh::findVertexInThisMesh(string name)
 
 void Mesh::deleteVertex(Vertex *v)
 {
-    return;
+    bool foundThisVertex = false;
+    int counter = 0;
+    for(Vertex * nextVert : vertList)
+    {
+        if(foundThisVertex)
+        {
+            nextVert->ID -= 1;
+        } else if(nextVert == v)
+        {
+            foundThisVertex = true;
+        } else {
+            counter++;
+        }
+    }
+    if(foundThisVertex)
+    {
+        vertList.erase(vertList.begin()+counter);
+    }
 }
 
 void Mesh::deleteFace(Face *face)
@@ -1482,9 +1500,11 @@ void Mesh::deleteEdge(Edge * edge)
          * for the affected vertex when edge is deleted. */
         if(edge -> va -> oneEdge == edge)
         {
+            foundEdge = false;
             if((vIt -> second).size() > 0)
             {
                 edge -> va -> oneEdge = *((vIt -> second).begin());
+                foundEdge = true;
             }
             else
             {
@@ -1495,32 +1515,91 @@ void Mesh::deleteEdge(Edge * edge)
                         if((*eIt) -> vb == edge -> va)
                         {
                             edge -> va -> oneEdge = (*eIt);
+                            foundEdge = true;
                             break;
                         }
                     }
                 }
             }
+            if(!foundEdge)
+            {
+                cout<<"Warning: Your deletion has created a lonely vertex."<<endl;
+                deleteVertex(edge -> va);
+                edge -> va -> oneEdge = NULL;
+            }
         }
         if(edge -> vb -> oneEdge == edge)
         {
+            foundEdge = false;
             vIt = edgeTable.find(edge -> vb);
             if(vIt != edgeTable.end() && (vIt -> second).size() > 0)
             {
                 edge -> vb -> oneEdge = *((vIt -> second).begin());
+                foundEdge = true;
             }
-            for(vIt = edgeTable.begin(); vIt != edgeTable.end(); vIt++)
+            else
             {
-                for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt++)
+                for(vIt = edgeTable.begin(); vIt != edgeTable.end(); vIt++)
                 {
-                    if((*eIt) -> vb == edge -> vb)
+                    for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt++)
                     {
-                        edge -> vb -> oneEdge = (*eIt);
-                        break;
+                        if((*eIt) -> vb == edge -> vb)
+                        {
+                            edge -> vb -> oneEdge = (*eIt);
+                            foundEdge = true;
+                            break;
+                        }
                     }
                 }
+            }
+            if(!foundEdge)
+            {
+                cout<<"Warning: Your deletion has created a lonely vertex."<<endl;
+                deleteVertex(edge -> vb);
+                edge -> vb -> oneEdge = NULL;
             }
         }
     }
     delete(edge);
+    return;
+}
+
+void Mesh::updateVertListAfterDeletion()
+{
+    vertList.clear();
+    bool foundVa;
+    bool foundVb;
+    unordered_map<Vertex*, vector<Edge*> >::iterator vIt;
+    for(vIt = edgeTable.begin(); vIt != edgeTable.end(); vIt++)
+    {
+        for(Edge * edge : (vIt -> second))
+        {
+            foundVa = false;
+            foundVb = false;
+            for(Vertex* v : vertList)
+            {
+                if(v == edge -> va)
+                {
+                    foundVa = true;
+                }
+                if(v == edge -> vb)
+                {
+                    foundVb = true;
+                }
+                if(foundVa && foundVb)
+                {
+                    break;
+                }
+            }
+            if(!foundVa)
+            {
+                vertList.push_back(edge -> va);
+            }
+            if(!foundVb)
+            {
+                vertList.push_back(edge -> vb);
+            }
+        }
+    }
     return;
 }

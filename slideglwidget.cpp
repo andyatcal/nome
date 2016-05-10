@@ -55,6 +55,7 @@ void SlideGLWidget::generalSetup()
     temp_mesh.clear();
     consolidate_mesh.color = QColor(255, 69, 0);
     consolidate_mesh.clear();
+    consolidate_mesh.isConsolidateMesh = true;
     group_from_consolidate_mesh = NULL;
     trianglePanelty = 1.3;
 }
@@ -689,7 +690,10 @@ void SlideGLWidget::consolidateTempMesh(bool)
                      consolidate_mesh.vertList.end(), v)
                 == consolidate_mesh.vertList.end())
         {
-            consolidate_mesh.vertList.push_back(v);
+            if(v -> oneEdge != NULL)
+            {
+                consolidate_mesh.vertList.push_back(v);
+            }
         }
     }
     for(Face*& f : temp_mesh.faceList)
