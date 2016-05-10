@@ -12,7 +12,7 @@
 #include <vector>
 #include "edge.h"
 #include "vertex.h"
-
+#include "mesh.h"
 using namespace glm;
 using namespace std;
 

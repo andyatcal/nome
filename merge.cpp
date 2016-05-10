@@ -147,15 +147,16 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
     vector<Face*>::iterator fIt;
     unordered_map<Vertex*, Vertex*>::iterator merIt;
     unordered_map<Vertex*, Vertex*> mergeMap;
-    unordered_map<Vertex*, Vertex*> tempMap;
     for(vIt = mesh1.vertList.begin(); vIt < mesh1.vertList.end(); vIt++) {
-        merIt = replacingMap.find(*vIt);
-        if(merIt == replacingMap.end()) {
-            Vertex * v = new Vertex;
-            v -> position = (*vIt) -> position;
-            v -> ID = mergedMesh.vertList.size();
-            mergeMap[*vIt] = v;
-            mergedMesh.vertList.push_back(v);
+        if((*vIt) -> oneEdge != NULL) {
+            merIt = replacingMap.find(*vIt);
+            if(merIt == replacingMap.end()) {
+                Vertex * v = new Vertex;
+                v -> position = (*vIt) -> position;
+                v -> ID = mergedMesh.vertList.size();
+                mergeMap[*vIt] = v;
+                mergedMesh.vertList.push_back(v);
+            }
         }
     }
     for(vIt = mesh1.vertList.begin(); vIt < mesh1.vertList.end(); vIt++) {
@@ -166,13 +167,15 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
     }
     //cout<<"And here!"<<endl;
     for(vIt = mesh2.vertList.begin(); vIt < mesh2.vertList.end(); vIt++) {
-        merIt = replacingMap.find(*vIt);
-        if(merIt == replacingMap.end()) {
-            Vertex * v = new Vertex;
-            v -> position = (*vIt) -> position;
-            v -> ID = mergedMesh.vertList.size();
-            mergeMap[*vIt] = v;
-            mergedMesh.vertList.push_back(v);
+        if((*vIt) -> oneEdge != NULL) {
+            merIt = replacingMap.find(*vIt);
+            if(merIt == replacingMap.end()) {
+                Vertex * v = new Vertex;
+                v -> position = (*vIt) -> position;
+                v -> ID = mergedMesh.vertList.size();
+                mergeMap[*vIt] = v;
+                mergedMesh.vertList.push_back(v);
+            }
         }
     }
     for(vIt = mesh2.vertList.begin(); vIt < mesh2.vertList.end(); vIt++) {

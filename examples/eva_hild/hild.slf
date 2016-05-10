@@ -1,0 +1,106 @@
+bank lefttunP
+    set     n       8       3       10      1
+    set     ro      0.3     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+endbank
+
+bank midtunP
+    set     n       8       3       10      1
+    set     ro      0.1     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+endbank
+
+bank midfunP
+    set     n       8       3       10      1
+    set     ro      0.3     0.1     1.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       0.05     0.05     0.75     0.05
+endbank
+
+bank outerfunP
+    set     n       8       3       10      1
+    set     ro      1     0.1     1.0     0.1
+    set     ratio   -0.1    -0.5    0.5     0.1
+    set     h       0     0     1.0     0.1
+endbank
+
+bank midfun2P
+    set     n       8       3       10      1
+    set     ro      0.9     0.1     1.0     0.1
+    set     ratio   -0.1    -0.5    0.5     0.1
+    set     h       0     0     1.0     0.1
+endbank
+
+bank backfunP
+    set     n       8       3       10      1
+    set ro      0.3     0.1     1.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       0.05     0.05     0.75     0.05
+endbank
+
+bank backfun2P
+    set     n       8       3       10      1
+    set     ro      0.6     0.1     1.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       0.05     0.05     0.75     0.05
+endbank
+
+bank righttunP
+    set     n       8       3       10      1
+    set     ro      0.2     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+endbank
+
+bank bottomfronttunP
+    set     n       8       3       10      1
+    set     ro      0.1     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+endbank
+
+tunnel lefttun ({expr $lefttunP_n} {expr $lefttunP_ro} {expr $lefttunP_ratio} {expr $lefttunP_h}) endtunnel
+
+tunnel midtun ({expr $midtunP_n} {expr $midtunP_ro} {expr $midtunP_ratio} {expr $midtunP_h}) endtunnel
+
+funnel midfun ({expr $midfunP_n} {expr $midfunP_ro} {expr $midfunP_ratio} {expr $midfunP_h}) endfunnel
+
+funnel outerfun ({expr $outerfunP_n} {expr $outerfunP_ro} {expr $outerfunP_ratio} {expr $outerfunP_h}) endfunnel
+
+funnel backfun ({expr $backfunP_n} {expr $backfunP_ro} {expr $backfunP_ratio} {expr $backfunP_h}) endfunnel
+
+funnel backfun2 ({expr $backfun2P_n} {expr $backfun2P_ro} {expr $backfun2P_ratio} {expr $backfun2P_h}) endfunnel
+
+tunnel righttun ({expr $righttunP_n} {expr $righttunP_ro} {expr $righttunP_ratio} {expr $righttunP_h}) endtunnel
+
+funnel midfun2 ({expr $midfun2P_n} {expr $midfun2P_ro} {expr $midfun2P_ratio} {expr $midfun2P_h}) endfunnel
+
+tunnel bottomfronttun ({expr $bottomfronttunP_n} {expr $bottomfronttunP_ro} {expr $bottomfronttunP_ratio} {expr $bottomfronttunP_h}) endtunnel
+
+point v1 (0 0 0) endpoint
+point v2 (1 0 0) endpoint
+point v3 (1 1 0) endpoint
+point v4 (1 1 1) endpoint
+point v5 (0 0 0) endpoint
+point v6 (1 0 0) endpoint
+point v7 (1 1 0) endpoint
+point v8 (1 1 1) endpoint
+
+polyline rim (v1 v2 v3 v4 v5 v6 v7 v8) endpolyline
+
+group snowhild
+    instance tun1 lefttun translate (-0.5 0 0) endinstance
+    instance tun2 midtun translate (0 0 0.1) endinstance
+    instance fun1 midfun rotate (1 0 0) (-30) translate (0 0 0.8) endinstance
+    instance tun3 righttun translate (0.3 0.3 0) endinstance
+    instance tun4 bottomfronttun rotate (0 1 0) (90) translate (0 -0.3 0.6) endinstance
+    instance fun2 outerfun enintance
+    instance fun3 backfun rotate (1 0 0) (45) translate (0.3 0.7 -0.8) endinstance
+    instance fun4 backfun2 rotate (0 1 0) (-30) translate (0.15 -0.2 -1) endinstance
+    instance fun5 midfun2 rotate (0 1 0) (-15) translate (0.075 -0.1 -0.6) endinstance
+    #instance l1 rim endinstance
+endgroup
+
+instance sh snowhild endinstance

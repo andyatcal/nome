@@ -37,16 +37,19 @@ void ControlPanel::buildConnection()
     connect(this, SIGNAL(makeOffsetMesh(float)), canvas, SLOT(offsetValueChanged(float)));
     connect(foreColorButton, SIGNAL(clicked(bool)), this, SLOT(resetForeColor(bool)));
     connect(backColorButton, SIGNAL(clicked(bool)), this, SLOT(resetBackColor(bool)));
-    connect(addModeButton, SIGNAL(clicked(bool)), this, SLOT(addModeChecked(bool)));
-    connect(zipModeButton, SIGNAL(clicked(bool)), this, SLOT(zipModeChecked(bool)));
+    connect(vertexModeButton, SIGNAL(clicked(bool)), this, SLOT(vertexModeChecked(bool)));
+    connect(borderModeButton, SIGNAL(clicked(bool)), this, SLOT(borderModeChecked(bool)));
+    connect(faceModeButton, SIGNAL(clicked(bool)), this, SLOT(faceModeChecked(bool)));
     connect(canvas, SIGNAL(feedback_status_bar(QString, int)), statusBar, SLOT(showMessage(QString,int)));
-    connect(addModeButton, SIGNAL(clicked(bool)), canvas, SLOT(addModeChecked(bool)));
-    connect(zipModeButton, SIGNAL(clicked(bool)), canvas, SLOT(zipModeChecked(bool)));
-    connect(addButton, SIGNAL(clicked(bool)), canvas, SLOT(addToTempCalled(bool)));
+    connect(vertexModeButton, SIGNAL(clicked(bool)), canvas, SLOT(vertexModeChecked(bool)));
+    connect(borderModeButton, SIGNAL(clicked(bool)), canvas, SLOT(borderModeChecked(bool)));
+    connect(faceModeButton, SIGNAL(clicked(bool)), canvas, SLOT(faceModeChecked(bool)));
+    connect(addFaceButton, SIGNAL(clicked(bool)), canvas, SLOT(addToTempCalled(bool)));
+    connect(deleteFaceButton, SIGNAL(clicked(bool)), canvas, SLOT(deleteFaceCalled(bool)));
     connect(addBorderButton, SIGNAL(clicked(bool)), canvas, SLOT(addBorderCalled(bool)));
     connect(zipButton, SIGNAL(clicked(bool)), canvas, SLOT(zipToTempCalled(bool)));
     connect(clearSelectionButton,SIGNAL(clicked(bool)), canvas, SLOT(clearSelectionCalled(bool)));
-    connect(addTempToMasterButton, SIGNAL(clicked(bool)), canvas, SLOT(addTempToMasterCalled(bool)));
+    //connect(addTempToMasterButton, SIGNAL(clicked(bool)), canvas, SLOT(addTempToMasterCalled(bool)));
     connect(wholeBorderCheck,SIGNAL(clicked(bool)), canvas, SLOT(wholeBorderSelectionChecked(bool)));
     connect(trianglePaneltyEdit, SIGNAL(textChanged(QString)), canvas, SLOT(resetTrianglePanelty(QString)));
     connect(consolidateButton, SIGNAL(clicked(bool)), canvas, SLOT(consolidateTempMesh(bool)));
@@ -77,26 +80,29 @@ void ControlPanel::setupLayout()
     viewContent -> addItem("Offset Mesh");
     viewContent -> addItem("Subdivision on Offset Mesh");
     viewContent -> setCurrentIndex(0);
-    viewLayout -> addWidget(resetViewButton = new QPushButton(tr("Reset View")));
+    viewLayout -> addWidget(resetViewButton = new QPushButton(tr("Reset Arcball View")));
+
     /* Mode layout.*/
-    modeLayout -> addLayout(addLayout = new QHBoxLayout);
-    modeLayout -> addLayout(zipLayout = new QHBoxLayout);
+    modeLayout -> addLayout(selectionLayout = new QHBoxLayout);
+    modeLayout -> addLayout(editLayout = new QHBoxLayout);
     modeLayout -> addLayout(zipOptionsLayout = new QHBoxLayout);
-    addLayout -> addWidget(addModeButton = new QRadioButton(tr("Add Mode")));
-    addModeButton -> setChecked(true);
-    addLayout -> addWidget(addButton = new QPushButton(tr("Add Polygon")));
-    zipLayout -> addWidget(zipModeButton = new QRadioButton(tr("Zip Mode")));
-    zipLayout -> addWidget(addBorderButton = new QPushButton(tr("Add Border")));
+    selectionLayout -> addWidget(faceModeButton = new QRadioButton(tr("Select Face")));
+    selectionLayout -> addWidget(vertexModeButton = new QRadioButton(tr("Select Vertex")));
+    vertexModeButton -> setChecked(true);
+    selectionLayout -> addWidget(borderModeButton = new QRadioButton(tr("Select Border")));
+    editLayout -> addWidget(addFaceButton = new QPushButton(tr("Add Polygon")));
+    editLayout -> addWidget(addBorderButton = new QPushButton(tr("Add One Border")));
+    editLayout -> addWidget(deleteFaceButton = new QPushButton(tr("Delete Face")));
     zipOptionsLayout -> addWidget(new QLabel(tr("Triangle Panelty")));
     zipOptionsLayout -> addWidget(trianglePaneltyEdit = new QLineEdit(tr("1.3")));
-    zipOptionsLayout -> addWidget(zipButton = new QPushButton(tr("Zip Two Borders")));
+    zipOptionsLayout -> addWidget(zipButton = new QPushButton(tr("Zip Two Mesh Borders")));
     modeLayout -> addLayout(addOrClearLayout = new QHBoxLayout);
     modeLayout-> addWidget(autoCorrectCheck = new QCheckBox(tr("Auto Correct Adding Face Oreinataion")));
     autoCorrectCheck -> setChecked(true);
     modeLayout-> addWidget(wholeBorderCheck = new QCheckBox(tr("Zip Whole Border Loop")));
     wholeBorderCheck -> setChecked(true);
     wholeBorderCheck -> setEnabled(false);
-    addOrClearLayout->addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
+    //addOrClearLayout->addWidget(addTempToMasterButton = new QPushButton(tr("Add to Initial Mesh")));
     addOrClearLayout->addWidget(clearSelectionButton = new QPushButton(tr("Clear Selection")));
     modeLayout -> addWidget(consolidateButton = new QPushButton(tr("Consolidate Temp Mesh")));
     modeLayout -> addWidget(mergeButton = new QPushButton(tr("Merge All")));
@@ -218,18 +224,25 @@ void ControlPanel::resetBackColor(bool)
     canvas -> setBackColor(newColor);
 }
 
-void ControlPanel::addModeChecked(bool checked)
+void ControlPanel::vertexModeChecked(bool checked)
 {
     autoCorrectCheck->setEnabled(checked);
     wholeBorderCheck->setEnabled(!checked);
-    statusBar -> showMessage(tr("Switch to Add Mode"));
+    statusBar -> showMessage(tr("Switch to Vertex Selection Mode"));
 }
 
-void ControlPanel::zipModeChecked(bool checked)
+void ControlPanel::borderModeChecked(bool checked)
 {
     autoCorrectCheck->setEnabled(!checked);
     wholeBorderCheck->setEnabled(checked);
-    statusBar -> showMessage(tr("Switch to Zip Mode"));
+    statusBar -> showMessage(tr("Switch to Border Selection Mode"));
+}
+
+void ControlPanel::faceModeChecked(bool checked)
+{
+    autoCorrectCheck->setEnabled(!checked);
+    wholeBorderCheck->setEnabled(!checked);
+    statusBar -> showMessage(tr("Switch to Face Selection Mode"));
 }
 
 void ControlPanel::pushMerge(bool)

@@ -36,7 +36,6 @@ void Mesh::addVertex(Vertex * v)
 Edge * Mesh::findEdge(Vertex * v1, Vertex * v2)
 {
     unordered_map<Vertex*, vector<Edge*> >::iterator vIt;
-    vector<Edge*> currEdges;
     vector<Edge*>::iterator eIt;
     vIt = edgeTable.find(v2);
     if(vIt != edgeTable.end())
@@ -429,11 +428,29 @@ void Mesh::computeNormals(){
 
 void Mesh::drawMesh(int startIndex, bool smoothShading)
 {
+    /* The overall mesh color.*/
+    GLfloat fcolor[] = {1.0f * color.red() / 255,
+                        1.0f * color.green() / 255,
+                        1.0f * color.blue() / 255,
+                        1.0f * color.alpha() /255};
+    /* The color for the selected face */
+    GLfloat fscolor[] = {1.0f - 1.0f * color.red() / 255,
+                         1.0f - 1.0f * color.green() / 255,
+                         1.0f - 1.0f * color.blue() / 255,
+                         1.0f - 1.0f * color.alpha() /255};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
+
     Face * tempFace;
     vector<Face*>::iterator fIt;
     for(fIt = faceList.begin(); fIt < faceList.end(); fIt++)
     {
         tempFace = (*fIt);
+        if(tempFace -> selected)
+        {
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fscolor);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fscolor);
+        }
         vec3 fNormal = tempFace -> normal;
         Vertex * tempv;
         Edge * firstEdge = (*fIt) -> oneEdge;
@@ -507,7 +524,11 @@ void Mesh::drawMesh(int startIndex, bool smoothShading)
             //cout<<"Current Vertex ID: "<<tempv -> ID<<endl;
         } while(currEdge != firstEdge);
         glEnd();
-        //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, CYAN);
+        if(tempFace -> selected)
+        {
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
+        }
     }
 }
 
@@ -1312,4 +1333,194 @@ Vertex * Mesh::findVertexInThisMesh(string name)
         }
     }
     return NULL;
+}
+
+void Mesh::deleteVertex(Vertex *v)
+{
+    return;
+}
+
+void Mesh::deleteFace(Face *face)
+{
+    bool foundThisFace = false;
+    int counter = 0;
+    for(Face * nextFace : faceList)
+    {
+        if(foundThisFace)
+        {
+            nextFace->id -= 1;
+        } else if(nextFace == face)
+        {
+            foundThisFace = true;
+        } else {
+            counter++;
+        }
+    }
+    if(foundThisFace)
+    {
+        faceList.erase(faceList.begin()+counter);
+    }
+    vector<Edge*> removeEdgeList;
+    removeEdgeList.clear();
+    Edge * firstEdge = face -> oneEdge;
+    Edge * currEdge = firstEdge;
+    Edge * nextEdge;
+    do
+    {
+        if(face == currEdge -> fa)
+        {
+            nextEdge = currEdge -> nextVbFa;
+            if(currEdge -> fb != NULL)
+            {
+                if(currEdge -> mobius)
+                {
+                    currEdge -> nextVaFa = currEdge -> nextVaFb;
+                    currEdge -> nextVbFa = currEdge -> nextVbFb;
+                    currEdge -> mobius = false;
+                    //Maybe we need to remark the end vertex non-Mobius here.
+                }
+                else
+                {
+                    /*Switch the va and vb, also need to change in the edgetable. */
+                    unordered_map<Vertex*, vector<Edge*> >::iterator vIt;
+                    vector<Edge*>::iterator eIt;
+                    vIt = edgeTable.find(currEdge -> va);
+                    if(vIt != edgeTable.end())
+                    {
+                        for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt++)
+                        {
+                            if((*eIt) == currEdge)
+                            {
+                                (vIt -> second).erase(eIt);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        cout<<"Error, there is a bug in the program!"<<endl;
+                    }
+                    vIt = edgeTable.find(currEdge -> vb);
+                    if(vIt != edgeTable.end())
+                    {
+                        (vIt -> second).push_back(currEdge);
+                    }
+                    else
+                    {
+                        vector<Edge*> edges;
+                        edges.push_back(currEdge);
+                        edgeTable[currEdge -> vb] = edges;
+                    }
+                    Vertex * temp = currEdge -> va;
+                    currEdge -> va = currEdge -> vb;
+                    currEdge -> vb = temp;
+                    currEdge -> nextVaFa = currEdge -> nextVbFb;
+                    currEdge -> nextVbFa = currEdge -> nextVaFb;
+                }
+                currEdge -> fa = currEdge -> fb;
+                currEdge -> nextVaFb = NULL;
+                currEdge -> nextVbFb = NULL;
+                currEdge -> fb = NULL;
+            }
+            else
+            {
+                currEdge -> nextVaFa = NULL;
+                currEdge -> nextVbFa = NULL;
+                currEdge -> fa = NULL;
+                removeEdgeList.push_back(currEdge);
+            }
+        }
+        else
+        {
+            if(currEdge -> mobius)
+            {
+                nextEdge = currEdge -> nextVbFb;
+                currEdge -> mobius = false;
+            } else
+            {
+                nextEdge = currEdge -> nextVaFb;
+            }
+            currEdge -> nextVaFb = NULL;
+            currEdge -> nextVbFb = NULL;
+            currEdge -> fb = NULL;
+        }
+        currEdge = nextEdge;
+    } while(currEdge != firstEdge);
+    for(Edge * edge : removeEdgeList)
+    {
+        deleteEdge(edge);
+    }
+    delete face;
+    return;
+}
+
+void Mesh::deleteEdge(Edge * edge)
+{
+    unordered_map<Vertex*, vector<Edge*> >::iterator vIt;
+    vector<Edge*>::iterator eIt;
+    vIt = edgeTable.find(edge -> va);
+    bool foundEdge = false;
+    if(vIt != edgeTable.end())
+    {
+        for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt++)
+        {
+            if((*eIt) == edge)
+            {
+                foundEdge = true;
+                (vIt -> second).erase(eIt);
+                break;
+            }
+        }
+    }
+    if(!foundEdge)
+    {
+        cout<<"Error: You can't delete this edge. Check the program!"<<endl;
+    }
+    else
+    {
+        /* Also need to settle edgeTable here. We also need to set the oneEdge pointer
+         * for the affected vertex when edge is deleted. */
+        if(edge -> va -> oneEdge == edge)
+        {
+            if((vIt -> second).size() > 0)
+            {
+                edge -> va -> oneEdge = *((vIt -> second).begin());
+            }
+            else
+            {
+                for(vIt = edgeTable.begin(); vIt != edgeTable.end(); vIt++)
+                {
+                    for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt++)
+                    {
+                        if((*eIt) -> vb == edge -> va)
+                        {
+                            edge -> va -> oneEdge = (*eIt);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(edge -> vb -> oneEdge == edge)
+        {
+            vIt = edgeTable.find(edge -> vb);
+            if(vIt != edgeTable.end() && (vIt -> second).size() > 0)
+            {
+                edge -> vb -> oneEdge = *((vIt -> second).begin());
+            }
+            for(vIt = edgeTable.begin(); vIt != edgeTable.end(); vIt++)
+            {
+                for(eIt = (vIt -> second).begin(); eIt < (vIt -> second).end(); eIt++)
+                {
+                    if((*eIt) -> vb == edge -> vb)
+                    {
+                        edge -> vb -> oneEdge = (*eIt);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    delete(edge);
+    return;
 }

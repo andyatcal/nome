@@ -77,6 +77,126 @@ void MySelection::selectFace(vector<Mesh*> &globalMeshList,
     }
 }
 
+void MySelection::selectFace(vector<Mesh*> &globalMeshList,
+                             vector<PolyLine*> &globalPolylineList,
+                             vector<int> &globalNameIndexList,
+                             vector<int> &globalPolylineNameIndexList,
+                             GLint hits, GLuint *names,
+                             GLdouble posX, GLdouble posY, GLdouble posZ)
+{
+    if(hits > 0) {
+        vec3 hit_position = vec3(posX, posY, posZ);
+        float min_distance = 500000.0;
+        Face * selectedFace = NULL;
+        Mesh * selectedMesh = NULL;
+        int endOfMesh = INT_MAX;
+        if(globalPolylineNameIndexList.size() > 0)
+        {
+            endOfMesh = globalPolylineNameIndexList[0];
+        }
+        for (int i = 0; i < hits; i++) {
+            int currentID = names[i * 4 + 3];
+            Face * workFace = NULL;
+            Mesh * workMesh = NULL;
+            vector<Mesh*>::iterator mIt;
+            vector<int>::iterator nIt;
+            /* Select a point on the polyline has a priority. */
+            if(currentID < endOfMesh)
+            {
+                for(mIt = globalMeshList.begin(),
+                    nIt = globalNameIndexList.begin();
+                    mIt < globalMeshList.end(); mIt++, nIt++)
+                {
+                    Mesh *currMesh = (*mIt);
+                    if(currentID < (currMesh -> faceList).size() + (*nIt))
+                    {
+                        workFace = currMesh -> faceList[currentID - (*nIt)];
+                        workMesh = currMesh;
+                        break;
+                    }
+                }
+                if(workFace != NULL)
+                {
+                    Edge * firstEdge = workFace -> oneEdge;
+                    Edge * currEdge = firstEdge;
+                    Edge * nextEdge;
+                    Vertex * tempv;
+                    do {
+                        if(workFace == currEdge -> fa) {
+                            tempv = currEdge -> vb;
+                            nextEdge = currEdge -> nextVbFa;
+                        } else {
+                            if(currEdge -> mobius) {
+                                tempv = currEdge -> vb;
+                                nextEdge = currEdge -> nextVbFb;
+                            } else {
+                                tempv = currEdge -> va;
+                                nextEdge = currEdge -> nextVaFb;
+                            }
+                        }
+                        float new_distance = distance(tempv -> position, hit_position);
+                        if(new_distance < min_distance) {
+                            min_distance = new_distance;
+                            selectedFace = workFace;
+                            selectedMesh = workMesh;
+                        }
+                        currEdge = nextEdge;
+                    } while (currEdge != firstEdge);
+                }
+            }
+        }
+        unordered_map<Mesh*, vector<Face*> >::iterator mfIt;
+        if(selectedFace != NULL)
+        {
+            if(selectedFace -> selected)
+            {
+                selectedFace -> selected = false;
+                mfIt = selectedFaces.find(selectedMesh);
+                if(mfIt != selectedFaces.end())
+                {
+                    vector<Face*> faces = mfIt -> second;
+                    vector<Face*>::iterator fIt;
+                    for(fIt = faces.begin();
+                     fIt < faces.end(); fIt ++) {
+                        if((*fIt) == selectedFace) {
+                            break;
+                        }
+                    }
+                    faces.erase(fIt);
+                    cout<<"Unselected Face: "<<selectedFace -> id<<endl;
+                }
+                else
+                {
+                    cout<<"Error, there is a bug in the selectoin program!"<<endl;
+                }
+            }
+            else
+            {
+                selectedFace -> selected = true;
+                mfIt = selectedFaces.find(selectedMesh);
+                if(mfIt == selectedFaces.end())
+                {
+                    vector<Face*> faces;
+                    faces.push_back(selectedFace);
+                    cout<<"Selected Face: "<<selectedFace -> id<<endl;
+                    selectedFaces[selectedMesh] = faces;
+                }
+                else
+                {
+                    vector<Face*> faces = mfIt -> second;
+                    faces.push_back(selectedFace);
+                    cout<<"Selected Face: "<<selectedFace -> id<<endl;
+                }
+
+            }
+        }
+        else
+        {
+            cout<<"You did not click on a face."<<endl;
+        }
+    }
+}
+
 void MySelection::selectVertex(vector<Mesh*> &globalMeshList,
                                vector<PolyLine*> &globalPolylineList,
                                vector<int> &globalNameIndexList,
@@ -913,10 +1033,19 @@ void MySelection::selectPartialBorder(vector<Mesh*> &globalMeshList,
 
 void MySelection::clearSelection() {
     vector<Vertex*>::iterator vIt;
-    for(vIt = selectedVertices.begin(); vIt < selectedVertices.end(); vIt++) {
+    for(vIt = selectedVertices.begin(); vIt < selectedVertices.end(); vIt++)
+    {
         (*vIt) -> selected = false;
     }
+    unordered_map<Mesh*, vector<Face*> >::iterator mfIt;
+    for(mfIt = selectedFaces.begin(); mfIt != selectedFaces.end(); mfIt++) {
+        vector<Face*> faces = mfIt -> second;
+        for(Face * face : faces) {
+            face -> selected = false;
+        }
+    }
     selectedVertices.clear();
+    selectedFaces.clear();
     firstBorderSelectionPoint = NULL;
     secondBorderSelectionPoint = NULL;
     allBorderPoints.clear();
@@ -940,6 +1069,23 @@ void MySelection::addSelectedToMesh(Mesh &mesh)
     mesh.buildBoundary();
     mesh.computeNormals();
     clearSelection();
+}
+
+void MySelection::deleteSelectedFaces()
+{
+    unordered_map<Mesh*, vector<Face*> >::iterator mfIt;
+    for(mfIt = selectedFaces.begin(); mfIt != selectedFaces.end(); mfIt++)
+    {
+        Mesh * mesh = mfIt -> first;
+        vector<Face*> faces = mfIt -> second;
+        for(Face * face : faces)
+        {
+            face -> selected = false;
+            mesh -> deleteFace(face);
+        }
+        mesh -> buildBoundary();
+    }
+    selectedFaces.clear();
 }
 
 PolyLine MySelection::addSelectedToPolyline(bool isLoop)

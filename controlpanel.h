@@ -53,11 +53,13 @@ private:
     QGroupBox *modeGroupBox;
     QVBoxLayout *modeLayout;
     QHBoxLayout *modeSelectLayout;
-    QHBoxLayout *zipLayout;
-    QHBoxLayout *addLayout;
-    QRadioButton *addModeButton;
-    QRadioButton *zipModeButton;
-    QPushButton *addButton;
+    QHBoxLayout *selectionLayout;
+    QHBoxLayout *editLayout;
+    QRadioButton *vertexModeButton;
+    QRadioButton *faceModeButton;
+    QRadioButton *borderModeButton;
+    QPushButton *addFaceButton;
+    QPushButton *deleteFaceButton;
     QPushButton *addBorderButton;
     QPushButton *zipButton;
     QCheckBox *autoCorrectCheck;
@@ -65,7 +67,7 @@ private:
     QHBoxLayout *zipOptionsLayout;
     QLineEdit *trianglePaneltyEdit;
     QHBoxLayout *addOrClearLayout;
-    QPushButton *addTempToMasterButton;
+    //QPushButton *addTempToMasterButton;
     QPushButton *clearSelectionButton;
     QVBoxLayout *subdivLayout;
     QVBoxLayout *offsetLayout;
@@ -106,8 +108,9 @@ public slots:
     void offSetSliderMoved();
     void resetForeColor(bool);
     void resetBackColor(bool);
-    void addModeChecked(bool);
-    void zipModeChecked(bool);
+    void vertexModeChecked(bool);
+    void borderModeChecked(bool);
+    void faceModeChecked(bool);
     void pushMerge(bool);
 signals:
     void makeOffsetMesh(float);

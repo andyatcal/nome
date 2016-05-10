@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <vector>
+#include <unordered_map>
 #include "polyline.h"
 #include "mesh.h"
 
@@ -24,6 +25,8 @@ class MySelection
 {
     /* Vertices selected. Can be used to create Face or Polyline.*/
     vector<Vertex*> selectedVertices;
+    /* Faces selected. Can be used to delete Face or change colors.*/
+    unordered_map<Mesh*, vector<Face*> > selectedFaces;
     /* For partial border selection/*/
     Vertex * firstBorderSelectionPoint = NULL;
     Vertex * secondBorderSelectionPoint = NULL;
@@ -48,6 +51,12 @@ public:
      */
     void selectFace(vector<Mesh*> &globalMeshList, vector<int> &globalNameIndexList,
                     GLint hits, GLuint *names);
+    void selectFace(vector<Mesh*> &globalMeshList,
+                    vector<PolyLine*> &globalPolylineList,
+                    vector<int> &globalNameIndexList,
+                    vector<int> &globalPolylineNameIndexList,
+                    GLint hits, GLuint *names,
+                    GLdouble posX, GLdouble posY, GLdouble posZ);
     /**
      * @brief selectVertex: Select the nearest vertex.
      * @param mesh: the mesh that contains this face.
@@ -128,6 +137,8 @@ public:
      * @return pointer to the new polyline
      */
     PolyLine addSelectedToPolyline(bool isLoop = false);
+    /* Delete the faces that we have selected. */
+    void deleteSelectedFaces();
 };
 
 #endif // SELECTION_H

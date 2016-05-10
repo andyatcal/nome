@@ -64,6 +64,12 @@ public:
      */
     void addVertex(Vertex * v, vector<string> &expr);
     /**
+     * @brief deleteVertex: Delete one vertex from this Mesh.
+     * If vertex is not in this mesh, do nothing.
+     * @param v: a pointer to the vertex that we want to delete.
+     */
+    void deleteVertex(Vertex *v);
+    /**
      * @brief Add one edge v1-v2 to this Mesh.
      * @param v1, v2: the two vertices of this edge.
      * If it already exists, then return the existing edge.
@@ -76,6 +82,11 @@ public:
      */
     Edge * findEdge(Vertex * v1, Vertex * v2);
     /**
+     * @brief deleteEdge Delete edge v1-v2 in this Mesh.
+     * @param v1, v2: the two vertices of this edge.
+     */
+    void deleteEdge(Edge * edge);
+    /**
      * @brief Add a triangle face to a mesh, with three vertices.
      * @param v1, v2, v3 are the three vertices of the face.
      */
@@ -86,6 +97,11 @@ public:
     // Add a arbitrary polygon face to a mesh, with three vertices.
     // @param vertices is a list of consequtive vertices of the face.
     void addPolygonFace(vector<Vertex*> vertices, bool reverseOrder = false);
+    /**
+     * @brief delelteFace: Delete a face from this mesh.
+     * @param face: the face to be deleted.
+     */
+    void deleteFace(Face * face);
     /**
      * @brief drawMesh:  Draw a mesh in OpenGL
      * @param startIndex: The starting index of drawing polygon name.

@@ -191,7 +191,15 @@ void SlideGLWidget::mouse_select(int x, int y)
     hits = glRenderMode(GL_RENDER);
     //cout<<posX<<" "<<posY<<" "<<posZ<<endl;
     //mySelect.list_hits(hits, buff);
-    if(selection_mode == 1)
+    if(selection_mode == 0)
+    {
+        mySelect.selectFace(global_mesh_list,
+                            global_polyline_list,
+                            global_name_index_list,
+                            global_polyline_name_index_list,
+                            hits, buff, posX, posY, posZ);
+    }
+    else if(selection_mode == 1)
     {
         mySelect.selectVertex(global_mesh_list,
                               global_polyline_list,
@@ -207,7 +215,7 @@ void SlideGLWidget::mouse_select(int x, int y)
                                    global_polyline_name_index_list,
                                    hits, buff, posX, posY, posZ);
     }
-    else
+    else if(selection_mode == 3)
     {
         mySelect.selectPartialBorder(global_mesh_list,
                                      global_polyline_list,
@@ -273,13 +281,6 @@ void SlideGLWidget::resizeGL(int w, int h)
 
 void SlideGLWidget::draw_mesh(int start_index, Mesh *mesh)
 {
-    QColor color = mesh -> color;
-    GLfloat fcolor[] = {1.0f * color.red() / 255,
-                        1.0f * color.green() / 255,
-                        1.0f * color.blue() / 255,
-                        1.0f * color.alpha() /255};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
     mesh -> drawMesh(start_index, smoothshading);
 }
 
@@ -606,13 +607,17 @@ void SlideGLWidget::setBackColor(QColor color)
     backColor = color;
     repaint();
 }
-void SlideGLWidget::addModeChecked(bool checked)
+void SlideGLWidget::vertexModeChecked(bool checked)
 {
     if(checked)
     {
         selection_mode = 1;
     }
-    else
+}
+
+void SlideGLWidget::borderModeChecked(bool checked)
+{
+    if(checked)
     {
         if(whole_border)
         {
@@ -625,9 +630,12 @@ void SlideGLWidget::addModeChecked(bool checked)
     }
 }
 
-void SlideGLWidget::zipModeChecked(bool checked)
+void SlideGLWidget::faceModeChecked(bool checked)
 {
-    addModeChecked(!checked);
+    if(checked)
+    {
+        selection_mode = 0;
+    }
 }
 
 void SlideGLWidget::autoCorrectChecked(bool checked)
@@ -933,5 +941,12 @@ void SlideGLWidget::updateFromSavedMesh()
     global_mesh_list.push_back(&temp_mesh);
     updateGlobalIndexList();
     set_to_editing_mode(true);
+    repaint();
+}
+
+void SlideGLWidget::deleteFaceCalled(bool)
+{
+    mySelect.deleteSelectedFaces();
+    updateGlobalIndexList();
     repaint();
 }

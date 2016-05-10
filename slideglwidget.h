@@ -156,6 +156,7 @@ private:
      */
     void mouse_select(int x, int y);
     /**
+     * selection_mode = 0: face selection;
      * selection_mode = 1: vertex selection
      * selection_mode = 2: whole border selection (line loop)
      * selection_mode = 3: partial border selection (line strip)
@@ -275,10 +276,12 @@ public slots:
     void resetViewDirection(bool);
     /* Receive the signal of offset value changed. */
     void offsetValueChanged(float);
-    /* Recevie the signal of changing to add mode. */
-    void addModeChecked(bool);
-    /* Recevie the signal of changing to zip mode. */
-    void zipModeChecked(bool);
+    /* Recevie the signal of changing to vertex selection mode. */
+    void vertexModeChecked(bool);
+    /* Recevie the signal of changing to border selection mode. */
+    void borderModeChecked(bool);
+    /* Recevie the signal of changing to face selection mode. */
+    void faceModeChecked(bool);
     /* Receive the signal auto correct orientation in adding mode. */
     void autoCorrectChecked(bool);
     /* Receive the signal whole border selection in zipping mode. */
@@ -305,6 +308,8 @@ public slots:
     void mergeCalled(bool);
     /* Slider value changed.*/
     void paramValueChanged(float);
+    /* Delete the selected faces called. */
+    void deleteFaceCalled(bool);
 signals:
     /* A feedback signal send back to control panel statusBar.*/
     void feedback_status_bar(QString, int);
