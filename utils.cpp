@@ -727,3 +727,57 @@ vec4 getXYZW(string input)
     }
     return vec4(x, y, z, w);
 }
+
+
+QColor evaluate_color_expression(string input)
+{
+    float r, b, g;
+    string number = "";
+    int i = 0;
+    for(char& c : input)
+    {
+        if(((c >= '0' &&  c <= '9') || c == '.' || c == '-' || c == '+'))
+        {
+            number.push_back(c);
+        }
+        else
+        {
+            if(number != "")
+            {
+                switch(i)
+                {
+                case 0:
+                    r = stof(number);
+                    break;
+                case 1:
+                    g = stof(number);
+                    break;
+                case 2:
+                    b = stof(number);
+                    break;
+                }
+                number = "";
+                i++;
+            }
+        }
+    }
+    if(number != "")
+    {
+        switch(i)
+        {
+        case 0:
+            r = stof(number);
+            break;
+        case 1:
+            g = stof(number);
+            break;
+        case 2:
+            b = stof(number);
+            break;
+        }
+        number = "";
+        i++;
+    }
+    cout<<r<<" "<<g<<" "<<b<<endl;
+    return QColor(255*r, 255*g, 255*b);
+}

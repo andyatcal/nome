@@ -72,6 +72,19 @@ string warning(int type, int lineNumber)
     case 14:
         return "Warning: vertex at line"
                 + to_string(lineNumber) + " can't be added to polyline. It has not been created.";
+    case 15:
+        return "Warning: Color at line"
+                + to_string(lineNumber) + " can't be assigned. It has not been created.";
+    case 16:
+        return "Warning: Color at line"
+                + to_string(lineNumber) + " has already been created (duplicate names).";
+    case 17:
+        return "Warning: Color at line"
+                + to_string(lineNumber) + " does not have enough input.";
+    case 18:
+        return "Warning: Instance at line"
+                + to_string(lineNumber) + " does not complete color definition. " +
+                "It can't be instantiated.";
     }
     return "";
 }
@@ -104,9 +117,9 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
     unordered_map<string, Vertex*>::iterator vertIt;
     unordered_map<string, PolyLine> polylines;
     unordered_map<string, PolyLine>::iterator lineIt;
-    vector<Vertex*> restore_vertices;
     string name = "";
-    bool restoreConsolidateMesh = false;
+    unordered_map<string, QColor> user_defined_colors;
+    unordered_map<string, QColor>::iterator colorIt;
     while(std::getline(file, nextLine))
     {
         istringstream iss(nextLine);
@@ -224,6 +237,75 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 banks[banks.size() - 1].addParameter(
                             &params[banks[banks.size() - 1].name.toStdString() + "_" + name]);
             }
+            else if((*tIt) == "surface")
+            {
+                string color_name;
+                QColor new_color;
+                if(++tIt < tokens.end())
+                {
+                    color_name = (*tIt);
+                    colorIt = user_defined_colors.find(color_name);
+                    if(colorIt != user_defined_colors.end())
+                    {
+                        cout<<warning(16, lineNumber)<<endl;
+                        goto newLineEnd;
+                    }
+                }
+                else
+                {
+                    cout<<warning(17, lineNumber)<<endl;
+                }
+                if(++tIt < tokens.end())
+                {
+                    if((*tIt) != "color")
+                    {
+                        cout<<warning(17, lineNumber)<<endl;
+                    }
+                }
+                else
+                {
+                    cout<<warning(17, lineNumber)<<endl;
+                }
+                string color_expression;
+                bool expression_input = false;
+                bool inExpression = false;
+                while(++tIt < tokens.end())
+                {
+                    for(char& c : (*tIt))
+                    {
+                        if(c == '(' && !inExpression)
+                        {
+                            expression_input = true;
+                        }
+                        else if(c == ')' && !inExpression)
+                        {
+                            expression_input = false;
+                            goto colordone;
+                        }
+                        else if(c == '#')
+                        {
+                            goto newLineEnd;
+                        }
+                        else if(expression_input)
+                        {
+                            color_expression.push_back(c);
+                        }
+                        if(c == '{')
+                        {
+                            inExpression = true;
+                        }
+                        else if(c == '}')
+                        {
+                            inExpression = false;
+                        }
+                    }
+                    color_expression.push_back(' ');
+                }
+                colordone:
+                new_color = evaluate_color_expression(color_expression);
+                user_defined_colors[color_name] = new_color;
+                goto newLineEnd;
+            }
             else if((*tIt) == "funnel")
             {
                 geometrylines.push_back(nextLine);
@@ -235,15 +317,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 }
                 string funnel_expression;
                 bool expression_input = false;
+                bool inExpression = false;
                 while(++tIt < tokens.end())
                 {
                     for(char& c : (*tIt))
                     {
-                        if(c == '(')
+                        if(c == '(' && !inExpression)
                         {
                             expression_input = true;
                         }
-                        else if(c == ')')
+                        else if(c == ')' && !inExpression)
                         {
                             expression_input = false;
                         }
@@ -254,6 +337,14 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         else if(expression_input)
                         {
                             funnel_expression.push_back(c);
+                        }
+                        if(c == '{')
+                        {
+                            inExpression = true;
+                        }
+                        else if(c == '}')
+                        {
+                            inExpression = false;
                         }
                     }
                     funnel_expression.push_back(' ');
@@ -282,15 +373,16 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 }
                 string tunnel_expression;
                 bool expression_input = false;
+                bool inExpression = false;
                 while(++tIt < tokens.end())
                 {
                     for(char& c : (*tIt))
                     {
-                        if(c == '(')
+                        if(c == '(' && !inExpression)
                         {
                             expression_input = true;
                         }
-                        else if(c == ')')
+                        else if(c == ')' && !inExpression)
                         {
                             expression_input = false;
                         }
@@ -301,6 +393,14 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         else if(expression_input)
                         {
                             tunnel_expression.push_back(c);
+                        }
+                        if(c == '{')
+                        {
+                            inExpression = true;
+                        }
+                        else if(c == '}')
+                        {
+                            inExpression = false;
                         }
                     }
                     tunnel_expression.push_back(' ');
@@ -473,6 +573,8 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                 bool findMesh = false;
                 bool findGroup = false;
                 bool findPolyline = false;
+                bool foundColor = false;
+                QColor color;
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
                     {
@@ -697,23 +799,59 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                         Transformation t(4, &params, xyzw);
                         transformations_up.push_back(t);
                     }
+                    if(*tIt == "surface")
+                    {
+                        string color_name;
+                        if(++tIt < tokens.end())
+                        {
+                            color_name = *tIt;
+                            colorIt = user_defined_colors.find(color_name);
+                            if(colorIt != user_defined_colors.end())
+                            {
+                                color = colorIt -> second;
+                                foundColor = true;
+                            }
+                            else
+                            {
+                                cout<<warning(18, lineNumber)<<endl;
+                            }
+                        }
+                        else
+                        {
+                            cout<<warning(18, lineNumber)<<endl;
+                        }
+                    }
                 }
                 if(currentGroup != "")
                 {
                     if(findMesh)
                     {
                         newMesh.setTransformation(transformations_up);
+                        if(foundColor)
+                        {
+                            newMesh.setColor(color);
+                            newMesh.user_set_color = true;
+                        }
                         groups[currentGroup].addMesh(newMesh);
-
                     }
                     else if(findGroup)
                     {
                         newGroup.setTransformation(transformations_up);
+                        if(foundColor)
+                        {
+                            newGroup.setColor(color);
+                            newGroup.user_set_color = true;
+                        }
                         groups[currentGroup].addGroup(newGroup);
                     }
                     else if(findPolyline)
                     {
                         newPolyline.setTransformation(transformations_up);
+                        if(foundColor)
+                        {
+                            newPolyline.setColor(color);
+                            newPolyline.user_set_color = true;
+                        }
                         groups[currentGroup].addPolyline(newPolyline);
                     }
                 }
@@ -722,16 +860,31 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
                     if(findMesh)
                     {
                         newMesh.setTransformation(transformations_up);
+                        if(foundColor)
+                        {
+                            newMesh.setColor(color);
+                            newMesh.user_set_color = true;
+                        }
                         group.addMesh(newMesh);
                     }
                     else if(findGroup)
                     {
                         newGroup.setTransformation(transformations_up);
+                        if(foundColor)
+                        {
+                            newGroup.setColor(color);
+                            newGroup.user_set_color = true;
+                        }
                         group.addGroup(newGroup);
                     }
                     else if(findPolyline)
                     {
                         newPolyline.setTransformation(transformations_up);
+                        if(foundColor)
+                        {
+                            newPolyline.setColor(color);
+                            newPolyline.user_set_color = true;
+                        }
                         group.addPolyline(newPolyline);
                     }
                 }

@@ -1,3 +1,14 @@
+#### Some Surface colors #############################
+surface R color (1 0 0) endsurface          # Red
+surface O color (0.9 0.6 0) endsurface      # Orange
+surface Y color (1 1 0) endsurface          # Yellow
+surface L color (0.6 0.8 0) endsurface      # Lime
+surface G color (0 0.9 0) endsurface        # Green
+surface A color (0 0.9 0.7) endsurface      # Aqua
+surface C color (0 1 1) endsurface          # Cyan
+surface U color (0 0.5 1) endsurface        # Uniform
+surface B color (0 0 1) endsurface          # Blue
+
 bank lefttunP
     set     n       8       3       10      1
     set     ro      0.3     0.1     1.0     0.1
@@ -91,20 +102,16 @@ point v8 (1 1 1) endpoint
 polyline rim (v1 v2 v3 v4 v5 v6 v7 v8) endpolyline
 
 group snowhild
-    instance tun1 lefttun translate (-0.5 0 0) endinstance
-    instance tun2 midtun translate (0 0 0.1) endinstance
-    instance fun1 midfun rotate (1 0 0) (-30) translate (0 0 0.8) endinstance
-    instance tun3 righttun translate (0.3 0.3 0) endinstance
+    instance tun1 lefttun translate (-0.5 0 0) surface L endinstance
+    instance tun2 midtun translate (0 0 0.1) surface A endinstance
+    instance fun1 midfun rotate (1 0 0) (-30) translate (0 0 0.8) surface G endinstance
+    instance tun3 righttun translate (0.3 0.3 0) surface L endinstance
     instance tun4 bottomfronttun rotate (0 1 0) (90) translate (0 -0.3 0.6) endinstance
-    instance fun2 outerfun enintance
-    instance fun3 backfun rotate (1 0 0) (45) translate (0.3 0.7 -0.8) endinstance
-    instance fun4 backfun2 rotate (0 1 0) (-30) translate (0.15 -0.2 -1) endinstance
-    instance fun5 midfun2 rotate (0 1 0) (-15) translate (0.075 -0.1 -0.6) endinstance
+    instance fun2 outerfun translate (0 0 0.2) surface Y enintance
+    instance fun3 backfun rotate (1 0 0) (45) translate (0.3 0.7 -0.8) surface O endinstance
+    instance fun4 backfun2 rotate (0 1 0) (-30) translate (0.15 -0.2 -1) surface B endinstance
+    instance fun5 midfun2 rotate (0 1 0) (-15) translate (0.075 -0.1 -0.6) surface U endinstance
     #instance l1 rim endinstance
 endgroup
 
 instance sh snowhild endinstance
-
-surface R color (1 0 0) endsurface  #Red
-surface O color (0.9 0.6 0) endsurface #Orange
-surface Y color (1 1 0) endsurface #Yellow

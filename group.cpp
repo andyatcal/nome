@@ -103,7 +103,8 @@ void Group::assignColor()
     vector<Group>::iterator gIt;
     for(mIt = myMeshes.begin(); mIt < myMeshes.end(); mIt++)
     {
-        if(!((*mIt).user_set_color)) {
+        if(!((*mIt).user_set_color))
+        {
             (*mIt).setColor(color);
         }
     }
@@ -115,8 +116,13 @@ void Group::assignColor()
     }
     for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
     {
-        if(!((*gIt).user_set_color)) {
+        if(!((*gIt).user_set_color))
+        {
             (*gIt).setColor(color);
+            (*gIt).assignColor();
+        }
+        else
+        {
             (*gIt).assignColor();
         }
     }
@@ -203,18 +209,24 @@ Group Group::makeCopy(string copy_group_name)
     {
         Mesh newMesh = (*mIt).makeCopy();
         newMesh.transformations_up = (*mIt).transformations_up;
+        newMesh.user_set_color = (*mIt).user_set_color;
+        newMesh.color = (*mIt).color;
         newGroup.addMesh(newMesh);
     }
     for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
     {
         PolyLine newPolyline = (*pIt).makeCopy();
         newPolyline.transformations_up = (*pIt).transformations_up;
+        newPolyline.user_set_color = (*pIt).user_set_color;
+        newPolyline.color = (*pIt).color;
         newGroup.addPolyline(newPolyline);
     }
     for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
     {
         Group copyGroup = (*gIt).makeCopy();
         copyGroup.transformations_up = (*gIt).transformations_up;
+        newGroup.user_set_color = (*gIt).user_set_color;
+        newGroup.color = (*gIt).color;
         newGroup.addGroup(copyGroup);
     }
     return newGroup;
@@ -233,18 +245,24 @@ Group Group::makeCopyForTransform()
     {
         Mesh newMesh = (*mIt).makeCopyForTransform();
         newMesh.transformations_up = (*mIt).transformations_up;
+        newMesh.user_set_color = (*mIt).user_set_color;
+        newMesh.color = (*mIt).color;
         newGroup.addMesh(newMesh);
     }
     for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
     {
         PolyLine newPolyline = (*pIt).makeCopyForTransform();
         newPolyline.transformations_up = (*pIt).transformations_up;
+        newPolyline.user_set_color = (*pIt).user_set_color;
+        newPolyline.color = (*pIt).color;
         newGroup.addPolyline(newPolyline);
     }
     for(gIt = subgroups.begin(); gIt < subgroups.end(); gIt++)
     {
         Group copyGroup = (*gIt).makeCopyForTransform();
         copyGroup.transformations_up = (*gIt).transformations_up;
+        newGroup.user_set_color = (*gIt).user_set_color;
+        newGroup.color = (*gIt).color;
         newGroup.addGroup(copyGroup);
     }
     return newGroup;

@@ -1,0 +1,115 @@
+savedparameter
+    lefttunP_n 8.000000
+    lefttunP_ro 0.300000
+    lefttunP_ratio 0.200000
+    lefttunP_h 0.100000
+    midtunP_n 8.000000
+    midtunP_ro 0.100000
+    midtunP_ratio 0.200000
+    midtunP_h 0.100000
+    midfunP_n 8.000000
+    midfunP_ro 0.300000
+    midfunP_ratio 0.000000
+    midfunP_h 0.050000
+    outerfunP_n 8.000000
+    outerfunP_ro 1.000000
+    outerfunP_ratio -0.100000
+    outerfunP_h 0.000000
+    midfun2P_n 8.000000
+    midfun2P_ro 0.900000
+    midfun2P_ratio -0.100000
+    midfun2P_h 0.000000
+    backfunP_n 8.000000
+    backfunP_ro 0.300000
+    backfunP_ratio 0.000000
+    backfunP_h 0.050000
+    backfun2P_n 8.000000
+    backfun2P_ro 0.600000
+    backfun2P_ratio 0.000000
+    backfun2P_h 0.050000
+    righttunP_n 8.000000
+    righttunP_ro 0.200000
+    righttunP_ratio 0.200000
+    righttunP_h 0.100000
+    bottomfronttunP_n 8.000000
+    bottomfronttunP_ro 0.100000
+    bottomfronttunP_ratio 0.200000
+    bottomfronttunP_h 0.100000
+endsavedparameter
+
+consolidate
+    consolidateface
+        vertex fun2_hc2 endvertex
+        vertex tun3_hc3 endvertex
+        vertex tun1_hc2 endvertex
+        vertex fun2_hc3 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun3_hc3 endvertex
+        vertex tun3_hc4 endvertex
+        vertex tun1_hc1 endvertex
+        vertex tun1_hc2 endvertex
+    endconsolidateface
+    consolidateface
+        vertex fun2_hc2 endvertex
+        vertex tun3_hc3 endvertex
+        vertex tun3_hc2 endvertex
+    endconsolidateface
+    consolidateface
+        vertex fun2_hc2 endvertex
+        vertex tun3_hc2 endvertex
+        vertex tun3_hc1 endvertex
+        vertex fun2_hc1 endvertex
+    endconsolidateface
+    consolidateface
+        vertex fun2_hc1 endvertex
+        vertex tun3_hc1 endvertex
+        vertex tun3_hc0 endvertex
+        vertex fun2_hc0 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun3_hc7 endvertex
+        vertex tun3_hc0 endvertex
+        vertex fun2_hc0 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun1_hc2 endvertex
+        vertex tun1_hc3 endvertex
+        vertex fun2_hc3 endvertex
+    endconsolidateface
+    consolidateface
+        vertex fun2_hc3 endvertex
+        vertex fun2_hc4 endvertex
+        vertex tun1_hc4 endvertex
+        vertex tun1_hc3 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun1_hc4 endvertex
+        vertex fun2_hc4 endvertex
+        vertex fun2_hc5 endvertex
+        vertex tun1_hc5 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun1_hc5 endvertex
+        vertex tun1_hc6 endvertex
+        vertex fun2_hc5 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun1_hc6 endvertex
+        vertex fun2_hc5 endvertex
+        vertex fun2_hc6 endvertex
+        vertex tun1_hc7 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun1_hc7 endvertex
+        vertex fun2_hc6 endvertex
+        vertex tun4_lc6 endvertex
+        vertex tun4_lc7 endvertex
+    endconsolidateface
+    consolidateface
+        vertex tun1_hc0 endvertex
+        vertex tun1_hc7 endvertex
+        vertex tun4_lc7 endvertex
+        vertex tun4_lc0 endvertex
+    endconsolidateface
+endconsolidate
