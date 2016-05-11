@@ -154,15 +154,14 @@ void MySelection::selectFace(vector<Mesh*> &globalMeshList,
                 mfIt = selectedFaces.find(selectedMesh);
                 if(mfIt != selectedFaces.end())
                 {
-                    vector<Face*> faces = mfIt -> second;
                     vector<Face*>::iterator fIt;
-                    for(fIt = faces.begin();
-                     fIt < faces.end(); fIt ++) {
+                    for(fIt = (mfIt -> second).begin();
+                     fIt < (mfIt -> second).end(); fIt ++) {
                         if((*fIt) == selectedFace) {
                             break;
                         }
                     }
-                    faces.erase(fIt);
+                    (mfIt -> second).erase(fIt);
                     cout<<"Unselected Face: "<<selectedFace -> id<<endl;
                 }
                 else
