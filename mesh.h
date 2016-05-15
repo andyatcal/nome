@@ -151,6 +151,10 @@ public:
      * @brief clear: clear the current mesh.
      */
     void clear();
+    /**
+     * @brief clear: clear the current mesh and delete the vertices and faces.
+     */
+    void clearAndDelete();
     /* Indicator of whether user sets the color of this mesh.*/
     bool user_set_color;
     /* transformation matrix to go up one level.*/

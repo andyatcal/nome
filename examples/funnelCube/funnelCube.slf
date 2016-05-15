@@ -29,6 +29,6 @@ group cubeMadeByFunnel
     instance fun6 fun translate (0 0 {expr $fp_z}) rotate (0 1 0) (-90) endinstance
 endgroup
 
-instance cf cubeMadeByFunnel endinstance
+instance cf cubeMadeByFunnel surface L endinstance
 
 

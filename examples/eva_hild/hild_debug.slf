@@ -1,0 +1,64 @@
+#### Some Surface colors #############################
+surface R color (1 0 0) endsurface          # Red
+surface O color (0.9 0.6 0) endsurface      # Orange
+surface Y color (1 1 0) endsurface          # Yellow
+surface L color (0.6 0.8 0) endsurface      # Lime
+surface G color (0 0.9 0) endsurface        # Green
+surface A color (0 0.9 0.7) endsurface      # Aqua
+surface C color (0 1 1) endsurface          # Cyan
+surface U color (0 0.5 1) endsurface        # Uniform
+surface B color (0 0 1) endsurface          # Blue
+
+bank midtunP
+    set     n       8       3       10      1
+    set     ro      0.1     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+endbank
+
+bank midfunP
+    set     n       8       3       10      1
+    set     ro      0.3     0.1     1.0     0.1
+    set     ratio   0    -0.5    0.5     0.1
+    set     h       0.05     0.05     0.75     0.05
+endbank
+
+bank bottomfronttunP
+    set     n       8       3       10      1
+    set     ro      0.1     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+endbank
+
+#tunnel lefttun ({expr $lefttunP_n} {expr $lefttunP_ro} {expr $lefttunP_ratio} {expr $lefttunP_h}) endtunnel
+
+tunnel midtun ({expr $midtunP_n} {expr $midtunP_ro} {expr $midtunP_ratio} {expr $midtunP_h}) endtunnel
+
+funnel midfun ({expr $midfunP_n} {expr $midfunP_ro} {expr $midfunP_ratio} {expr $midfunP_h}) endfunnel
+
+#funnel outerfun ({expr $outerfunP_n} {expr $outerfunP_ro} {expr $outerfunP_ratio} {expr $outerfunP_h}) endfunnel
+
+#funnel backfun ({expr $backfunP_n} {expr $backfunP_ro} {expr $backfunP_ratio} {expr $backfunP_h}) endfunnel
+
+#funnel backfun2 ({expr $backfun2P_n} {expr $backfun2P_ro} {expr $backfun2P_ratio} {expr $backfun2P_h}) endfunnel
+
+#tunnel righttun ({expr $righttunP_n} {expr $righttunP_ro} {expr $righttunP_ratio} {expr $righttunP_h}) endtunnel
+
+#funnel midfun2 ({expr $midfun2P_n} {expr $midfun2P_ro} {expr $midfun2P_ratio} {expr $midfun2P_h}) endfunnel
+
+tunnel bottomfronttun ({expr $bottomfronttunP_n} {expr $bottomfronttunP_ro} {expr $bottomfronttunP_ratio} {expr $bottomfronttunP_h}) endtunnel
+
+group snowhild
+    #instance tun1 lefttun translate (-0.5 0 0) surface L endinstance
+    instance tun2 midtun translate (0 0 0.1) surface A endinstance
+    instance fun1 midfun rotate (1 0 0) (-30) translate (0 0 0.8) surface G endinstance
+    #instance tun3 righttun translate (0.3 0.3 0) surface L endinstance
+    instance tun4 bottomfronttun rotate (0 1 0) (90) translate (0 -0.3 0.6) endinstance
+    #instance fun2 outerfun translate (0 0 0.2) surface Y enintance
+    #instance fun3 backfun rotate (1 0 0) (45) translate (0.3 0.7 -0.8) surface O endinstance
+    #instance fun4 backfun2 rotate (0 1 0) (-30) translate (0.15 -0.2 -1) surface B endinstance
+    #instance fun5 midfun2 rotate (0 1 0) (-15) translate (0.075 -0.1 -0.6) surface U endinstance
+    #instance l1 rim endinstance
+endgroup
+
+instance sh snowhild endinstance

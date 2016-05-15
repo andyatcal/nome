@@ -286,6 +286,10 @@ void MySelection::selectVertex(vector<Mesh*> &globalMeshList,
             }
         }
         getSelectedVertex:
+        if(selectedVertex -> source_vertex != NULL)
+        {
+            selectedVertex = selectedVertex -> source_vertex;
+        }
         if(selectedVertex -> selected) {
             selectedVertex -> selected = false;
             vector<Vertex*>::iterator vIt;
@@ -1053,15 +1057,33 @@ void MySelection::clearSelection() {
 void MySelection::addSelectedToMesh(Mesh &mesh)
 {
     vector<Vertex*> vertices;
+    vertices.clear();
     vector<Vertex*>::iterator vIt;
+    Vertex * foundVertex;
     for(vIt = selectedVertices.begin();
      vIt < selectedVertices.end(); vIt++)
     {
-        if(std::find(mesh.vertList.begin(), mesh.vertList.end(), *vIt) == mesh.vertList.end())
+        foundVertex = NULL;
+        for(Vertex * v : mesh.vertList)
         {
-            mesh.addVertex(*vIt);
+            if((v -> source_vertex) == (*vIt))
+            {
+                foundVertex = v;
+                break;
+            }
         }
-        vertices.push_back(*vIt);
+        if(foundVertex != NULL)
+        {
+            vertices.push_back(foundVertex);
+        }
+        else
+        {   Vertex * newVertex = new Vertex;
+            newVertex -> source_vertex = *vIt;
+            newVertex -> position = (*vIt) -> position;
+            newVertex -> ID = mesh.vertList.size();
+            mesh.addVertex(newVertex);
+            vertices.push_back(newVertex);
+        }
     }
     mesh.addPolygonFace(vertices);
     mesh.buildBoundary();

@@ -246,6 +246,10 @@ private:
     void mergeAll();
     /* Set the in_eidting_mode of scene shown and all leave meshes.*/
     void set_to_editing_mode(bool in_editing_mode);
+    /* Update the temprary mesh.*/
+    void updateTempMesh();
+    /* Update the consolidate mesh.*/
+    void updateConsolidateMesh();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

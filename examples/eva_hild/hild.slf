@@ -111,7 +111,7 @@ group snowhild
     instance fun3 backfun rotate (1 0 0) (45) translate (0.3 0.7 -0.8) surface O endinstance
     instance fun4 backfun2 rotate (0 1 0) (-30) translate (0.15 -0.2 -1) surface B endinstance
     instance fun5 midfun2 rotate (0 1 0) (-15) translate (0.075 -0.1 -0.6) surface U endinstance
-    #instance l1 rim endinstance
+    instance l1 rim endinstance
 endgroup
 
 instance sh snowhild endinstance

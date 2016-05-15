@@ -18,7 +18,7 @@ MainWindow::MainWindow()
 void MainWindow::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Import Input File"), "/", tr("Geometry Files (*.slf *.sif *.aslf)"));
+        tr("Import Input File"), "/", tr("Geometry Files (*.nom *.sif *.anom)"));
     if(fileName == "")
     {
         return;
@@ -29,7 +29,7 @@ void MainWindow::open()
 void MainWindow::save()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-         tr("Save Output File"), "/", tr("Output Files (*.stl *.slf *.aslf)"));
+         tr("Save Output File"), "/", tr("Output Files (*.stl *.nom *.anom)"));
     if(fileName == "")
     {
         return;
@@ -43,13 +43,13 @@ void MainWindow::save()
     {
         canvas -> saveMesh(fileName.toStdString());
     }
-    else if(fileName.right(4).toLower() == "aslf")
+    else if(fileName.right(4).toLower() == "anom")
     {
-        save_current_status_aslf(fileName.toStdString());
+        save_current_status_anom(fileName.toStdString());
     }
     else
     {
-        save_current_status_slf(fileName.toStdString());
+        save_current_status_nome(fileName.toStdString());
     }
 }
 
@@ -78,12 +78,12 @@ void MainWindow::createActions()
 {
     openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
-    openAct->setStatusTip(tr("Open a SIF or SLF file"));
+    openAct->setStatusTip(tr("Open a SIF or NOME file"));
     connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
     saveAct = new QAction(tr("&Save..."), this);
     saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Save your work as a STL file"));
+    saveAct->setStatusTip(tr("Save your work as a NOME or STL file"));
     connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
     closeAct = new QAction(tr("&Close..."), this);
@@ -114,7 +114,7 @@ void MainWindow::createCanvas(QString name)
         canvas -> show();
         createControlPanel(canvas);
     }
-    else if(name.right(4).toLower() == "aslf")
+    else if(name.right(4).toLower() == "anom")
     {
         if(canvas == NULL)
         {
@@ -127,7 +127,7 @@ void MainWindow::createCanvas(QString name)
             slfParser->appendWithASLF(params, append_scene, canvas, name.toStdString());
         }
     }
-    else if (name.right(3).toLower() == "slf")
+    else if (name.right(3).toLower() == "nom")
     {
         slfParser->makeWithMiniSLF(banks, params, scene, name.toStdString(),
                                    banklines, geometrylines);
@@ -141,7 +141,7 @@ void MainWindow::createCanvas(QString name)
     }
     else
     {
-        cout<<"File not supported!";
+        cout<<"File type not supported!";
     }
 }
 
@@ -169,7 +169,7 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     menu.exec(event->globalPos());
 }
 
-void MainWindow::save_current_status_aslf(string out_put_file)
+void MainWindow::save_current_status_anom(string out_put_file)
 {
     ofstream file(out_put_file);
     if (!file.is_open())
@@ -221,7 +221,7 @@ void MainWindow::save_current_status_aslf(string out_put_file)
     }
 }
 
-void MainWindow::save_current_status_slf(string out_put_file)
+void MainWindow::save_current_status_nome(string out_put_file)
 {
     ofstream file(out_put_file);
     if (!file.is_open())

@@ -571,7 +571,8 @@ bool Mesh::isEmpty() {
     return vertList.size() == 0 && faceList.size() == 0;
 }
 
-void Mesh::clear() {
+void Mesh::clear()
+{
     //for(Vertex*& v : vertList)
     //{
     //    delete v;
@@ -580,6 +581,21 @@ void Mesh::clear() {
     //{
     //    delete f;
     //}
+    vertList.clear();
+    faceList.clear();
+    edgeTable.clear();
+}
+
+void Mesh::clearAndDelete()
+{
+    for(Vertex*& v : vertList)
+    {
+        delete v;
+    }
+    for(Face*& f : faceList)
+    {
+        delete f;
+    }
     vertList.clear();
     faceList.clear();
     edgeTable.clear();
@@ -1345,10 +1361,13 @@ void Mesh::deleteVertex(Vertex *v)
         if(foundThisVertex)
         {
             nextVert->ID -= 1;
-        } else if(nextVert == v)
+        }
+        else if(nextVert == v)
         {
             foundThisVertex = true;
-        } else {
+        }
+        else
+        {
             counter++;
         }
     }
@@ -1356,6 +1375,7 @@ void Mesh::deleteVertex(Vertex *v)
     {
         vertList.erase(vertList.begin()+counter);
     }
+    delete v;
 }
 
 void Mesh::deleteFace(Face *face)
@@ -1523,9 +1543,9 @@ void Mesh::deleteEdge(Edge * edge)
             }
             if(!foundEdge)
             {
-                cout<<"Warning: Your deletion has created a lonely vertex."<<endl;
-                deleteVertex(edge -> va);
+                cout<<"Warning: Your deletion has deleted a vertex."<<endl;
                 edge -> va -> oneEdge = NULL;
+                deleteVertex(edge -> va);
             }
         }
         if(edge -> vb -> oneEdge == edge)
@@ -1554,12 +1574,14 @@ void Mesh::deleteEdge(Edge * edge)
             }
             if(!foundEdge)
             {
-                cout<<"Warning: Your deletion has created a lonely vertex."<<endl;
-                deleteVertex(edge -> vb);
+                cout<<"Warning: Your deletion has deleted a vertex."<<endl;
                 edge -> vb -> oneEdge = NULL;
+                deleteVertex(edge -> vb);
             }
         }
     }
+
+    /* Also need to remove the key in edgeTable if it does not exist anymore. */
     delete(edge);
     return;
 }

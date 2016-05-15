@@ -1,6 +1,6 @@
-#include "minislfparser.h"
+#include "nomeparser.h"
 
-MiniSlfParser::MiniSlfParser()
+NomeParser::NomeParser()
 {
 
 }
@@ -89,7 +89,7 @@ string warning(int type, int lineNumber)
     return "";
 }
 
-void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
+void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                                     unordered_map<string, Parameter> &params,
                                     Group &group,
                                     string inputSIF,
@@ -896,7 +896,7 @@ void MiniSlfParser::makeWithMiniSLF(vector<ParameterBank> &banks,
     group.mapFromParameters();
 }
 
-void MiniSlfParser::appendWithASLF(unordered_map<string, Parameter> &params,
+void NomeParser::appendWithANOM(unordered_map<string, Parameter> &params,
                                    Group &group,
                                    SlideGLWidget* canvas,
                                    string inputSIF)

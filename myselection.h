@@ -23,8 +23,7 @@ using namespace std;
 
 class MySelection
 {
-    /* Vertices selected. Can be used to create Face or Polyline.*/
-    vector<Vertex*> selectedVertices;
+private:
     /* Faces selected. Can be used to delete Face or change colors.*/
     unordered_map<Mesh*, vector<Face*> > selectedFaces;
     /* For partial border selection/*/
@@ -34,6 +33,8 @@ class MySelection
     vector<Vertex*> firstHalfBorder;
     vector<Vertex*> vertToSelect;
 public:
+    /* Vertices selected. Can be used to create Face or Polyline.*/
+    vector<Vertex*> selectedVertices;
     /**
      * @brief list_hits: A debug function. Shows the current hit
      * objects names.

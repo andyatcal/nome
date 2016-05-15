@@ -225,8 +225,8 @@ Group Group::makeCopy(string copy_group_name)
     {
         Group copyGroup = (*gIt).makeCopy();
         copyGroup.transformations_up = (*gIt).transformations_up;
-        newGroup.user_set_color = (*gIt).user_set_color;
-        newGroup.color = (*gIt).color;
+        copyGroup.user_set_color = (*gIt).user_set_color;
+        copyGroup.color = (*gIt).color;
         newGroup.addGroup(copyGroup);
     }
     return newGroup;
@@ -261,8 +261,8 @@ Group Group::makeCopyForTransform()
     {
         Group copyGroup = (*gIt).makeCopyForTransform();
         copyGroup.transformations_up = (*gIt).transformations_up;
-        newGroup.user_set_color = (*gIt).user_set_color;
-        newGroup.color = (*gIt).color;
+        copyGroup.user_set_color = (*gIt).user_set_color;
+        copyGroup.color = (*gIt).color;
         newGroup.addGroup(copyGroup);
     }
     return newGroup;

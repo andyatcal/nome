@@ -12,7 +12,7 @@
 #include <string>
 #include "slideglwidget.h"
 #include "controlpanel.h"
-#include "minislfparser.h"
+#include "nomeparser.h"
 #include "sliderpanel.h"
 #include <sstream>
 QT_BEGIN_NAMESPACE
@@ -34,8 +34,8 @@ private:
     void createCanvas(QString name);
     void createControlPanel(SlideGLWidget *canvas);
     void createSliderPanel(SlideGLWidget * canvas);
-    void save_current_status_slf(string out_put_file);
-    void save_current_status_aslf(string out_put_file);
+    void save_current_status_nome(string out_put_file);
+    void save_current_status_anom(string out_put_file);
     QMenu *fileMenu;
     QAction *openAct;
     QAction *saveAct;
@@ -43,7 +43,7 @@ private:
     QAction *quitAct;
     SlideGLWidget *canvas;
     ControlPanel *controls;
-    MiniSlfParser *slfParser;
+    NomeParser *nomeParser;
     Group scene;
     Group append_scene;
     unordered_map<string, Parameter> params;

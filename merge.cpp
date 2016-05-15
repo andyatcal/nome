@@ -159,6 +159,10 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
                 mergedMesh.vertList.push_back(v);
             }
         }
+        else
+        {
+            cout<<"Test here1."<<endl;
+        }
     }
     for(vIt = mesh1.vertList.begin(); vIt < mesh1.vertList.end(); vIt++) {
         merIt = replacingMap.find(*vIt);
@@ -168,7 +172,6 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
     }
     //cout<<"And here!"<<endl;
     for(vIt = mesh2.vertList.begin(); vIt < mesh2.vertList.end(); vIt++) {
-        if((*vIt) -> oneEdge != NULL) {
             merIt = replacingMap.find(*vIt);
             if(merIt == replacingMap.end()) {
                 Vertex * v = new Vertex;
@@ -177,7 +180,6 @@ Mesh merge(Mesh & mesh1, Mesh & mesh2) {
                 mergeMap[*vIt] = v;
                 mergedMesh.vertList.push_back(v);
             }
-        }
     }
     for(vIt = mesh2.vertList.begin(); vIt < mesh2.vertList.end(); vIt++) {
         merIt = replacingMap.find(*vIt);

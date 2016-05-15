@@ -56,6 +56,8 @@ public:
     /* A pointer to its original vertex before transformation.
      * This is only used for a transformed mesh. */
     Vertex * before_transform_vertex;
+    /* For the consolidated mesh and temp mesh. Find its own source vertex.*/
+    Vertex * source_vertex;
     /* Indicator of whether this vertex is selected.*/
     bool selected;
     /* Indicator of whether this vertex is parametric. */

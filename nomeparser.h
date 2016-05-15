@@ -1,5 +1,5 @@
-#ifndef MINISLFPARSER_H
-#define MINISLFPARSER_H
+#ifndef NOMEPARSER_H
+#define NOMEPARSER_H
 
 #include <vector>
 #include "parameterbank.h"
@@ -12,17 +12,17 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-class MiniSlfParser
+class NomeParser
 {
 public:
-    MiniSlfParser();
-    void makeWithMiniSLF(vector<ParameterBank> &banks,
+    NomeParser();
+    void makeWithNome(vector<ParameterBank> &banks,
                          unordered_map<string, Parameter> &params,
                          Group &group,
                          string inputSIF,
                          vector<string> &banklines,
                          vector<string> &geometrylines);
-    void appendWithASLF(unordered_map<string, Parameter> &params,
+    void appendWithANOM(unordered_map<string, Parameter> &params,
                         Group &group,
                         SlideGLWidget *canvas,
                         string inputSIF);

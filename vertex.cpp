@@ -17,6 +17,7 @@ Vertex::Vertex()
     selected = false;
     isParametric = false;
     before_transform_vertex = NULL;
+    source_vertex = NULL;
 }
 
 Vertex::Vertex(float x, float y, float z, unsigned long ID)

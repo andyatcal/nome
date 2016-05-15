@@ -684,16 +684,31 @@ void SlideGLWidget::zipToTempCalled(bool)
 
 void SlideGLWidget::consolidateTempMesh(bool)
 {
+    unordered_map<Vertex*, Vertex*> tempToConsolidateMap;
+    Vertex * foundVertex;
     for(Vertex*& v : temp_mesh.vertList)
     {
-        if(std::find(consolidate_mesh.vertList.begin(),
-                     consolidate_mesh.vertList.end(), v)
-                == consolidate_mesh.vertList.end())
+        foundVertex = NULL;
+        for(Vertex *& vc : consolidate_mesh.vertList)
         {
-            if(v -> oneEdge != NULL)
+            if(vc -> source_vertex == v -> source_vertex)
             {
-                consolidate_mesh.vertList.push_back(v);
+                foundVertex = vc;
+                tempToConsolidateMap[v] = vc;
+                break;
             }
+        }
+        if(foundVertex == NULL)
+        {
+            Vertex * newVertex = new Vertex;
+            newVertex -> ID = consolidate_mesh.vertList.size();
+            newVertex -> position = v -> position;
+            if(v -> source_vertex != NULL)
+            {
+                newVertex -> source_vertex = v -> source_vertex;
+            }
+            tempToConsolidateMap[v] = newVertex;
+            consolidate_mesh.addVertex(newVertex);
         }
     }
     for(Face*& f : temp_mesh.faceList)
@@ -723,7 +738,7 @@ void SlideGLWidget::consolidateTempMesh(bool)
                     nextEdge = currEdge -> nextVaFb;
                 }
             }
-            vertices.push_back(tempv);
+            vertices.push_back(tempToConsolidateMap[tempv]);
             currEdge = nextEdge;
         } while (currEdge != firstEdge);
         consolidate_mesh.addPolygonFace(vertices);
@@ -857,7 +872,7 @@ void SlideGLWidget::clearSelection()
     mySelect.clearSelection();
     border1.clear();
     border2.clear();
-    temp_mesh.clear();
+    temp_mesh.clearAndDelete();
     if(temp_mesh.isEmpty() && consolidate_mesh.isEmpty())
     {
         set_to_editing_mode(false);
@@ -905,6 +920,7 @@ void SlideGLWidget::paramValueChanged(float)
     {
         makeSLFMesh();
     }
+    updateTempMesh();
     if(group_from_consolidate_mesh != NULL && group_from_consolidate_mesh->myMeshes.size() != 0)
     {
         for(Mesh& mesh : group_from_consolidate_mesh->myMeshes)
@@ -944,7 +960,10 @@ void SlideGLWidget::updateFromSavedMesh()
     global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
     global_mesh_list.push_back(&temp_mesh);
     updateGlobalIndexList();
-    set_to_editing_mode(true);
+    if(consolidate_mesh.faceList.size() != 0)
+    {
+        set_to_editing_mode(true);
+    }
     repaint();
 }
 
@@ -953,4 +972,26 @@ void SlideGLWidget::deleteFaceCalled(bool)
     mySelect.deleteSelectedFaces();
     updateGlobalIndexList();
     repaint();
+}
+
+void SlideGLWidget::updateTempMesh()
+{
+    for(Vertex * v : temp_mesh.vertList)
+    {
+        if(v -> source_vertex != NULL)
+        {
+            v -> position = v -> source_vertex -> position;
+        }
+    }
+}
+
+void SlideGLWidget::updateConsolidateMesh()
+{
+    for(Vertex * v : consolidate_mesh.vertList)
+    {
+        if(v -> source_vertex != NULL)
+        {
+            v -> position = v -> source_vertex -> position;
+        }
+    }
 }
