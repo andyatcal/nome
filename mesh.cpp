@@ -441,16 +441,39 @@ void Mesh::drawMesh(int startIndex, bool smoothShading)
                          1.0f - 1.0f * color.alpha() /255};
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
-
     Face * tempFace;
     vector<Face*>::iterator fIt;
     for(fIt = faceList.begin(); fIt < faceList.end(); fIt++)
     {
         tempFace = (*fIt);
-        if(tempFace -> selected)
+        if(tempFace -> user_defined_color)
         {
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fscolor);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fscolor);
+            if(tempFace -> selected)
+            {
+                /* The reverse of user defined face color, ussed for selection. */
+                GLfloat uscolor[] = {1.0f - 1.0f * color.red() / 255,
+                                     1.0f - 1.0f * color.green() / 255,
+                                     1.0f - 1.0f * color.blue() / 255,
+                                     1.0f - 1.0f * color.alpha() /255};
+                glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uscolor);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, uscolor);
+            }
+            else
+            {
+                /* The user defined face color.*/
+                GLfloat ucolor[] = {1.0f * color.red() / 255,
+                                    1.0f * color.green() / 255,
+                                    1.0f * color.blue() / 255,
+                                    1.0f * color.alpha() /255};
+                glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, ucolor);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ucolor);
+            }
+        } else {
+            if(tempFace -> selected)
+            {
+                glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fscolor);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fscolor);
+            }
         }
         vec3 fNormal = tempFace -> normal;
         Vertex * tempv;
@@ -525,7 +548,7 @@ void Mesh::drawMesh(int startIndex, bool smoothShading)
             //cout<<"Current Vertex ID: "<<tempv -> ID<<endl;
         } while(currEdge != firstEdge);
         glEnd();
-        if(tempFace -> selected)
+        if(tempFace -> selected || tempFace -> user_defined_color)
         {
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, fcolor);
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, fcolor);
@@ -640,6 +663,15 @@ Mesh Mesh::makeCopy(string copy_mesh_name) {
         vertCopy -> ID = (*vIt) -> ID;
         vertCopy -> name = (*vIt) -> name;
         vertCopy -> position = (*vIt) -> position;
+        vertCopy -> isParametric = (*vIt) -> isParametric;
+        if((*vIt) -> isParametric)
+        {
+            vertCopy -> x_expr = (*vIt) -> x_expr;
+            vertCopy -> y_expr = (*vIt) -> y_expr;
+            vertCopy -> z_expr = (*vIt) -> z_expr;
+            vertCopy -> params = (*vIt) -> params;
+            vertCopy -> influencingParams = (*vIt) -> influencingParams;
+        }
         newMesh.addVertex(vertCopy);
     }
     vector<Face*>::iterator fIt;
@@ -669,6 +701,10 @@ Mesh Mesh::makeCopy(string copy_mesh_name) {
             currEdge = nextEdge;
         } while (currEdge != firstEdge);
         newMesh.addPolygonFace(vertices);
+        newMesh.faceList[newMesh.faceList.size() - 1] -> user_defined_color
+                = (*fIt) -> user_defined_color;
+        newMesh.faceList[newMesh.faceList.size() - 1] -> color
+                = (*fIt) -> color;
     }
     newMesh.buildBoundary();
     newMesh.computeNormals();
@@ -834,6 +870,10 @@ Mesh Mesh::makeCopyForTransform() {
             currEdge = nextEdge;
         } while (currEdge != firstEdge);
         newMesh.addPolygonFace(vertices);
+        newMesh.faceList[newMesh.faceList.size() - 1] -> user_defined_color
+                = (*fIt) -> user_defined_color;
+        newMesh.faceList[newMesh.faceList.size() - 1] -> color
+                = (*fIt) -> color;
     }
     newMesh.buildBoundary();
     newMesh.computeNormals();

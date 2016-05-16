@@ -13,6 +13,7 @@
 #include "edge.h"
 #include "vertex.h"
 #include "mesh.h"
+#include <QColor>
 using namespace glm;
 using namespace std;
 
@@ -35,6 +36,12 @@ public:
     bool selected;
     /* FaceID, is the index from the global face list.*/
     int id;
+    /* The name of this face.*/
+    string name;
+    /* The color of this face. */
+    QColor color;
+    /* Indicate if this face has user defined color. */
+    bool user_defined_color;
 };
 
 #endif // __FACE_H__

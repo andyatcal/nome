@@ -1,0 +1,34 @@
+#### Some Surface colors #############################
+surface R color (1 0 0) endsurface          # Red
+surface O color (0.9 0.6 0) endsurface      # Orange
+surface Y color (1 1 0) endsurface          # Yellow
+surface L color (0.6 0.8 0) endsurface      # Lime
+surface G color (0 0.9 0) endsurface        # Green
+surface A color (0 0.9 0.7) endsurface      # Aqua
+surface C color (0 1 1) endsurface          # Cyan
+surface U color (0 0.5 1) endsurface        # Uniform
+surface B color (0 0 1) endsurface          # Blue
+
+bank cubeP
+    set     l       1       0.5       1.5      0.1
+endbank
+
+point XYZ  ( {expr $cubeP_l}  {expr $cubeP_l}  {expr $cubeP_l} ) endpoint
+point XYC  ( {expr $cubeP_l}  {expr $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
+point XBZ  ( {expr $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr $cubeP_l} ) endpoint
+point XBC  ( {expr $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
+point AYZ  ( {expr -1.0 * $cubeP_l}  {expr $cubeP_l}  {expr $cubeP_l} ) endpoint
+point AYC  ( {expr -1.0 * $cubeP_l}  {expr $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
+point ABZ  ( {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr $cubeP_l} ) endpoint
+point ABC  ( {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
+
+face c1   (XYZ XBZ XBC XYC ) surface G endface
+face c2   (XYZ XYC AYC AYZ ) endface
+face c3   (AYZ AYC ABC ABZ ) endface
+face c4   (ABZ ABC XBC XBZ ) endface
+face c5   (XYZ AYZ ABZ XBZ ) endface
+face c6   (XYC XBC ABC AYC ) endface
+
+object cube (c1 c2 c3 c4 c5 c6) endobject
+
+instance cube1 cube endinstance

@@ -85,6 +85,25 @@ string warning(int type, int lineNumber)
         return "Warning: Instance at line"
                 + to_string(lineNumber) + " does not complete color definition. " +
                 "It can't be instantiated.";
+    case 19:
+        return "Warning: face at line"
+                + to_string(lineNumber) + " doesn't have a name. It can't be initiated.";
+    case 20:
+        return "Warning: face at line"
+                + to_string(lineNumber) + " has already been created (duplicate names)." +
+                                          " It can't be initiated.";
+    case 21:
+        return "Warning: vertex at line"
+                + to_string(lineNumber) + " can't be added to face. It has not been created.";
+
+    case 22:
+        return "Warning: Face at line"
+                + to_string(lineNumber) + " does not complete color definition. " +
+                "It can't be instantiated.";
+    case 23:
+        return "Warning: face at line"
+                + to_string(lineNumber) + " can't be added to mesh. It has not been created.";
+
     }
     return "";
 }
@@ -117,6 +136,9 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
     unordered_map<string, Vertex*>::iterator vertIt;
     unordered_map<string, PolyLine> polylines;
     unordered_map<string, PolyLine>::iterator lineIt;
+    unordered_map<string, Face*> global_faces;
+    unordered_map<Face*, vector<Vertex*> > map_face_vertices;
+    unordered_map<string, Face*>::iterator faceIt;
     string name = "";
     unordered_map<string, QColor> user_defined_colors;
     unordered_map<string, QColor>::iterator colorIt;
@@ -359,8 +381,7 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                 {
                     cout<<warning(3, lineNumber)<<endl;
                 }
-                newFunnel.computeNormals();
-                //group.addMesh(newFunnel);
+                //newFunnel.computeNormals();
             }
             else if((*tIt) == "tunnel")
             {
@@ -415,7 +436,257 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                 {
                     cout<<warning(3, lineNumber)<<endl;
                 }
-                newTunnel.computeNormals();
+                //newTunnel.computeNormals();
+            }
+            else if((*tIt) == "object")
+            {
+                geometrylines.push_back(nextLine);
+                Mesh newMesh(0);
+                newMesh.setGlobalParameter(&params);
+                if(++tIt < tokens.end())
+                {
+                    if(!testComments(*tIt))
+                    {
+                        newMesh.name = *tIt;
+                    }
+                        else
+                    {
+                        cout<<warning(3, lineNumber)<<endl;
+                        goto newLineEnd;
+                    }
+                }
+                string faceInside = "";
+                bool addingFace = false;
+                while(++tIt < tokens.end())
+                {
+                    for(char& c : (*tIt))
+                    {
+                        if(c == '(')
+                        {
+                            addingFace = true;
+                        }
+                        else if(c == ')')
+                        {
+                            addingFace = false;
+                            if(faceInside != "")
+                            {
+                                faceIt = global_faces.find(faceInside);
+                                if(faceIt == global_faces.end())
+                                {
+                                    cout<<warning(23, lineNumber);
+                                }
+                                else
+                                {
+                                    Vertex * foundVertex;
+                                    vector<Vertex*> vertices;
+                                    for(Vertex * vc : map_face_vertices[(faceIt -> second)])
+                                    {
+                                        foundVertex = NULL;
+                                        for(Vertex * v : newMesh.vertList)
+                                        {
+                                            if(v -> source_vertex == vc)
+                                            {
+                                                foundVertex = v;
+                                                vertices.push_back(v);
+                                            }
+                                        }
+                                        if(foundVertex == NULL)
+                                        {
+                                            Vertex * newVertex = new Vertex;
+                                            newVertex -> isParametric = vc -> isParametric;
+                                            newVertex -> position = vc -> position;
+                                            newVertex -> ID = newMesh.vertList.size();
+                                            newVertex -> source_vertex = vc;
+                                            newVertex -> name = vc -> name;
+                                            newVertex -> x_expr = vc -> x_expr;
+                                            newVertex -> y_expr = vc -> y_expr;
+                                            newVertex -> z_expr = vc -> z_expr;
+                                            newVertex -> influencingParams = vc -> influencingParams;
+                                            newVertex -> params = vc -> params;
+                                            newMesh.addVertex(newVertex);
+                                            vertices.push_back(newVertex);
+                                        }
+                                    }
+                                    newMesh.addPolygonFace(vertices);
+                                    newMesh.faceList[newMesh.faceList.size()-1]->user_defined_color = faceIt -> second -> user_defined_color;
+                                    if(faceIt -> second -> user_defined_color)
+                                    {
+                                        newMesh.faceList[newMesh.faceList.size()-1]->color = faceIt -> second -> color;
+                                    }
+                                }
+                                faceInside = "";
+                            }
+                            goto endAddingFaceInMesh;
+                        }
+                        else if(addingFace)
+                        {
+                            faceInside.push_back(c);
+                        }
+                    }
+                    if(faceInside != "")
+                    {
+                        faceIt = global_faces.find(faceInside);
+                        if(faceIt == global_faces.end())
+                        {
+                            cout<<warning(23, lineNumber);
+                        }
+                        else
+                        {
+                            Vertex * foundVertex;
+                            vector<Vertex*> vertices;
+                            for(Vertex * vc : map_face_vertices[(faceIt -> second)])
+                            {
+                                foundVertex = NULL;
+                                for(Vertex * v : newMesh.vertList)
+                                {
+                                    if(v -> source_vertex == vc)
+                                    {
+                                        foundVertex = v;
+                                        vertices.push_back(v);
+                                    }
+                                }
+                                if(foundVertex == NULL)
+                                {
+                                    Vertex * newVertex = new Vertex;
+                                    newVertex -> isParametric = vc -> isParametric;
+                                    newVertex -> position = vc -> position;
+                                    newVertex -> ID = newMesh.vertList.size();
+                                    newVertex -> source_vertex = vc;
+                                    newVertex -> name = vc -> name;
+                                    newVertex -> x_expr = vc -> x_expr;
+                                    newVertex -> y_expr = vc -> y_expr;
+                                    newVertex -> z_expr = vc -> z_expr;
+                                    newVertex -> influencingParams = vc -> influencingParams;
+                                    newVertex -> params = vc -> params;
+                                    newMesh.addVertex(newVertex);
+                                    vertices.push_back(newVertex);
+                                }
+                            }
+                            newMesh.addPolygonFace(vertices);
+                            newMesh.faceList[newMesh.faceList.size()-1]->user_defined_color = faceIt -> second -> user_defined_color;
+                            if(faceIt -> second -> user_defined_color)
+                            {
+                                newMesh.faceList[newMesh.faceList.size()-1]->color = faceIt -> second -> color;
+                            }
+                        }
+                        faceInside = "";
+                    }
+                }
+                endAddingFaceInMesh:
+                if(meshes.find(newMesh.name) == meshes.end())
+                {
+                    //newMesh.computeNormals();
+                    meshes[newMesh.name] = newMesh;
+                }
+                else
+                {
+                    cout<<warning(3, lineNumber)<<endl;
+                }
+            }
+            else if((*tIt) == "face")
+            {
+                geometrylines.push_back(nextLine);
+                Face * newFace = new Face;
+                if((++tIt) < tokens.end()) {
+                    if(!testComments(*tIt))
+                    {
+                        vertIt = global_vertices.find(*tIt);
+                        if(vertIt == global_vertices.end())
+                        {
+                            newFace -> name = *tIt;
+                            global_faces[*tIt] = newFace;
+                        }
+                        else
+                        {
+                            cout<<warning(20, lineNumber)<<endl;
+                        }
+                    }
+                    else
+                    {
+                        cout<<warning(19, lineNumber)<<endl;
+                    }
+                }
+                string vertInside = "";
+                bool addingVert = false;
+                vector<Vertex*> vertices;
+                vertices.clear();
+                while(++tIt < tokens.end() && (*tIt) != "endface")
+                {
+                    for(char & c: (*tIt))
+                    {
+                        if(c == '(')
+                        {
+                            addingVert = true;
+                        }
+                        else if(c == ')')
+                        {
+                            addingVert = false;
+                            if(vertInside != "")
+                            {
+                                vertIt = global_vertices.find(vertInside);
+                                if(vertIt == global_vertices.end())
+                                {
+                                    cout<<warning(21, lineNumber);
+                                }
+                                else
+                                {
+                                    vertices.push_back(vertIt -> second);
+                                }
+                                vertInside = "";
+                            }
+                            goto endAddingVertInFace;
+                        }
+                        else if(addingVert)
+                        {
+                            vertInside.push_back(c);
+                        }
+                    }
+                    if(vertInside != "")
+                    {
+                        vertIt = global_vertices.find(vertInside);
+                        if(vertIt == global_vertices.end())
+                        {
+                            cout<<warning(21, lineNumber);
+                        }
+                        else
+                        {
+                            vertices.push_back(vertIt -> second);
+                        }
+                        vertInside = "";
+                    }
+                }
+                endAddingVertInFace:
+                map_face_vertices[newFace] = vertices;
+                if(++tIt < tokens.end() && (*tIt) == "surface")
+                {
+                    string color_name = "";
+                    QColor color;
+                    bool foundColor = false;
+                    if(++tIt < tokens.end())
+                    {
+                        color_name = *tIt;
+                        colorIt = user_defined_colors.find(color_name);
+                        if(colorIt != user_defined_colors.end())
+                        {
+                            foundColor = true;
+                            color = colorIt -> second;
+                        }
+                        else
+                        {
+                            cout<<warning(22, lineNumber)<<endl;
+                        }
+                    }
+                    else
+                    {
+                        cout<<warning(22, lineNumber)<<endl;
+                    }
+                    if(foundColor)
+                    {
+                        newFace -> color = color;
+                        newFace -> user_defined_color = true;
+                    }
+                }
+
             }
             else if((*tIt) == "polyline")
             {
@@ -457,6 +728,7 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                                     newPolyline.isLoop = true;
                                 }
                             }
+                            goto endPolyLineWhile;
                         }
                         else if(addingVert)
                         {
@@ -465,7 +737,6 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                     }
                     if(vertInside != "")
                     {
-                        //xyz.push_back(' ');
                         vertIt = global_vertices.find(vertInside);
                         if(vertIt == global_vertices.end())
                         {

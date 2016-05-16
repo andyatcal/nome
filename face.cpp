@@ -11,4 +11,7 @@ Face::Face(){
     oneEdge = NULL;
     facePoint = NULL;
     selected = false;
+    id = -1;
+    name = "";
+    user_defined_color = false;
 }

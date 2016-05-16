@@ -294,6 +294,7 @@ void Group::setName(string name)
 
 void Group::mapFromParameters()
 {
+    bool found;
     for(Transformation& t : transformations_up)
     {
         vector<Parameter*> params = t.influencingParams;
@@ -318,6 +319,25 @@ void Group::mapFromParameters()
                 p->addInfluenceTransformation(&t);
             }
         }
+        for(Vertex*& v : (*mIt).vertList)
+        {
+            vector<Parameter*> params = v -> influencingParams;
+            for(Parameter*& p : params)
+            {
+                found = false;
+                for(Vertex * vin : p -> influenceVertices)
+                {
+                    if(vin == v)
+                    {
+                        found = true;
+                    }
+                }
+                if(!found)
+                {
+                    p->addInfluenceVertex(v);
+                }
+            }
+        }
     }
     vector<PolyLine>::iterator pIt;
     for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
@@ -327,7 +347,18 @@ void Group::mapFromParameters()
             vector<Parameter*> params = v -> influencingParams;
             for(Parameter*& p : params)
             {
-                p->addInfluenceVertex(v);
+                found = false;
+                for(Vertex * vin : p -> influenceVertices)
+                {
+                    if(vin == v)
+                    {
+                        found = true;
+                    }
+                }
+                if(!found)
+                {
+                    p->addInfluenceVertex(v);
+                }
             }
         }
         for(Transformation& t : (*pIt).transformations_up)

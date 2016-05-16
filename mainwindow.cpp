@@ -124,16 +124,16 @@ void MainWindow::createCanvas(QString name)
         else
         {
             canvas -> group_from_consolidate_mesh = &append_scene;
-            slfParser->appendWithASLF(params, append_scene, canvas, name.toStdString());
+            nomeParser->appendWithANOM(params, append_scene, canvas, name.toStdString());
         }
     }
     else if (name.right(3).toLower() == "nom")
     {
-        slfParser->makeWithMiniSLF(banks, params, scene, name.toStdString(),
+        nomeParser->makeWithNome(banks, params, scene, name.toStdString(),
                                    banklines, geometrylines);
         canvas = new SlideGLWidget(scene);
         canvas -> group_from_consolidate_mesh = &append_scene;
-        slfParser->appendWithASLF(params, append_scene, canvas, name.toStdString());
+        nomeParser->appendWithANOM(params, append_scene, canvas, name.toStdString());
         createSliderPanel(canvas);
         canvas -> move(0, 50);
         canvas -> show();
