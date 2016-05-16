@@ -448,23 +448,25 @@ void Mesh::drawMesh(int startIndex, bool smoothShading)
         tempFace = (*fIt);
         if(tempFace -> user_defined_color)
         {
+            QColor user_color = tempFace -> color;
             if(tempFace -> selected)
             {
+
                 /* The reverse of user defined face color, ussed for selection. */
-                GLfloat uscolor[] = {1.0f - 1.0f * color.red() / 255,
-                                     1.0f - 1.0f * color.green() / 255,
-                                     1.0f - 1.0f * color.blue() / 255,
-                                     1.0f - 1.0f * color.alpha() /255};
+                GLfloat uscolor[] = {1.0f - 1.0f * user_color.red() / 255,
+                                     1.0f - 1.0f * user_color.green() / 255,
+                                     1.0f - 1.0f * user_color.blue() / 255,
+                                     1.0f - 1.0f * user_color.alpha() /255};
                 glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uscolor);
                 glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, uscolor);
             }
             else
             {
                 /* The user defined face color.*/
-                GLfloat ucolor[] = {1.0f * color.red() / 255,
-                                    1.0f * color.green() / 255,
-                                    1.0f * color.blue() / 255,
-                                    1.0f * color.alpha() /255};
+                GLfloat ucolor[] = {1.0f * user_color.red() / 255,
+                                    1.0f * user_color.green() / 255,
+                                    1.0f * user_color.blue() / 255,
+                                    1.0f * user_color.alpha() /255};
                 glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, ucolor);
                 glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ucolor);
             }
