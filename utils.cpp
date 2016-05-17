@@ -778,6 +778,6 @@ QColor evaluate_color_expression(string input)
         number = "";
         i++;
     }
-    cout<<r<<" "<<g<<" "<<b<<endl;
+    //cout<<r<<" "<<g<<" "<<b<<endl;
     return QColor(255*r, 255*g, 255*b);
 }

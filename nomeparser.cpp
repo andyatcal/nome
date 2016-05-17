@@ -126,15 +126,15 @@ string warning(int type, int lineNumber)
 void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                               unordered_map<string, Parameter> &params,
                               Group &group,
-                              string inputSIF,
+                              string input,
                               vector<string> &colorlines,
                               vector<string> &banklines,
                               vector<string> &geometrylines,
-                              vector<string> &postProcessingLines)
+                              vector<int> &postProcessingLines)
 {
     banks.clear();
     group.clear();
-    ifstream file(inputSIF);
+    ifstream file(input);
     if (!file.good())
     {
         cout<<"THE PATH OF MINI SIF FILE IS NOT VAILD.";
@@ -160,8 +160,8 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
     unordered_map<string, Face*>::iterator faceIt;
     string name = "";
     unordered_map<string, QColor> user_defined_colors;
-    string current_mesh_name = "";
     unordered_map<string, QColor>::iterator colorIt;
+    string current_mesh_name = "";
     while(std::getline(file, nextLine))
     {
         istringstream iss(nextLine);
@@ -710,24 +710,11 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
             }
             else if((*tIt) == "face" && deletePhase)
             {
-                postProcessingLines.push_back(nextLine);
+                postProcessingLines.push_back(lineNumber);
                 /*
-                string deleteFaceName = "";
-                if(++tIt < tokens.end())
-                {
-                    deleteFaceName = *tIt;
-                }
-                else
-                {
-                    cout<<warning(24, lineNumber)<<endl;
-                    goto newLineEnd;
-                }
-                bool found = group.deleteFaceInThisGroup(deleteFaceName);
-                if(!found)
-                {
-                    cout<<warning(25, lineNumber)<<endl;
-                }
+
                 */
+                goto newLineEnd;
             }
             else if((*tIt) == "face" && constructingMesh)
             {
@@ -738,7 +725,7 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                 }
                 else if(current_mesh_name == "consolidatedmesh")
                 {
-                    postProcessingLines.push_back(nextLine);
+                    postProcessingLines.push_back(lineNumber);
                     goto newLineEnd;
                 }
                 geometrylines.push_back(nextLine);
@@ -1044,7 +1031,7 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                         instanceName = *tIt;
                     }
                 } else {
-                    cout<<warning(5, lineNumber);
+                    cout<<warning(5, lineNumber)<<endl;
                 }
                 if((++tIt) < tokens.end()) {
                     if(!testComments(*tIt))
@@ -1052,11 +1039,11 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                         className = *tIt;
                     }
                 } else {
-                    cout<<warning(6, lineNumber);
+                    cout<<warning(6, lineNumber)<<endl;
                 }
                 if(className == "consolidatedmesh")
                 {
-                    postProcessingLines.push_back(nextLine);
+                    postProcessingLines.push_back(lineNumber);
                     goto newLineEnd;
                 }
                 else
@@ -1087,7 +1074,7 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                         }
                         else
                         {
-                            cout<<warning(5, lineNumber);
+                            cout<<warning(5, lineNumber)<<endl;
                         }
                     }
                 }
@@ -1359,13 +1346,15 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
             }
             else if(*tIt == "delete")
             {
-                postProcessingLines.push_back(nextLine);
+                postProcessingLines.push_back(lineNumber);
                 deletePhase = true;
+                goto newLineEnd;
             }
             else if(*tIt == "enddelete")
             {
-                postProcessingLines.push_back(nextLine);
+                postProcessingLines.push_back(lineNumber);
                 deletePhase = false;
+                goto newLineEnd;
             }
             else if(*tIt == "mesh")
             {
@@ -1376,7 +1365,7 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                     {
                         if(*tIt == "consolidatedmesh")
                         {
-                            postProcessingLines.push_back(nextLine);
+                            postProcessingLines.push_back(lineNumber);
                             current_mesh_name = "consolidatedmesh";
                             goto newLineEnd;
                         }
@@ -1414,7 +1403,7 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
                 constructingMesh = false;
                 if(current_mesh_name == "consolidatedmesh")
                 {
-                    postProcessingLines.push_back(nextLine);
+                    postProcessingLines.push_back(lineNumber);
                 }
                 else
                 {
@@ -1430,25 +1419,625 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
 }
 
 void NomeParser::postProcessingWithNome(unordered_map<string, Parameter> &params,
-                                        vector<string> &postProcessingLines,
+                                        vector<int> &postProcessingLines,
                                         SlideGLWidget *canvas,
-                                        Group &group)
+                                        Group &group,
+                                        string input)
 {
+    if(postProcessingLines.size() == 0)
+    {
+        return;
+    }
+    ifstream file(input);
+    if (!file.good())
+    {
+        cout<<"THE PATH OF MINI SIF FILE IS NOT VAILD.";
+        exit(1);
+    }
+    string nextLine;
+    int lineNumber = 1;
     bool deletePhase = false;
     bool restoreConsolidatedMesh = false;
-    for(string nextLine : postProcessingLines)
+    string current_mesh_name = "";
+    unordered_map<string, QColor> user_defined_colors;
+    unordered_map<string, QColor>::iterator colorIt;
+    vector<int>::iterator fileLineIter = postProcessingLines.begin();
+    unordered_map<string, Mesh> meshes;
+    unordered_map<string, Mesh>::iterator meshIt;
+    unordered_map<string, Face*> global_faces;
+    unordered_map<string, Face*>::iterator faceIt;
+    while(std::getline(file, nextLine))
     {
-        cout<<nextLine<<endl;
+        istringstream iss(nextLine);
+        vector<string> tokens;
+        copy(istream_iterator<string>(iss),
+             istream_iterator<string>(),
+             back_inserter(tokens));
+        vector<string>::iterator tIt;
+        for(tIt = tokens.begin(); tIt < tokens.end(); tIt++)
+        {
+            if((*tIt) != "surface" && lineNumber != (*fileLineIter))
+            {
+                goto newLineEnd;
+            }
+            else if((*tIt) == "surface")
+            {
+                //cout<<nextLine<<endl;
+                string color_name;
+                QColor new_color;
+                if(++tIt < tokens.end())
+                {
+                    color_name = (*tIt);
+                    colorIt = user_defined_colors.find(color_name);
+                    if(colorIt != user_defined_colors.end())
+                    {
+                        cout<<warning(16, lineNumber)<<endl;
+                        goto newLineEnd;
+                    }
+                }
+                else
+                {
+                    cout<<warning(17, lineNumber)<<endl;
+                }
+                if(++tIt < tokens.end())
+                {
+                    if((*tIt) != "color")
+                    {
+                        cout<<warning(17, lineNumber)<<endl;
+                    }
+                }
+                else
+                {
+                    cout<<warning(17, lineNumber)<<endl;
+                }
+                string color_expression;
+                bool expression_input = false;
+                bool inExpression = false;
+                while(++tIt < tokens.end())
+                {
+                    for(char& c : (*tIt))
+                    {
+                        if(c == '(' && !inExpression)
+                        {
+                            expression_input = true;
+                        }
+                        else if(c == ')' && !inExpression)
+                        {
+                            expression_input = false;
+                            goto colordone;
+                        }
+                        else if(c == '#')
+                        {
+                            goto newLineEnd;
+                        }
+                        else if(expression_input)
+                        {
+                            color_expression.push_back(c);
+                        }
+                        if(c == '{')
+                        {
+                            inExpression = true;
+                        }
+                        else if(c == '}')
+                        {
+                            inExpression = false;
+                        }
+                    }
+                    color_expression.push_back(' ');
+                }
+                colordone:
+                new_color = evaluate_color_expression(color_expression);
+                user_defined_colors[color_name] = new_color;
+                goto newLineEnd;
+            }
+            else
+            {
+                fileLineIter++;
+            }
+            if((*tIt) == "mesh")
+            {
+                restoreConsolidatedMesh = true;
+                Mesh newMesh(0);
+                if((++tIt) < tokens.end()) {
+                    if(!testComments(*tIt))
+                    {
+                        if(*tIt != "consolidatedmesh")
+                        {
+                            cout<<"Error: there is a bug in the program. Check!"<<endl;
+                            goto newLineEnd;
+                        }
+                        newMesh.name = *tIt;
+                        newMesh.setGlobalParameter(&params);
+                    }
+                    else
+                    {
+                        cout<<warning(26, lineNumber)<<endl;
+                        goto newLineEnd;
+                    }
+                }
+                else
+                {
+                    cout<<warning(26, lineNumber)<<endl;
+                    goto newLineEnd;
+                }
+                if(meshes.find(newMesh.name) == meshes.end())
+                {
+                    meshes[newMesh.name] = newMesh;
+                    current_mesh_name = newMesh.name;
+                }
+                else
+                {
+                    cout<<warning(3, lineNumber)<<endl;
+                }
+                goto newLineEnd;
+            }
+            else if((*tIt) == "endmesh")
+            {
+                restoreConsolidatedMesh = false;
+                goto newLineEnd;
+            }
+            else if((*tIt) == "delete")
+            {
+                deletePhase = true;
+                goto newLineEnd;
+            }
+            else if((*tIt) == "enddelete")
+            {
+                deletePhase = false;
+                goto newLineEnd;
+            }
+            else if((*tIt) == "face" && deletePhase)
+            {
+                string deleteFaceName = "";
+                if(++tIt < tokens.end())
+                {
+                    deleteFaceName = *tIt;
+                }
+                else
+                {
+                    cout<<warning(24, lineNumber)<<endl;
+                    goto newLineEnd;
+                }
+                cout<<deleteFaceName<<endl;
+                bool found = (canvas
+                              -> hierarchical_scene_transformed).deleteFaceInThisGroup(deleteFaceName);
+                if(!found)
+                {
+                    cout<<warning(25, lineNumber)<<endl;
+                }
+                goto newLineEnd;
+            }
+            else if((*tIt) == "face" && restoreConsolidatedMesh)
+            {
+                if(current_mesh_name != "consolidatedmesh")
+                {
+                    cout<<"Error: there is a bug in the program. Check!"<<endl;
+                    goto newLineEnd;
+                }
+                Face * newFace = new Face;
+                if((++tIt) < tokens.end()) {
+                    if(!testComments(*tIt))
+                    {
+                        faceIt = global_faces.find(*tIt);
+                        if(faceIt == global_faces.end())
+                        {
+                            newFace -> name = *tIt;
+                            global_faces[*tIt] = newFace;
+                        }
+                        else
+                        {
+                            cout<<warning(20, lineNumber)<<endl;
+                        }
+                    }
+                    else
+                    {
+                        cout<<warning(19, lineNumber)<<endl;
+                    }
+                }
+                string vertInside = "";
+                bool addingVert = false;
+                vector<Vertex*> vertices;
+                vertices.clear();
+                while(++tIt < tokens.end() && (*tIt) != "endface")
+                {
+                    for(char & c: (*tIt))
+                    {
+                        if(c == '(')
+                        {
+                            addingVert = true;
+                        }
+                        else if(c == ')')
+                        {
+                            addingVert = false;
+                            if(vertInside != "")
+                            {
+                                Vertex *v = (canvas -> hierarchical_scene_transformed).findVertexInThisGroup(vertInside);
+                                if(!(canvas -> master_mesh.isEmpty())) /* Dealing with recovery of SIF.*/
+                                {
+                                    v = (canvas -> master_mesh.findVertexInThisMesh(vertInside));
+                                }
+                                if(v == NULL)
+                                {
+                                    cout<<warning(9, lineNumber)<<endl;
+                                }
+                                else
+                                {
+                                    vertices.push_back(v);
+                                }
+                                vertInside = "";
+                            }
+                            goto endAddingVertInFace;
+                        }
+                        else if(addingVert)
+                        {
+                            vertInside.push_back(c);
+                        }
+                    }
+                    if(vertInside != "")
+                    {
+                        //cout<<vertInside<<endl;
+                        Vertex *v = (canvas -> hierarchical_scene_transformed).findVertexInThisGroup(vertInside);
+                        if(!(canvas -> master_mesh.isEmpty())) /* Dealing with recovery of SIF.*/
+                        {
+                            v = (canvas -> master_mesh.findVertexInThisMesh(vertInside));
+                        }
+                        if(v == NULL)
+                        {
+                            cout<<warning(9, lineNumber)<<endl;
+                        }
+                        else
+                        {
+                            vertices.push_back(v);
+                        }
+                        vertInside = "";
+                    }
+                }
+                endAddingVertInFace:
+                /* Add this face to the current mesh.*/
+                vector<Vertex*> mappedVertices;
+                mappedVertices.clear();
+                bool foundVertex;
+                for(Vertex * vs : vertices)
+                {
+                    foundVertex = false;
+                    for(Vertex * v : meshes[current_mesh_name].vertList)
+                    {
+                        if(v -> source_vertex == vs)
+                        {
+                            foundVertex = true;
+                            mappedVertices.push_back(v);
+                            break;
+                        }
+                    }
+                    if(!foundVertex)
+                    {
+                        Vertex * newVertex = new Vertex;
+                        newVertex -> isParametric = vs -> isParametric;
+                        newVertex -> position = vs -> position;
+                        newVertex -> ID = meshes[current_mesh_name].vertList.size();
+                        newVertex -> source_vertex = vs;
+                        newVertex -> name = vs -> name;
+                        newVertex -> x_expr = vs -> x_expr;
+                        newVertex -> y_expr = vs -> y_expr;
+                        newVertex -> z_expr = vs -> z_expr;
+                        newVertex -> influencingParams = vs -> influencingParams;
+                        newVertex -> params = vs -> params;
+                        meshes[current_mesh_name].addVertex(newVertex);
+                        mappedVertices.push_back(newVertex);
+                    }
+                }
+                meshes[current_mesh_name].addPolygonFace(mappedVertices);
+                meshes[current_mesh_name].faceList[meshes[current_mesh_name].faceList.size() - 1]
+                        -> name = newFace -> name;
+                if(++tIt < tokens.end() && (*tIt) == "surface")
+                {
+                    string color_name = "";
+                    QColor color;
+                    bool foundColor = false;
+                    if(++tIt < tokens.end())
+                    {
+                        color_name = *tIt;
+                        colorIt = user_defined_colors.find(color_name);
+                        if(colorIt != user_defined_colors.end())
+                        {
+                            foundColor = true;
+                            color = colorIt -> second;
+                        }
+                        else
+                        {
+                            cout<<warning(22, lineNumber)<<endl;
+                        }
+                    }
+                    else
+                    {
+                        cout<<warning(22, lineNumber)<<endl;
+                    }
+                    if(foundColor)
+                    {
+                        meshes[current_mesh_name].faceList[meshes[current_mesh_name].faceList.size() - 1]
+                                -> color = color;
+                        meshes[current_mesh_name].faceList[meshes[current_mesh_name].faceList.size() - 1]
+                                -> user_defined_color = true;
+                    }
+                }
+                delete newFace;
+            }
+            else if((*tIt) == "instance")
+            {
+                string instanceName;
+                Mesh newMesh;
+                string className;
+                bool findMesh = false;
+                bool foundColor = false;
+                QColor color;
+                if((++tIt) < tokens.end())
+                {
+                    if(!testComments(*tIt))
+                    {
+                        instanceName = *tIt;
+                    }
+                }
+                else
+                {
+                    cout<<warning(5, lineNumber)<<endl;
+                }
+                if((++tIt) < tokens.end())
+                {
+                    if(!testComments(*tIt))
+                    {
+                        className = *tIt;
+                    }
+                }
+                else
+                {
+                    cout<<warning(6, lineNumber)<<endl;
+                }
+                if(className != "consolidatedmesh")
+                {
+                    cout<<"Error: there is a bug in the program. Check!"<<endl;
+                    goto newLineEnd;
+                }
+                else
+                {
+                    meshIt = meshes.find(className);
+                    if(meshIt != meshes.end())
+                    {
+                        newMesh = (meshIt -> second).makeCopyForTempMesh(instanceName);
+                        findMesh = true;
+                    }
+                }
+                vector<Transformation> transformations_up;
+                while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                {
+                    if(testComments(*tIt))
+                    {
+                        goto newLineEnd;
+                    }
+                    if(*tIt == "rotate")
+                    {
+                        string xyz;
+                        string angle;
+                        bool makingXYZ = false;
+                        bool makingAngle = false;
+                        bool doneXYZ = false;
+                        bool inExpression = false;
+                        while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                        {
+                            for(char& c : (*tIt))
+                            {
+                                if(c == '(' && !inExpression)
+                                {
+                                    if(!doneXYZ)
+                                    {
+                                        makingXYZ = true;
+                                    }
+                                    else
+                                    {
+                                        makingAngle = true;
+                                    }
+                                }
+                                else if(c == ')' && !inExpression)
+                                {
+                                    if(makingXYZ)
+                                    {
+                                        doneXYZ = true;
+                                        makingXYZ = false;
+                                    } else if(makingAngle)
+                                    {
+                                        makingAngle = false;
+                                        goto endWhile1;
+                                    }
+                                }
+                                else
+                                {
+                                    if(makingXYZ)
+                                    {
+                                        xyz.push_back(c);
+                                        if(c == '{')
+                                        {
+                                            inExpression = true;
+                                        }
+                                        else if(c == '}')
+                                        {
+                                            inExpression = false;
+                                        }
+                                    }
+                                    else if(makingAngle)
+                                    {
+                                        angle.push_back(c);
+                                        if(c == '{')
+                                        {
+                                            inExpression = true;
+                                        }
+                                        else if(c == '}')
+                                        {
+                                            inExpression = false;
+                                        }
+                                    }
+                                }
+                            }
+                            if(makingXYZ && xyz != "")
+                            {
+                                xyz.push_back(' ');
+                            }
+                            else if(makingAngle && angle != "")
+                            {
+                                angle.push_back(' ');
+                            }
+                        }
+                        endWhile1:
+                        Transformation t(1, &params, xyz, angle);
+                        transformations_up.push_back(t);
+                    }
+                    else if(*tIt == "translate" || *tIt == "scale")
+                    {
+                        bool isTranslate = false;
+                        if(*tIt == "translate")
+                        {
+                            isTranslate = true;
+                        }
+                        string xyz = "";
+                        bool makingXYZ = false;
+                        bool inExpression = false;
+                        while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                        {
+                            for(char& c : (*tIt))
+                            {
+                                if(c == '(' && !inExpression)
+                                {
+                                    makingXYZ = true;
+                                }
+                                else if(c == ')' && !inExpression)
+                                {
+                                    makingXYZ = false;
+                                    goto endWhile2;
+                                }
+                                else if(makingXYZ)
+                                {
+                                    xyz.push_back(c);
+                                    if(c == '{')
+                                    {
+                                        inExpression = true;
+                                    }
+                                    else if(c == '}')
+                                    {
+                                        inExpression = false;
+                                    }
+                                }
+                            }
+                            if(xyz != "")
+                            {
+                                xyz.push_back(' ');
+                            }
+                        }
+                        endWhile2:
+                        if(isTranslate)
+                        {
+                            Transformation t(3,&params, xyz);
+                            transformations_up.push_back(t);
+                        }
+                        else
+                        {
+                            Transformation t(2, &params, xyz);
+                            transformations_up.push_back(t);
+                        }
+                    }
+                    else if(*tIt == "mirror")
+                    {
+                        string xyzw = "";
+                        bool makingXYZW = false;
+                        bool inExpression = false;
+                        while(++tIt < tokens.end() && (*tIt) != "endinstance")
+                        {
+                            for(char& c : (*tIt))
+                            {
+                                if(c == '(' && !inExpression)
+                                {
+                                    makingXYZW = true;
+                                }
+                                else if(c == ')' && !inExpression)
+                                {
+                                    makingXYZW = false;
+                                    goto endWhile3;
+                                }
+                                else if(makingXYZW)
+                                {
+                                    xyzw.push_back(c);
+                                    if(c == '{')
+                                    {
+                                        inExpression = true;
+                                    }
+                                    else if(c == '}')
+                                    {
+                                        inExpression = false;
+                                    }
+                                }
+                            }
+                            if(xyzw != "")
+                            {
+                                xyzw.push_back(' ');
+                            }
+                        }
+                        endWhile3:
+                        Transformation t(4, &params, xyzw);
+                        transformations_up.push_back(t);
+                    }
+                    if(*tIt == "surface")
+                    {
+                        string color_name;
+                        if(++tIt < tokens.end())
+                        {
+                            color_name = *tIt;
+                            colorIt = user_defined_colors.find(color_name);
+                            if(colorIt != user_defined_colors.end())
+                            {
+                                color = colorIt -> second;
+                                foundColor = true;
+                            }
+                            else
+                            {
+                                cout<<warning(18, lineNumber)<<endl;
+                            }
+                        }
+                        else
+                        {
+                            cout<<warning(18, lineNumber)<<endl;
+                        }
+                    }
+                }
+                if(findMesh)
+                {
+                    newMesh.setTransformation(transformations_up);
+                    if(foundColor)
+                    {
+                        newMesh.setColor(color);
+                        newMesh.user_set_color = true;
+                    }
+                    group.addMesh(newMesh);
+                }
+                else
+                {
+                    cout<<"Error: there is a bug in the program. Check!"<<endl;
+                }
+            }
+            else
+            {
+                cout<<nextLine<<endl;
+                goto newLineEnd;
+            }
+        }
+    newLineEnd:
+    lineNumber++;
     }
-    return;
+    canvas -> updateFromSavedMesh();
 }
 
 void NomeParser::appendWithANOM(unordered_map<string, Parameter> &params,
                                 Group &group,
                                 SlideGLWidget* canvas,
-                                string inputSIF)
+                                string input)
 {
-    ifstream file(inputSIF);
+    ifstream file(input);
     if (!file.good())
     {
         cout<<"THE PATH OF MINI SIF FILE IS NOT VAILD.";
@@ -1501,14 +2090,14 @@ void NomeParser::appendWithANOM(unordered_map<string, Parameter> &params,
                 pIt = params.find(*tIt);
                 if(pIt == params.end())
                 {
-                    cout<<warning(7, lineNumber);
+                    cout<<warning(7, lineNumber)<<endl;
                 }
                 else
                 {
                     tIt++;
                     if(tIt >= tokens.end() || testComments(*tIt))
                     {
-                        cout<<warning(8, lineNumber);
+                        cout<<warning(8, lineNumber)<<endl;
                     }
                     else
                     {
@@ -1535,7 +2124,7 @@ void NomeParser::appendWithANOM(unordered_map<string, Parameter> &params,
                     tIt++;
                     if(tIt >= tokens.end() || testComments(*tIt))
                     {
-                        cout<<warning(9, lineNumber);
+                        cout<<warning(9, lineNumber)<<endl;
                     }
                     Vertex *v = (canvas -> hierarchical_scene_transformed).findVertexInThisGroup(*tIt);
                     if(!(canvas -> master_mesh.isEmpty())) /* Dealing with recovery of SIF.*/

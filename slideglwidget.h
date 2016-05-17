@@ -253,6 +253,8 @@ private:
     void updateTempMesh();
     /* Update the consolidate mesh.*/
     void updateConsolidateMesh();
+    /* Update the saved consolidated mesh. */
+    void updateSavedConsolidatedMesh();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

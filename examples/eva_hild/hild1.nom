@@ -1,0 +1,78 @@
+##### Some Surface colors #####
+surface R color (1 0 0) endsurface          # Red
+surface O color (0.9 0.6 0) endsurface      # Orange
+surface Y color (1 1 0) endsurface          # Yellow
+surface L color (0.6 0.8 0) endsurface      # Lime
+surface G color (0 0.9 0) endsurface        # Green
+surface A color (0 0.9 0.7) endsurface      # Aqua
+surface C color (0 1 1) endsurface          # Cyan
+surface U color (0 0.5 1) endsurface        # Uniform
+surface B color (0 0 1) endsurface          # Blue
+
+##### The Parameter Banks ##### 
+bank outerFrontFunnelBank
+    set     ro      1       0.8     1.3     0.1
+    set     ratio   0.1    -0.5     0.5     0.1
+    set     h       0.2       0     1.0     0.1
+endbank
+
+bank outerBackFunnelBank
+    set     ro      0.9       0.1     1.0     0.1
+    set     ratio   -0.2     -0.5     0.5     0.1
+    set     h       0.3         0     1.0     0.1
+    set     angle   0        -90     90       15
+    set     x       -0.2       -1.0    1.0     0.2
+    set     y       0       -1.0    1.0     0.2
+    set     z       -0.8      -1.0    1.0     0.2
+endbank
+
+bank midLeftTunnelBank
+    set     ro      0.3     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+    set     x       -0.5   -1.0    1.0     0.1
+    set     y       0.1       0    0.5     0.1
+    set     z       -0.3    -0.5    0.5     0.1
+endbank
+
+bank midRightTunnelBank
+    set     ro      0.1     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+    set     x       0.5    -1.0    1.0     0.1
+    set     y       0.5       0    1.0     0.1
+    set     z       -0.3    -0.5    0.5     0.1
+endbank
+
+bank midMidTunnelBank
+    set     ro      0.1     0.1     1.0     0.1
+    set     ratio   0.2    -0.5    0.5     0.1
+    set     h       0.1     0.1     1.5     0.1
+    set     x       0    -1.0    1.0     0.1
+    set     y       0       0    1.0     0.1
+    set     z       -0.3    -0.5    0.5     0.1
+endbank
+
+##### Define the generators #####
+
+funnel outerFrontFunnel (12 {expr $outerFrontFunnelBank_ro} {expr $outerFrontFunnelBank_ratio} {expr $outerFrontFunnelBank_h}) endfunnel
+
+funnel outerBackFunnel (12 {expr $outerBackFunnelBank_ro} {expr $outerBackFunnelBank_ratio} {expr $outerBackFunnelBank_h}) endfunnel
+
+tunnel midLeftTunnel (8 {expr $midLeftTunnelBank_ro} {expr $midLeftTunnelBank_ratio} {expr $midLeftTunnelBank_h}) endtunnel
+
+tunnel midRightTunnel (8 {expr $midRightTunnelBank_ro} {expr $midRightTunnelBank_ratio} {expr $midRightTunnelBank_h}) endtunnel
+
+tunnel midMidTunnel (8 {expr $midRightTunnelBank_ro} {expr $midRightTunnelBank_ratio} {expr $midRightTunnelBank_h}) endtunnel
+
+##### Wrapping all instances #####
+group snowhild
+    instance OFF outerFrontFunnel surface G endinstance
+    instance OBF outerBackFunnel rotate (1 0 0) ({expr $outerBackFunnelBank_angle}) translate ({expr $outerBackFunnelBank_x} {expr $outerBackFunnelBank_y} {expr $outerBackFunnelBank_z}) surface B endinstance
+    instance MLT midLeftTunnel translate ({expr $midLeftTunnelBank_x} {expr $midLeftTunnelBank_y} {expr $midLeftTunnelBank_z}) surface U endinstance
+    instance MRT midRightTunnel translate ({expr $midRightTunnelBank_x} {expr $midRightTunnelBank_y} {expr $midRightTunnelBank_z}) surface U endinstance
+    instance MMT midMidTunnel translate ({expr $midRightTunnelBank_x} {expr $midRightTunnelBank_y} {expr $midRightTunnelBank_z}) surface L endinstance
+endgroup
+
+#### Show the final work in the scene.
+instance sh snowhild endinstance

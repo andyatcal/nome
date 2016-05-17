@@ -133,7 +133,7 @@ void MainWindow::createCanvas(QString name)
                                  colorlines, banklines, geometrylines, postProcessingLines);
         canvas = new SlideGLWidget(scene);
         canvas -> group_from_consolidate_mesh = &append_scene;
-        nomeParser->postProcessingWithNome(params, postProcessingLines, canvas, append_scene);
+        nomeParser->postProcessingWithNome(params, postProcessingLines, canvas, append_scene, name.toStdString());
         createSliderPanel(canvas);
         canvas -> move(0, 50);
         canvas -> show();

@@ -52,7 +52,7 @@ private:
     vector<string> colorlines;
     vector<string> banklines;
     vector<string> geometrylines;
-    vector<string> postProcessingLines;
+    vector<int> postProcessingLines;
 private slots:
     void open();
     void save();

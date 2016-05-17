@@ -923,20 +923,8 @@ void SlideGLWidget::paramValueChanged(float)
         makeSLFMesh();
     }
     updateTempMesh();
-    if(group_from_consolidate_mesh != NULL && group_from_consolidate_mesh->myMeshes.size() != 0)
-    {
-        for(Mesh& mesh : group_from_consolidate_mesh->myMeshes)
-        {
-            for(Vertex*& v: mesh.vertList)
-            {
-                v->position = v ->before_transform_vertex->position;
-            }
-        }
-        vector<Mesh*> append_list = group_from_consolidate_mesh -> flattenedMeshes();
-        global_mesh_list.pop_back();
-        global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
-        global_mesh_list.push_back(&temp_mesh);
-    }
+    updateConsolidateMesh();
+    updateSavedConsolidatedMesh();
     updateGlobalIndexList();
     if(work_phase >= 1)
     {
@@ -954,6 +942,24 @@ void SlideGLWidget::paramValueChanged(float)
     repaint();
 }
 
+void SlideGLWidget::updateSavedConsolidatedMesh()
+{
+    if(group_from_consolidate_mesh != NULL && group_from_consolidate_mesh->myMeshes.size() != 0)
+    {
+        for(Mesh& mesh : group_from_consolidate_mesh->myMeshes)
+        {
+            for(Vertex*& v: mesh.vertList)
+            {
+                v -> position = v -> source_vertex -> position;
+            }
+        }
+        vector<Mesh*> append_list = group_from_consolidate_mesh -> flattenedMeshes();
+        global_mesh_list.pop_back();
+        global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
+        global_mesh_list.push_back(&temp_mesh);
+    }
+}
+
 void SlideGLWidget::updateFromSavedMesh()
 {
     consolidate_mesh.computeNormals();
@@ -962,7 +968,7 @@ void SlideGLWidget::updateFromSavedMesh()
     global_mesh_list.insert(global_mesh_list.end(), append_list.begin(), append_list.end());
     global_mesh_list.push_back(&temp_mesh);
     updateGlobalIndexList();
-    if(consolidate_mesh.faceList.size() != 0)
+    if(group_from_consolidate_mesh != NULL && group_from_consolidate_mesh->myMeshes.size() > 0)
     {
         set_to_editing_mode(true);
     }

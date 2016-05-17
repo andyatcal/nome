@@ -31,19 +31,17 @@ instance cf cubeMadeByFunnel surface L endinstance
 
 ##### The added faces. #####
 mesh consolidatedmesh
-    face consolidatedface0 (fun3_hc3 fun5_hc3 fun2_hc5 ) surface G endface
-    face consolidatedface1 (fun3_hc4 fun5_hc2 fun5_hc3 fun3_hc3 ) endface
-    face consolidatedface2 (fun5_hc3 fun5_hc4 fun2_hc4 fun2_hc5 ) endface
-    face consolidatedface3 (fun3_hc3 fun2_hc5 fun2_hc6 fun3_hc2 ) endface
+    face consolidatedface0 (fun3_hc3 fun2_hc5 fun2_hc6 fun3_hc2 ) endface
+    face consolidatedface1 (fun3_bc3 fun3_hc3 fun3_hc2 fun3_bc2 ) endface
+    face consolidatedface2 (fun2_hc5 fun2_hc6 fun2_bc6 fun2_bc5 ) endface
 endmesh
+
+##### The deleted faces #####
+delete
+    face fun2_5 endface
+    face fun3_2 endface
+enddelete
 
 ####Create an instance of the consolidated mesh here.####
 
 instance cm1 consolidatedmesh endinstance
-instance tp1 consolidatedmesh rotate (0 0 1) (90) endinstance
-instance tp2 consolidatedmesh rotate (0 0 1) (180) endinstance
-instance tp3 consolidatedmesh rotate (0 0 1) (270) endinstance
-instance tp4 consolidatedmesh rotate (0 1 0) (-90) endinstance
-instance tp5 consolidatedmesh rotate (0 1 0) (-180) endinstance
-instance tp6 consolidatedmesh rotate (0 0 1) (90) rotate (0 1 0) (-90) endinstance
-instance tp7 consolidatedmesh rotate (0 0 1) (90) rotate (0 1 0) (-180) endinstance

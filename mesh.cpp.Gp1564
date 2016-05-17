@@ -1394,7 +1394,6 @@ bool Mesh::deleteFaceInThisMesh(string name)
 {
     for(Face*& f: faceList)
     {
-        cout<<f->name<<" ";
         if(f->name == name)
         {
             deleteFace(f);
