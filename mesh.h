@@ -179,6 +179,9 @@ public:
      * Type of this mesh.
      * 0: A general mesh.
      * 1: A Funnel.
+     * 2: A Tunnel.
+     * 3: A rim line.
+     * 99: Consolidated mesh or Temporary mesh.
      */
     int type;
     /* Parameters used by funnel. */
@@ -207,6 +210,9 @@ public:
     Mesh * before_transform_mesh;
     /* Find a vertex in this mesh given its name. */
     Vertex * findVertexInThisMesh(string name);
+    /* Find a face in this mesh given its name. And delete this face.
+     * return true if it is in this mesh. */
+    bool deleteFaceInThisMesh(string name);
     /* Indicator that this group is in editing mode.
      * So we can't change the hyper parameters of this mesh,
      * e.g. the parameter n of the mesh.

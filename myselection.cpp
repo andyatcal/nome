@@ -162,7 +162,7 @@ void MySelection::selectFace(vector<Mesh*> &globalMeshList,
                         }
                     }
                     (mfIt -> second).erase(fIt);
-                    cout<<"Unselected Face: "<<selectedFace -> id<<endl;
+                    cout<<"Unselected Face: "<<selectedFace -> name<<endl;
                 }
                 else
                 {
@@ -177,13 +177,13 @@ void MySelection::selectFace(vector<Mesh*> &globalMeshList,
                 {
                     vector<Face*> faces;
                     faces.push_back(selectedFace);
-                    cout<<"Selected Face: "<<selectedFace -> id<<endl;
+                    cout<<"Selected Face: "<<selectedFace -> name<<endl;
                     selectedFaces[selectedMesh] = faces;
                 }
                 else
                 {
                     (mfIt -> second).push_back(selectedFace);
-                    cout<<"Selected Face: "<<selectedFace -> id<<endl;
+                    cout<<"Selected Face: "<<selectedFace -> name<<endl;
                 }
 
             }
@@ -1091,7 +1091,7 @@ void MySelection::addSelectedToMesh(Mesh &mesh)
     clearSelection();
 }
 
-void MySelection::deleteSelectedFaces()
+void MySelection::deleteSelectedFaces(vector<string> & deletedFaces)
 {
     unordered_map<Mesh*, vector<Face*> >::iterator mfIt;
     for(mfIt = selectedFaces.begin(); mfIt != selectedFaces.end(); mfIt++)
@@ -1100,6 +1100,10 @@ void MySelection::deleteSelectedFaces()
         vector<Face*> faces = mfIt -> second;
         for(Face * face : faces)
         {
+            if(mesh -> type != 99)
+            {
+                deletedFaces.push_back(face -> name);
+            }
             face -> selected = false;
             mesh -> deleteFace(face);
         }

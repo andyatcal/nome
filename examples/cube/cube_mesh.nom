@@ -22,13 +22,13 @@ point AYC  ( {expr -1.0 * $cubeP_l}  {expr $cubeP_l}  {expr -1.0 * $cubeP_l} ) e
 point ABZ  ( {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr $cubeP_l} ) endpoint
 point ABC  ( {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
 
-face c1   (XYZ XBZ XBC XYC ) surface G endface
-face c2   (XYZ XYC AYC AYZ ) surface U endface
-face c3   (AYZ AYC ABC ABZ ) endface
-face c4   (ABZ ABC XBC XBZ ) endface
-face c5   (XYZ AYZ ABZ XBZ ) endface
-face c6   (XYC XBC ABC AYC ) endface
-
-object cube (c1 c2 c3 c4 c5 c6) endobject
+mesh cube
+    face c1   (XYZ XBZ XBC XYC ) surface G endface
+    face c2   (XYZ XYC AYC AYZ ) surface U endface
+    face c3   (AYZ AYC ABC ABZ ) endface
+    face c4   (ABZ ABC XBC XBZ ) endface
+    face c5   (XYZ AYZ ABZ XBZ ) endface
+    face c6   (XYC XBC ABC AYC ) endface
+endmesh
 
 instance cube1 cube surface B endinstance

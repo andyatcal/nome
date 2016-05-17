@@ -145,6 +145,17 @@ void Group::updateGroupElementName()
             {
                 v -> name = (*mIt).name + "_" + v -> name;
             }
+            for(Face*& f : (*mIt).faceList)
+            {
+                if(f -> name == "")
+                {
+                    f -> name = (*mIt).name + "_" + to_string(f -> id);
+                }
+                else
+                {
+                    f -> name = (*mIt).name + "_" + f -> name;
+                }
+            }
         }
         for(pIt = myPolylines.begin(); pIt < myPolylines.end(); pIt++)
         {
@@ -404,4 +415,25 @@ Vertex* Group::findVertexInThisGroup(string name)
         }
     }
     return NULL;
+}
+
+bool Group::deleteFaceInThisGroup(string name)
+{
+    for(Mesh &mesh : myMeshes)
+    {
+        bool found = mesh.deleteFaceInThisMesh(name);
+        if(found)
+        {
+            return true;
+        }
+    }
+    for(Group& group : subgroups)
+    {
+        bool found = group.deleteFaceInThisGroup(name);
+        if(found)
+        {
+            return true;
+        }
+    }
+    return false;
 }

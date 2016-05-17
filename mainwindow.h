@@ -49,8 +49,10 @@ private:
     unordered_map<string, Parameter> params;
     vector<ParameterBank> banks;
     vector<SliderPanel*> slider_panels;
+    vector<string> colorlines;
     vector<string> banklines;
     vector<string> geometrylines;
+    vector<string> postProcessingLines;
 private slots:
     void open();
     void save();

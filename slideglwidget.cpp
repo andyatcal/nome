@@ -53,9 +53,11 @@ void SlideGLWidget::generalSetup()
     work_phase = 0;
     temp_mesh.color = Qt::yellow;
     temp_mesh.clear();
+    temp_mesh.type = 99;
     consolidate_mesh.color = QColor(255, 69, 0);
     consolidate_mesh.clear();
     consolidate_mesh.isConsolidateMesh = true;
+    consolidate_mesh.type = 99;
     group_from_consolidate_mesh = NULL;
     trianglePanelty = 1.3;
 }
@@ -969,7 +971,7 @@ void SlideGLWidget::updateFromSavedMesh()
 
 void SlideGLWidget::deleteFaceCalled(bool)
 {
-    mySelect.deleteSelectedFaces();
+    mySelect.deleteSelectedFaces(deletedFaces);
     updateGlobalIndexList();
     repaint();
 }

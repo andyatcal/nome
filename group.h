@@ -100,6 +100,8 @@ public:
     void updateGroupElementName();
     /* Find a vertex given its hierarchical name.*/
     Vertex* findVertexInThisGroup(string name);
+    /* Find a face given its hierachical name and delete this face. */
+    bool deleteFaceInThisGroup(string name);
     /* Indicator that this group is in editing mode.
      * So we can't change the hyper parameters of this mesh,
      * e.g. the parameter n of the mesh.

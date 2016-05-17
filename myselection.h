@@ -139,7 +139,7 @@ public:
      */
     PolyLine addSelectedToPolyline(bool isLoop = false);
     /* Delete the faces that we have selected. */
-    void deleteSelectedFaces();
+    void deleteSelectedFaces(vector<string> & deletedFaces);
 };
 
 #endif // SELECTION_H

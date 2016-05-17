@@ -130,10 +130,10 @@ void MainWindow::createCanvas(QString name)
     else if (name.right(3).toLower() == "nom")
     {
         nomeParser->makeWithNome(banks, params, scene, name.toStdString(),
-                                   banklines, geometrylines);
+                                 colorlines, banklines, geometrylines, postProcessingLines);
         canvas = new SlideGLWidget(scene);
         canvas -> group_from_consolidate_mesh = &append_scene;
-        nomeParser->appendWithANOM(params, append_scene, canvas, name.toStdString());
+        nomeParser->postProcessingWithNome(params, postProcessingLines, canvas, append_scene);
         createSliderPanel(canvas);
         canvas -> move(0, 50);
         canvas -> show();
@@ -231,6 +231,15 @@ void MainWindow::save_current_status_nome(string out_put_file)
     else
     {
         string bankname = "";
+        if(colorlines.size() > 0)
+        {
+            file<<"#### Some Surface colors #####\n";
+            for(string& line : colorlines)
+            {
+                file<<line<<'\n';
+            }
+            file<<"\n";
+        }
         for(string& line : banklines)
         {
             istringstream iss(line);
@@ -270,14 +279,19 @@ void MainWindow::save_current_status_nome(string out_put_file)
             file<<line<<'\n';
         }
     }
-
+    if(!(canvas->consolidate_mesh).isEmpty() || (canvas -> deletedFaces).size() > 0)
+    {
+        file<<"\n##### The following is the saved work of last time. #####\n"<<endl;
+    }
     if(!(canvas->consolidate_mesh).isEmpty())
     {
-        file<<"\n";
-        file<<"consolidate\n";
+        file<<"##### The added faces. #####\n";
+        file<<"mesh consolidatedmesh\n";
+        int counter = 0;
         for(Face*& face: (canvas->consolidate_mesh).faceList)
         {
-            file<<"    consolidateface\n";
+            file<<"    face";
+            file<<" consolidatedface"<<counter++<<" (";
             Edge * firstEdge = face -> oneEdge;
             Edge * currEdge = firstEdge;
             Edge * nextEdge;
@@ -295,11 +309,27 @@ void MainWindow::save_current_status_nome(string out_put_file)
                         nextEdge = currEdge -> nextVaFb;
                     }
                 }
-                file<<"        vertex "<<tempv->name<<" endvertex\n";
+                file<<tempv->source_vertex->name<<" ";
                 currEdge = nextEdge;
             } while (currEdge != firstEdge);
-            file<<"    endconsolidateface\n";
+            file<<") endface\n";
         }
-        file<<"endconsolidate\n";
+        file<<"endmesh\n";
+
+    }
+    if((canvas -> deletedFaces).size() > 0)
+    {
+        file<<"\n##### The deleted faces #####\n";
+        file<<"delete\n";
+        for(string deletedFace : (canvas->deletedFaces))
+        {
+            file<<"    face "<<deletedFace<<" endface\n";
+        }
+        file<<"enddelete\n";
+    }
+    if(!(canvas->consolidate_mesh).isEmpty())
+    {
+        file<<"\n####Create an instance of the consolidated mesh here.####\n"<<endl;
+        file<<"instance cm1 consolidatedmesh endinstance\n";
     }
 }

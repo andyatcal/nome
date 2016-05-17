@@ -86,13 +86,16 @@ public:
     /* The current subdivided mesh. */
     Mesh subdiv_mesh;
     /* The pointer to the whole scene. */
-    Group *hierarchical_scene;
+    Group * hierarchical_scene;
     /* A copy of the hierarchical_scene, with all meshes transformed. */
     Group hierarchical_scene_transformed;
     /* The group from saved consolidate mesh. It is created from aslf file. */
-    Group *group_from_consolidate_mesh;
+    Group * group_from_consolidate_mesh;
     /* Update the canvas after reading in the aslf file. */
     void updateFromSavedMesh();
+    /* Record the list of the name of faces deleted by the user.
+     * (Not including the consolidated mesh or temprary mesh. */
+    vector<string> deletedFaces;
 private:
     /* Viewer variables.*/
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;

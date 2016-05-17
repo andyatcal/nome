@@ -707,6 +707,8 @@ Mesh Mesh::makeCopy(string copy_mesh_name) {
                 = (*fIt) -> user_defined_color;
         newMesh.faceList[newMesh.faceList.size() - 1] -> color
                 = (*fIt) -> color;
+        newMesh.faceList[newMesh.faceList.size() - 1] -> name
+                = (*fIt) -> name;
     }
     newMesh.buildBoundary();
     newMesh.computeNormals();
@@ -876,6 +878,8 @@ Mesh Mesh::makeCopyForTransform() {
                 = (*fIt) -> user_defined_color;
         newMesh.faceList[newMesh.faceList.size() - 1] -> color
                 = (*fIt) -> color;
+        newMesh.faceList[newMesh.faceList.size() - 1] -> name
+                = (*fIt) -> name;
     }
     newMesh.buildBoundary();
     newMesh.computeNormals();
@@ -1392,6 +1396,19 @@ Vertex * Mesh::findVertexInThisMesh(string name)
         }
     }
     return NULL;
+}
+
+bool Mesh::deleteFaceInThisMesh(string name)
+{
+    for(Face*& f: faceList)
+    {
+        if(f->name == name)
+        {
+            deleteFace(f);
+            return true;
+        }
+    }
+    return false;
 }
 
 void Mesh::deleteVertex(Vertex *v)
