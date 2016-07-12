@@ -9,12 +9,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <string>
 #include "slideglwidget.h"
 #include "controlpanel.h"
 #include "nomeparser.h"
 #include "sliderpanel.h"
-#include <sstream>
 QT_BEGIN_NAMESPACE
 class QAction;
 class QActionGroup;

@@ -75,7 +75,7 @@ Vertex * Edge::theOtherVertex(Vertex * v) {
         return va;
     } else {
         cout<<"ERROR: v is not in edge!"<<endl;
-        exit(0);
+        //exit(0);
     }
 }
 

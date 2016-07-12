@@ -56,16 +56,35 @@ void MainWindow::save()
 void MainWindow::close()
 {
     if(canvas != NULL) {
+        canvas -> hierarchical_scene_transformed.clearAndDelete();
+        canvas -> master_mesh.clearAndDelete();
+        //canvas -> temp_mesh.clearAndDelete();
+        //canvas -> consolidate_mesh.clearAndDelete();
+        //canvas -> merged_mesh.clearAndDelete();
+        //canvas -> subdiv_mesh.clearAndDelete();
+        //canvas -> offset_mesh.clearAndDelete();
         canvas -> close();
+        scene.clearAndDelete();
+        append_scene.clearAndDelete();
+        nomeParser = NULL;
+        delete(canvas);
         canvas = NULL;
         controls -> close();
+        delete(controls);
         controls = NULL;
         for(SliderPanel*& panel: slider_panels)
         {
             panel->close();
+            delete(panel);
             panel = NULL;
         }
         slider_panels.clear();
+        banklines.clear();
+        colorlines.clear();
+        geometrylines.clear();
+        postProcessingLines.clear();
+        banks.clear();
+        params.clear();
     }
 }
 

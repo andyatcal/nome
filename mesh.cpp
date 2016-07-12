@@ -372,7 +372,7 @@ void getFaceNormal(Face * currFace){
 }
 
 // Get the vertex normal
-// @param currVert: pointer of the edge, which the vertex on the end of.
+// @param currVert: the target vertex.
 void getVertexNormal(Vertex * currVert){
     Edge * firstEdge = currVert -> oneEdge;
     if(firstEdge == NULL) {
@@ -1676,4 +1676,24 @@ void Mesh::updateVertListAfterDeletion()
         }
     }
     return;
+}
+
+void Mesh::setBoundaryEdgeToNull(Vertex* v) {
+    /* Traverse around v and find boundary edges.
+     * Set the nextFb pointers to NULL for those edges. */
+    vector<Edge*> edgeAtThisPoint;
+    unordered_map<Vertex*, vector<Edge*> >::iterator vIt;
+    vIt = edgeTable.find(v);
+    if(vIt != edgeTable.end()) {
+        edgeAtThisPoint = vIt -> second;
+        for(Edge* e : edgeAtThisPoint) {
+            e -> isSharp = false;
+            if((e -> fb) == NULL) {
+                e->nextVaFb = NULL;
+                e->nextVbFb = NULL;
+            }
+        }
+    } else {
+        cout<<"Error: The Vertex doesn't belongs to this Mesh. Debug here."<<endl;
+    }
 }

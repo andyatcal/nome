@@ -171,8 +171,6 @@ void Subdivision::makeVertexPointsC(vector<Vertex*> &newVertList){
 
 void Subdivision::makeVertexPointsD(vector<Vertex*> &newVertList){
     vector<Vertex*>::iterator vIt;
-    Vertex facePointAvg;
-    Vertex edgePointAvg;
     Vertex * currVert;
     Vertex * newVertexPoint;
     for(vIt = currMesh.vertList.begin(); vIt < currMesh.vertList.end(); vIt++){
@@ -472,9 +470,39 @@ Mesh Subdivision::ccSubdivision(int level){
         makeEdgePoints(newMesh.vertList);
         makeVertexPointsD(newMesh.vertList);
         compileNewMesh(newMesh.faceList);
+        setAllNewPointPointersToNull();
         currMesh = newMesh;
         newMesh.clear();
     }
     return currMesh;
+}
+
+void Subdivision::setAllNewPointPointersToNull() {
+    for(Vertex* v : currMesh.vertList) {
+        v -> vertexPoint = NULL;
+    }
+    for(Face* f : currMesh.faceList) {
+        f -> facePoint = NULL;
+        Edge * firstEdge = f -> oneEdge;
+        Edge * currEdge = firstEdge;
+        Vertex * currVert;
+        do {
+            currEdge -> edgePoint = NULL;
+            currEdge -> firstHalf = NULL;
+            currEdge -> secondHalf = NULL;
+            if(f == currEdge -> fa) {
+                currVert = currEdge -> vb;
+                currEdge = currEdge -> nextVbFa;
+            } else if(f == currEdge -> fb) {
+                if(currEdge -> mobius) {
+                    currVert = currEdge -> vb;
+                    currEdge = currEdge -> nextVbFb;
+                } else {
+                    currVert = currEdge -> va;
+                    currEdge = currEdge -> nextVaFb;
+                }
+            }
+        } while (currEdge != firstEdge);
+    }
 }
 

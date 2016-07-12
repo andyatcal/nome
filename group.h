@@ -84,6 +84,8 @@ public:
     void updateCopyForTransform();
     /* Clear this group.*/
     void clear();
+    /* Clear and delete everything from this group.*/
+    void clearAndDelete();
     /* name of this group. */
     string name;
     /* set name of this group. */

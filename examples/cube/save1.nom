@@ -1,4 +1,4 @@
-#### Some Surface colors #############################
+#### Some Surface colors #####
 surface R color (1 0 0) endsurface          # Red
 surface O color (0.9 0.6 0) endsurface      # Orange
 surface Y color (1 1 0) endsurface          # Yellow
@@ -10,9 +10,8 @@ surface U color (0 0.5 1) endsurface        # Uniform
 surface B color (0 0 1) endsurface          # Blue
 
 bank cubeP
-    set     l       1       0.5       1.5      0.1
+    set		l		0.9		0.5		1.5		0.1		
 endbank
-
 point XYZ  ( {expr $cubeP_l}  {expr $cubeP_l}  {expr $cubeP_l} ) endpoint
 point XYC  ( {expr $cubeP_l}  {expr $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
 point XBZ  ( {expr $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr $cubeP_l} ) endpoint
@@ -21,7 +20,6 @@ point AYZ  ( {expr -1.0 * $cubeP_l}  {expr $cubeP_l}  {expr $cubeP_l} ) endpoint
 point AYC  ( {expr -1.0 * $cubeP_l}  {expr $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
 point ABZ  ( {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr $cubeP_l} ) endpoint
 point ABC  ( {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l}  {expr -1.0 * $cubeP_l} ) endpoint
-
 mesh cube
     face c1   (XYZ XBZ XBC XYC ) surface G endface
     face c2   (XYZ XYC AYC AYZ ) surface U endface
@@ -30,5 +28,22 @@ mesh cube
     face c5   (XYZ AYZ ABZ XBZ ) endface
     face c6   (XYC XBC ABC AYC ) endface
 endmesh
-
 instance cube1 cube endinstance
+
+##### The following is the saved work of last time. #####
+
+##### The added faces. #####
+mesh consolidatedmesh
+    face consolidatedface0 (cube1_XBZ cube1_XYC cube1_AYZ ) endface
+endmesh
+
+##### The deleted faces #####
+delete
+    face cube1_c4 endface
+    face cube1_c2 endface
+    face cube1_c3 endface
+enddelete
+
+####Create an instance of the consolidated mesh here.####
+
+instance cm1 consolidatedmesh endinstance

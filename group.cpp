@@ -201,6 +201,20 @@ void Group::clear()
     transformations_up.clear();
 }
 
+void Group::clearAndDelete()
+{
+    for(Group g: subgroups) {
+        g.clearAndDelete();
+    }
+    for(Mesh m: myMeshes) {
+        m.clearAndDelete();
+    }
+    subgroups.clear();
+    myMeshes.clear();
+    myPolylines.clear();
+    transformations_up.clear();
+}
+
 Group Group::makeCopy(string copy_group_name)
 {
     Group newGroup;

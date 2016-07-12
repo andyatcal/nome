@@ -86,6 +86,7 @@ void SlideGLWidget::makeSIFMesh(string name)
 
 void SlideGLWidget::makeSLFMesh()
 {
+    hierarchical_scene_transformed.clearAndDelete();
     hierarchical_scene_transformed = hierarchical_scene->makeCopyForTransform();
     transform_meshes_in_scene();
     hierarchical_scene_transformed.setColor(foreColor);
@@ -106,6 +107,7 @@ void SlideGLWidget::mergeAll()
 {
     work_phase = glm::max(work_phase, 1);
     global_mesh_list.pop_back();
+    merged_mesh.clearAndDelete();
     merged_mesh = merge(global_mesh_list);
     global_mesh_list.push_back(&temp_mesh);
     merged_mesh.color = foreColor;
@@ -472,7 +474,7 @@ void SlideGLWidget::keyPressEvent(QKeyEvent* event)
 void SlideGLWidget::subdivide(int level)
 {
     if(level <= 0) {
-        subdiv_mesh = merged_mesh;
+        subdiv_mesh = merged_mesh.makeCopy();
         return;
     }
     //int cachedLevel = cache_subdivided_meshes.size();
@@ -500,7 +502,8 @@ void SlideGLWidget::subdivide(int level)
     //        cachedLevel++;
     //    }
     //}
-    subdivider = new Subdivision(merged_mesh.makeCopy());
+    subdivider = new Subdivision(merged_mesh);
+    subdiv_mesh.clearAndDelete();
     subdiv_mesh = subdivider->ccSubdivision(level);
     subdiv_mesh.computeNormals();
     subdiv_mesh.color = foreColor;
@@ -511,18 +514,16 @@ void SlideGLWidget::offset(float value)
     work_phase = glm::max(work_phase, 3);
     if(value == 0)
     {
-        offset_mesh = merged_mesh;
+        offset_mesh = merged_mesh.makeCopy();
         return;
     }
     if(subdiv_mesh.isEmpty())
     {
-        offseter = new Offset(merged_mesh, value);
+        subdiv_mesh = merged_mesh.makeCopy();
     }
-    else
-    {
-        offseter = new Offset(subdiv_mesh, value);
-    }
+    offseter = new Offset(subdiv_mesh, value);
     offseter -> makeFullOffset();
+    offset_mesh.clearAndDelete();
     offset_mesh = offseter->offsetMesh;
 }
 
@@ -537,8 +538,8 @@ void SlideGLWidget::levelChanged(int new_level)
     work_phase = glm::max(work_phase, 2);
     subdiv_level = new_level;
     subdivide(new_level);
-    offset_mesh.clear();
-    subdiv_offset_mesh.clear();
+    offset_mesh.clearAndDelete();
+    subdiv_offset_mesh.clearAndDelete();
     viewer_mode = 2;
     repaint();
     //emit feedback_status_bar(tr("Subdivision Finished. Level: ")
@@ -550,7 +551,7 @@ void SlideGLWidget::offsetValueChanged(float new_offset_value)
     viewer_mode = 3;
     offset_value = new_offset_value;
     offset(new_offset_value);
-    subdiv_offset_mesh.clear();
+    subdiv_offset_mesh.clearAndDelete();
     repaint();
 }
 
@@ -705,6 +706,7 @@ void SlideGLWidget::consolidateTempMesh(bool)
             Vertex * newVertex = new Vertex;
             newVertex -> ID = consolidate_mesh.vertList.size();
             newVertex -> position = v -> position;
+            newVertex -> name = v -> name;
             if(v -> source_vertex != NULL)
             {
                 newVertex -> source_vertex = v -> source_vertex;
@@ -863,10 +865,10 @@ void SlideGLWidget::addBorderCalled(bool)
 }
 
 void SlideGLWidget::clearSubDivisionAndOffset() {
-    subdiv_mesh.clear();
-    offset_mesh.clear();
-    subdiv_offset_mesh.clear();
-    cache_subdivided_meshes.clear();
+    subdiv_mesh.clearAndDelete();
+    offset_mesh.clearAndDelete();
+    subdiv_offset_mesh.clearAndDelete();
+    //cache_subdivided_meshes.clear();
 }
 
 void SlideGLWidget::clearSelection()
@@ -920,6 +922,7 @@ void SlideGLWidget::paramValueChanged(float)
     }
     else
     {
+
         makeSLFMesh();
     }
     updateTempMesh();

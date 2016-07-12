@@ -651,24 +651,54 @@ void Zipper::zip(PolyLine * b1, PolyLine * b2,  Mesh &mesh, float trianglePenalt
             "boarders with more than or equal to 2 points."<<endl;
             return;
         }
-        vector<Vertex*>::iterator b1It;
-        vector<Vertex*>::iterator b2It;
-        for(b1It = boarder1.begin(); b1It < boarder1.end(); b1It ++)
-        {
-            if(std::find(mesh.vertList.begin(), mesh.vertList.end(),
-                         *b1It) == mesh.vertList.end())
-            {
-                mesh.addVertex(*b1It);
+        vector<Vertex*> newBoarder1;
+        newBoarder1.clear();
+        vector<Vertex*> newBoarder2;
+        newBoarder2.clear();
+        Vertex * foundVertex;
+        for(Vertex * v : boarder1) {
+            foundVertex = NULL;
+            for(Vertex * vm : mesh.vertList) {
+                if(v == vm -> source_vertex) {
+                    foundVertex = vm;
+                    mesh.setBoundaryEdgeToNull(vm);
+                    break;
+                }
+            }
+            if(foundVertex == NULL) {
+                Vertex * newVertex = new Vertex;
+                newVertex -> source_vertex = v;
+                newVertex -> position = v -> position;
+                newVertex -> ID = mesh.vertList.size();
+                newVertex -> name = v -> name;
+                mesh.addVertex(newVertex);
+                newBoarder1.push_back(newVertex);
+            } else {
+                newBoarder1.push_back(foundVertex);
             }
         }
-        for(b2It = boarder2.begin(); b2It < boarder2.end(); b2It ++)
-        {
-            if(std::find(mesh.vertList.begin(), mesh.vertList.end(),
-                         *b2It) == mesh.vertList.end())
-            {
-                mesh.addVertex(*b2It);
+        for(Vertex * v : boarder2) {
+            foundVertex = NULL;
+            for(Vertex * vm : mesh.vertList) {
+                if(v == vm -> source_vertex) {
+                    foundVertex = vm;
+                    break;
+                }
+            }
+            if(foundVertex == NULL) {
+                Vertex * newVertex = new Vertex;
+                newVertex -> source_vertex = v;
+                newVertex -> position = v -> position;
+                newVertex -> ID = mesh.vertList.size();
+                newVertex -> name = v -> name;
+                mesh.addVertex(newVertex);
+                newBoarder2.push_back(newVertex);
+            } else {
+                newBoarder2.push_back(foundVertex);
             }
         }
+        boarder1 = newBoarder1;
+        boarder2 = newBoarder2;
         vector<Vertex*>::iterator bIt1start = boarder1.begin();
         vector<Vertex*>::iterator bIt1end = boarder1.end() - 1;
         vector<Vertex*>::iterator bIt2start = boarder2.begin();
@@ -872,24 +902,54 @@ void Zipper::zip(PolyLine * b1, PolyLine * b2,  Mesh &mesh, float trianglePenalt
             "boarders with more than or equal to 3 points when they are loops."<<endl;
             return;
         }
-        vector<Vertex*>::iterator b1It;
-        vector<Vertex*>::iterator b2It;
-        for(b1It = boarder1.begin(); b1It < boarder1.end(); b1It ++)
-        {
-            if(std::find(mesh.vertList.begin(), mesh.vertList.end()
-                         , *b1It) == mesh.vertList.end())
-            {
-                mesh.addVertex(*b1It);
+        vector<Vertex*> newBoarder1;
+        newBoarder1.clear();
+        vector<Vertex*> newBoarder2;
+        newBoarder2.clear();
+        Vertex * foundVertex;
+        for(Vertex * v : boarder1) {
+            foundVertex = NULL;
+            for(Vertex * vm : mesh.vertList) {
+                if(v == vm -> source_vertex) {
+                    foundVertex = vm;
+                    mesh.setBoundaryEdgeToNull(vm);
+                    break;
+                }
+            }
+            if(foundVertex == NULL) {
+                Vertex * newVertex = new Vertex;
+                newVertex -> source_vertex = v;
+                newVertex -> position = v -> position;
+                newVertex -> ID = mesh.vertList.size();
+                newVertex -> name = v -> name;
+                mesh.addVertex(newVertex);
+                newBoarder1.push_back(newVertex);
+            } else {
+                newBoarder1.push_back(foundVertex);
             }
         }
-        for(b2It = boarder2.begin(); b2It < boarder2.end(); b2It ++)
-        {
-            if(std::find(mesh.vertList.begin(), mesh.vertList.end()
-                         , *b2It) == mesh.vertList.end())
-            {
-                mesh.addVertex(*b2It);
+        for(Vertex * v : boarder2) {
+            foundVertex = NULL;
+            for(Vertex * vm : mesh.vertList) {
+                if(v == vm -> source_vertex) {
+                    foundVertex = vm;
+                    break;
+                }
+            }
+            if(foundVertex == NULL) {
+                Vertex * newVertex = new Vertex;
+                newVertex -> source_vertex = v;
+                newVertex -> position = v -> position;
+                newVertex -> ID = mesh.vertList.size();
+                newVertex -> name = v -> name;
+                mesh.addVertex(newVertex);
+                newBoarder2.push_back(newVertex);
+            } else {
+                newBoarder2.push_back(foundVertex);
             }
         }
+        boarder1 = newBoarder1;
+        boarder2 = newBoarder2;
         vector<Vertex*>::iterator bIt1start = boarder1.begin();
         vector<Vertex*>::iterator bIt1end = boarder1.begin();
         vector<Vertex*>::iterator bIt2start = boarder2.begin();

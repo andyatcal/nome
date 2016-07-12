@@ -137,6 +137,8 @@ public:
     void drawVertices();
     // Build Boundary Pointers for Mesh.
     void buildBoundary();
+    // Reverse the effect of buildBoundary function on some vertices. */
+    void setBoundaryEdgeToNull(Vertex* v);
     // Compute the vertex normals for every face and vertex of the mesh.
     void computeNormals();
     // Return the list of edges on the boarders

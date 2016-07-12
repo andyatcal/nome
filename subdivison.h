@@ -22,7 +22,7 @@ public:
     // The mesh to be subdivide;
     Mesh currMesh;
     // Constructor.
-    Subdivision(){};
+    Subdivision();
     // Constructor.
     // @param mesh: the reference of given mesh.
     Subdivision(Mesh mesh);
@@ -48,6 +48,8 @@ private:
     // Construct a new mesh after given new facepoints, edgepoints, and vertexpoints.
     // @param newFaceList: the list of faces for the next level mesh.
     void compileNewMesh(vector<Face*> &newFaceList);
+    // In order to redo the subdivision, we need to set all next level subdivision to null
+    void setAllNewPointPointersToNull();
 };
 
 #endif // __SUBDIVISION_H__

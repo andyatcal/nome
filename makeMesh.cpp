@@ -1282,7 +1282,7 @@ void makeWithSIF(Mesh &mesh, string inputSIF){
             temp = temp.substr(temp.find(" ") + 1);
             float z = stof(temp);
             Vertex * newVert = new Vertex;
-            newVert -> position = vec3(x, y, z) * 1.0f; // Can be modifed here to zoom in.
+            newVert -> position = vec3(x, y, z); // Can be modifed here to zoom in.
             newVert -> ID = vAfterMergeCounter;
             newVert -> name = "v" + to_string(vAfterMergeCounter);
             vector<Vertex*>::iterator vIt;

@@ -1074,18 +1074,27 @@ void MySelection::addSelectedToMesh(Mesh &mesh)
         }
         if(foundVertex != NULL)
         {
+            /* Reset the next pointer for the boundary
+             * edge of the found vertex here. */
+            mesh.setBoundaryEdgeToNull(foundVertex);
             vertices.push_back(foundVertex);
         }
         else
-        {   Vertex * newVertex = new Vertex;
+        {   
+            Vertex * newVertex = new Vertex;
             newVertex -> source_vertex = *vIt;
             newVertex -> position = (*vIt) -> position;
             newVertex -> ID = mesh.vertList.size();
+            newVertex -> name = (*vIt) -> name;
             mesh.addVertex(newVertex);
             vertices.push_back(newVertex);
         }
     }
     mesh.addPolygonFace(vertices);
+    /* The build Boundary function may
+     * have destroyed our data structure.
+     * We need to reset the next pointers of
+     * the boundary edges of the newly added vertex*/
     mesh.buildBoundary();
     mesh.computeNormals();
     clearSelection();
