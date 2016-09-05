@@ -711,8 +711,8 @@ void NomeParser::makeWithNome(vector<ParameterBank> &banks,
             else if((*tIt) == "face" && deletePhase)
             {
                 postProcessingLines.push_back(lineNumber);
-                /*
-
+                /* Hmm, this is weird, I did not do anything here!
+                   Except putting the delte into postProcessingLines.
                 */
                 goto newLineEnd;
             }
@@ -1598,7 +1598,7 @@ void NomeParser::postProcessingWithNome(unordered_map<string, Parameter> &params
                     cout<<warning(24, lineNumber)<<endl;
                     goto newLineEnd;
                 }
-                cout<<deleteFaceName<<endl;
+                //cout<<deleteFaceName<<endl;
                 bool found = (canvas
                               -> hierarchical_scene_transformed).deleteFaceInThisGroup(deleteFaceName);
                 if(!found)
@@ -2029,6 +2029,7 @@ void NomeParser::postProcessingWithNome(unordered_map<string, Parameter> &params
     newLineEnd:
     lineNumber++;
     }
+    canvas -> set_to_editing_mode(true);
     canvas -> updateFromSavedMesh();
 }
 

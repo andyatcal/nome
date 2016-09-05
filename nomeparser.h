@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "parameterbank.h"
-#include "slideglwidget.h"
+#include "nomeglwidget.h"
 #include "mesh.h"
 #include "polyline.h"
 #include "group.h"

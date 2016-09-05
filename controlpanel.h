@@ -1,7 +1,7 @@
 /**
  * @author Andy Wang, UC Berkeley.
  * Copyright 2016 reserve.
- * UC Berkeley, Slide_2016 project.
+ * UC Berkeley, NOME project.
  * Advised by Prof. Sequin H. Carlos.
  */
 
@@ -22,7 +22,7 @@
 #include <QLineEdit>
 #include <QStatusBar>
 #include <QCheckBox>
-#include "slideglwidget.h"
+#include "nomeglwidget.h"
 class ControlPanel : public QWidget
 {
     Q_OBJECT

@@ -438,6 +438,7 @@ bool Group::deleteFaceInThisGroup(string name)
         bool found = mesh.deleteFaceInThisMesh(name);
         if(found)
         {
+            mesh.buildBoundary();
             return true;
         }
     }

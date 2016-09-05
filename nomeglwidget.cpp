@@ -5,7 +5,7 @@
  * Advised by Prof. Sequin H. Carlos.
  */
 
-#include "slideglwidget.h"
+#include "nomeglwidget.h"
 
 SlideGLWidget::SlideGLWidget(QWidget *parent) :
     QGLWidget(parent)
@@ -922,7 +922,6 @@ void SlideGLWidget::paramValueChanged(float)
     }
     else
     {
-
         makeSLFMesh();
     }
     updateTempMesh();

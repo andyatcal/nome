@@ -93,6 +93,8 @@ public:
     Group * group_from_consolidate_mesh;
     /* Update the canvas after reading in the aslf file. */
     void updateFromSavedMesh();
+    /* Set the in_editing_mode of scene shown and all leave meshes.*/
+    void set_to_editing_mode(bool in_editing_mode);
     /* Record the list of the name of faces deleted by the user.
      * (Not including the consolidated mesh or temprary mesh. */
     vector<string> deletedFaces;
@@ -247,8 +249,6 @@ private:
     float offset_value;
     /* Merge all meshes from global_mesh_list into master_mesh.*/
     void mergeAll();
-    /* Set the in_eidting_mode of scene shown and all leave meshes.*/
-    void set_to_editing_mode(bool in_editing_mode);
     /* Update the temprary mesh.*/
     void updateTempMesh();
     /* Update the consolidate mesh.*/

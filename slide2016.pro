@@ -27,7 +27,6 @@ SOURCES += main.cpp\
     zipper.cpp \
     makePolyline.cpp \
     myselection.cpp \
-    slideglwidget.cpp \
     controlpanel.cpp \
     mainwindow.cpp \
     group.cpp \
@@ -37,7 +36,8 @@ SOURCES += main.cpp\
     myslider.cpp \
     parameterbank.cpp \
     utils.cpp \
-    nomeparser.cpp
+    nomeparser.cpp \
+    nomeglwidget.cpp
 
 HEADERS  += \
     edge.h \
@@ -54,7 +54,6 @@ HEADERS  += \
     zipper.h \
     makePolyline.h \
     myselection.h \
-    slideglwidget.h \
     controlpanel.h \
     mainwindow.h \
     group.h \
@@ -64,7 +63,8 @@ HEADERS  += \
     myslider.h \
     parameterbank.h \
     utils.h \
-    nomeparser.h
+    nomeparser.h \
+    nomeglwidget.h
 
 linux{
     LIBS += -lglut -lGLU

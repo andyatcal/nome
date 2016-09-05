@@ -9,7 +9,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "slideglwidget.h"
+#include "nomeglwidget.h"
 #include "controlpanel.h"
 #include "nomeparser.h"
 #include "sliderpanel.h"

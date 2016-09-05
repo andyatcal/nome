@@ -7,7 +7,7 @@
 #include "myslider.h"
 #include "parameter.h"
 #include "parameterbank.h"
-#include "slideglwidget.h"
+#include "nomeglwidget.h"
 class SliderPanel : public QWidget
 {
     Q_OBJECT

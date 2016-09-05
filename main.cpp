@@ -6,7 +6,7 @@
  */
 
 #include "mainwindow.h"
-#include "slideglwidget.h"
+#include "nomeglwidget.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

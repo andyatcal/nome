@@ -1,7 +1,7 @@
 /**
  * @author Andy Wang, UC Berkeley.
  * Copyright 2016 reserve.
- * UC Berkeley, Slide_2016 project.
+ * UC Berkeley, NOME project.
  * Advised by Prof. Sequin H. Carlos.
  */
 
@@ -15,7 +15,6 @@
 using namespace glm;
 using namespace std;
 
-// Forward declarations
 class Vertex;
 class Face;
 
